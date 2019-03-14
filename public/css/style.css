@@ -1,0 +1,217 @@
+html, body {
+    background-color: #fff;
+    color: #636b6f;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 200;
+    height: 100vh;
+    margin: 0;
+}
+
+.full-height {
+    height: 100vh;
+}
+
+.flex-center {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.position-ref {
+    position: relative;
+}
+
+.top-right {
+    position: absolute;
+    right: 10px;
+    top: 18px;
+}
+
+.content {
+    text-align: center;
+}
+
+.title {
+    font-size: 84px;
+}
+
+.links > a {
+    color: #636b6f;
+    padding: 0 25px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: .1rem;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+.m-b-md {
+    margin-bottom: 30px;
+}
+.control-legend{
+    float:left;
+}
+.top-left {
+    position: absolute;
+    left: 10px;
+    top: 18px;
+}
+.eventcreate{
+    float:left;
+    padding-left: 15px;
+    padding-bottom: 20px;
+}
+.eventcreatebutton{
+    float:right;
+    padding-left: 15px;
+    padding-bottom: 20px;
+}
+.eventcreateradio{
+    float:left;
+    padding-left: 40px;
+}
+.control-radio{
+    float:left;
+    padding-left: 30px;
+}
+.seats{
+    position: relative;
+    width: 17%;
+    padding-left: 10px;
+}
+.ticketcount{
+    position: relative;
+    width: 100%;
+    text-align: center;
+}
+.radio{
+    padding-top: 5px;
+}
+.radiocontainer{
+    max-width: 15%;
+}
+.contain{
+    text-align: -webkit-center;
+    width: 40%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+.slidercontainer{
+    text-align: -webkit-center;
+    width: 100%;
+    max-width: 750px;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+.color-green{
+    background-color: #28a745;
+}
+.space{
+    padding-left: 15px;
+}
+td.top{
+    padding-top: 30px;
+    vertical-align: top;
+}
+.eventdate{
+    border:1px solid black;
+    border-radius: 12px;
+    width: 100px;
+    height: 150px;
+}
+.eventday{
+    width: 100%;
+    height: 65%;
+}
+.eventmonth{
+    border:1px solid black;
+    border-style: groove hidden hidden hidden;
+    border-radius: 0px 0px 12px 12px;
+    width: 100%;
+    height: 35%;
+    background-color: #ffc107;
+    
+}
+.h-center{
+    text-align: center;
+}
+.v-center span{
+    margin: 0;
+  position: relative;
+  top: 30%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+.eventinfo{
+    width: 100%;
+}
+.slidercontainer .next {
+    position: sticky;
+    left: 100%;
+}
+.slidercontainer .prev{
+    position: sticky;
+    right: 100%;
+}
+.button:link,.button:visited {
+    background-color:#28a745;
+    color: white;
+    padding: 14px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 20px;
+    transition: 0.4s;
+  }
+  
+ .button:hover,.button:active,.slider-months_item a.active{
+    background-color: green;
+    border-radius: 50px 20px; 
+  }
+  .uppercase{
+    text-transform: uppercase;
+  }
+  .bold{
+    font-weight: bold;
+  }
+.slider-months {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    text-align: center;
+    
+  }
+  
+.slider-months{
+    font-size: 12px;
+    list-style:none;
+    margin:0;
+    padding:0;
+    text-align:center;
+}
+.slider-months_item{
+    display:inline;
+}
+.slider-months_item a{
+    display:inline-block;
+    padding:10px;
+}
+.slider-months_item .button{
+    padding: 8px 12px;
+}
+.daystyle{
+    font-size: 25px;
+}
+.back{
+    padding-top: 10px;
+}
+.ticketinfo{
+    padding-top: 40px;
+    font-style: italic;
+    color: #636b6f;
+}
