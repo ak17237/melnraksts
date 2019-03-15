@@ -22,9 +22,10 @@ class ReservationController extends Controller
 
         if(!empty($myevent) && $myevent->Melnraksts == 1) return response("There is no such event",404); // Ja atrastais id ir melnraksts vai neeksistē izdod kļūdu
         else if(empty($myevent)) return response("There is no such event",404);
+
+        $description = str_replace("\r\n",'<br>',$myevent->Description);
         
-        
-        return view('Reservation.Reservationcreate',compact('myevent','checkedtables','checkedseats','ticketinfo','standing'));
+        return view('Reservation.Reservationcreate',compact('myevent','checkedtables','checkedseats','ticketinfo','standing','description'));
     }
     public function reservationcreate(createReservationRequest $request,$id){
         

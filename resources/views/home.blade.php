@@ -68,12 +68,14 @@
                     <tbody>
                       <tr>
                         <td class="top">
+                            <a href="{{ route('showevent',$d->id) }}"></a>
                             <div class="eventdate"> {{-- geteventdate,geteventd funckijas helpers.php failā lai korrekti izvadīt informāciju --}}
                                 <div class="eventday block h-center v-center"><span class="daystyle">{{ geteventday($d->Datefrom) }}</span></div>
                                 <div class="eventmonth block h-center v-center"><span class="month">Mēnesis</span></div>
                             </div>
                         </td>
                         <td class="top space eventinfo">
+                            <a href="{{ route('showevent',$d->id) }}"></a>
                             <h5>{{ $d->Title }}
                             @if(reservinfo($d->id)[0] == 0 && $d->Tickets != -999)
                             (Biļetes beidzās)

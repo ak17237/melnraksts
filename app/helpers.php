@@ -62,4 +62,16 @@ function reservinfo($id){
 
         return $array;
 }
+function linecount($string){
+    
+    $new = explode('<br>',$string);
+    $lines = 0;
+
+    for($i = 0;$i < count($new);$i++){
+        $lines += ceil(strlen($new[$i])/161);
+        if(strlen($new[$i]) == 0) $lines++;
+    }
+    return (int)$lines;
+
+}
 ?>

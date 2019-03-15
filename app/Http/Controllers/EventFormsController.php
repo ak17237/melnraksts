@@ -43,6 +43,17 @@ class EventFormsController extends Controller
         for($i = 1;$i <= $number; $i++) $pagenumber[] = $i;
         return view('Event_forms.Savedevents',compact('data','pagenumber'));
     }
+    public function showevent($id){
+
+        $myevent = Events::find($id);
+
+        if(!empty($myevent) && $myevent->Melnraksts == 1) return response("There is no such event",404); // Ja atrastais id ir melnraksts vai neeksistē izdod kļūdu
+        else if(empty($myevent)) return response("There is no such event",404);
+
+        $description = str_replace("\r\n",'<br>',$myevent->Description);
+
+        return view('Event_forms.Eventinfo',compact('myevent','description'));
+    }
     public function create(createEventRequest $request){ // pasākumu izveide un saglabāšana datu bāzē kļūdas pārbauda izveidotais request 
         
         if($request['action'] == 'save') $melnraksts = 1; // pārbaude vai saglabāt kā melnrakstu vai publicēt

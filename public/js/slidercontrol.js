@@ -55,5 +55,8 @@ $(document).ready(function(){
             jQuery('#month'+ i).html(months[index]);
 
         }
+        $("td.top").click(function() {
+            window.location = $(this).find("a").attr("href");
+         });
     
 });

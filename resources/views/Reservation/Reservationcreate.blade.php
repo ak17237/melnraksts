@@ -3,7 +3,7 @@
 
 <div class="container">
     <br>
-        <a href="/" class="btn btn-primary back">Back</a>
+        <a href="javascript:history.go(-1)" class="btn btn-primary back">Back</a>
         <div class="row">
             <div class="col-lg-offset-3 col-lg-11">
                 <div>
@@ -14,7 +14,15 @@
                     <p>{{ geteventdate($myevent->Datefrom) . '-' . geteventdate($myevent->Dateto) }}</p>
                     @endif
                     <h6><i>{{ $myevent->Address }}</i></h6>
-                    <p>{{ $myevent->Description }}</p>
+                    @if(empty($description))
+                    <p>Nav apraksta</p>
+                    @elseif(linecount($description) > 10)
+                    <a href="{{ route('showevent',$myevent->id) }}">Apskatīt aprakstu</a>
+                    @else
+                    <p>{!! $description !!}</p>
+                    @endif
+                    
+                    
                 </div>
                 @if($ticketinfo == 0 && $myevent->Tickets != -999)
                 <h3>Biļetes ir beigušās</h3>

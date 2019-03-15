@@ -60,10 +60,10 @@ Route::get('/saved-events-{page}',[
     'middleware' =>  'roles',
     'roles' => ['Admin']
         ]);
-Route::post('/saved-events/edit-{id}/record','EventFormsController@showeditsave')->name('editsave');
+Route::get('/event-{id}','EventFormsController@showevent')->name('showevent');
 // Rezervāciju pārvalde
-Route::get('event-reservation-{id}','ReservationController@showreservationcreate')->name('showreservationcreate');
-Route::post('event-reservation-{id}/result','ReservationController@reservationcreate')->name('reservationcreate');
+Route::get('event-{id}/reservation','ReservationController@showreservationcreate')->name('showreservationcreate');
+Route::post('event-{id}/reservation/result','ReservationController@reservationcreate')->name('reservationcreate');
 
 
 
