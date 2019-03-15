@@ -84,16 +84,19 @@
                             <p>Kur: {{ $d->Address }}</p>
                             <i>{{ $d->Anotation }}</i>
                         </td>
-                        <td class="space"><a href="{{ route('showreservationcreate',$d->id) }}" class="button">
+                        @if(Auth::check())
+                        <td @if (Auth::user()->hasRole('Admin') && !checkAuthor(Auth::user()->email,$d->id)) colspan="2" {{-- ja nav piekļuves pogai lai būtu centrēts --}}
+                          style="text-align: center" @endif class="space" ><a href="{{ route('showreservationcreate',$d->id) }}" class="button">
                         @if(reservinfo($d->id)[0] == 0 && $d->Tickets != -999)
                         Apskatīt
                         @else
                         Rezervēt
                         @endif</a></td>
-                        @if (Auth::check())
-                        @if (Auth::user()->hasRole('Admin')) {{-- Tikai administrācijas piekļuve --}}
+                        @if (Auth::user()->hasRole('Admin') && checkAuthor(Auth::user()->email,$d->id)) {{-- Tikai administrācijas piekļuve un tikai pasākuma autoram--}}
                         <td class="space"><a href="{{ route('showedit',$d->id) }}" class="button">Rediģēt</a></td>
+                        @else <td></td>
                         @endif
+                        @else <td class="space"><a href="{{ route('showevent',$d->id) }}" class="button">Apskatīt</a>
                         @endif
                       </tr>
                     </tbody>
@@ -141,7 +144,7 @@
                           Rezervēt
                           @endif</a></td>
                           @if (Auth::check())
-                          @if (Auth::user()->hasRole('Admin'))
+                          @if (Auth::user()->hasRole('Admin') && checkAuthor(Auth::user()->email,$dp1->id))
                           <td class="space"><a href="{{ route('showedit',$dp1->id) }}" class="button">Rediģēt</a></td>
                           @endif
                           @endif
@@ -191,7 +194,7 @@
                             Rezervēt
                             @endif</a></td>
                             @if (Auth::check())
-                            @if (Auth::user()->hasRole('Admin'))
+                            @if (Auth::user()->hasRole('Admin') && checkAuthor(Auth::user()->email,$dp2->id))
                             <td class="space"><a href="{{ route('showedit',$dp2->id) }}" class="button">Rediģēt</a></td>
                             @endif
                             @endif
@@ -241,7 +244,7 @@
                               Rezervēt
                               @endif</a></td>
                               @if (Auth::check())
-                              @if (Auth::user()->hasRole('Admin'))
+                              @if (Auth::user()->hasRole('Admin') && checkAuthor(Auth::user()->email,$dp3->id))
                               <td class="space"><a href="{{ route('showedit',$dp3->id) }}" class="button">Rediģēt</a></td>
                               @endif
                               @endif
@@ -291,7 +294,7 @@
                                 Rezervēt
                                 @endif</a></td>
                                 @if (Auth::check())
-                                @if (Auth::user()->hasRole('Admin'))
+                                @if (Auth::user()->hasRole('Admin') && checkAuthor(Auth::user()->email,$dp4->id))
                                 <td class="space"><a href="{{ route('showedit',$dp4->id) }}" class="button">Rediģēt</a></td>
                                 @endif
                                 @endif
@@ -341,7 +344,7 @@
                                   Rezervēt
                                   @endif</a></td><br>
                                   @if (Auth::check())
-                                  @if (Auth::user()->hasRole('Admin'))
+                                  @if (Auth::user()->hasRole('Admin') && checkAuthor(Auth::user()->email,$d->id))
                                   <td class="space"><a href="{{ route('showedit',$dp5->id) }}" class="button">Rediģēt</a></td>
                                   @endif
                                   @endif

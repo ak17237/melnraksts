@@ -16,8 +16,8 @@ Route::get('/','HomeController@index')->name('home');
 
 Auth::routes();
 // Autorizācija
-Route::get('/register','RegisterController@showRegister')->name('showregister');
-Route::get('/login','LoginController@showLogin')->name('showlogin');
+Route::get('/register','RegisterController@showRegister')->name('showregister')->middleware('guest');
+Route::get('/login','LoginController@showLogin')->name('showlogin')->middleware('guest');
 Route::post('/login/check','LoginController@Login')->name('login');
 Route::post('/register','RegisterController@Register')->name('register');
 // Profila maiņa
@@ -46,14 +46,14 @@ Route::get('/create-event',[
     'roles' => ['Admin']
         ]);
 Route::post('/create-event/results','EventFormsController@create')->name('create');
-Route::get('/edit-event-{id}',[
+Route::get('/event-{id}/edit',[
     'uses' => 'EventFormsController@showedit',
     'as' => 'showedit',
-    'middleware' =>  'roles',
+    'middleware' =>  ['roles','author'],
     'roles' => ['Admin']
         ]);
-Route::post('/edit-event-{id}/record','EventFormsController@edit')->name('edit');
-Route::delete('/delete-event-{id}','EventFormsController@delete')->name('delete');
+Route::post('/event-{id}/edit/record','EventFormsController@edit')->name('edit');
+Route::delete('event-{id}/delete','EventFormsController@delete')->name('delete');
 Route::get('/saved-events-{page}',[
     'uses' => 'EventFormsController@showsavedevents',
     'as' => 'showsavedevents',
@@ -62,7 +62,12 @@ Route::get('/saved-events-{page}',[
         ]);
 Route::get('/event-{id}','EventFormsController@showevent')->name('showevent');
 // Rezervāciju pārvalde
-Route::get('event-{id}/reservation','ReservationController@showreservationcreate')->name('showreservationcreate');
+Route::get('event-{id}/reservation',[
+    'uses' => 'ReservationController@showreservationcreate',
+    'as' => 'showreservationcreate',
+    'middleware' =>  'roles',
+    'roles' => ['User','Admin']
+        ]);
 Route::post('event-{id}/reservation/result','ReservationController@reservationcreate')->name('reservationcreate');
 
 

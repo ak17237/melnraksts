@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests\createEventRequest;
 
 use App\Events;
+use App\User;
+use Auth;
 
 class EventFormsController extends Controller
 {
@@ -33,8 +35,10 @@ class EventFormsController extends Controller
     }
     public function showsavedevents($page){ // parāda saglabātos pasākumus sākumā nesen izmainītos,kuriem ir melnraksts 1
 
-        $data = Events::where('Melnraksts',1)->SimplePaginate(5,['*'], 'page', $page)->sortByDesc(['updated_at']);
-        $count = Events::where('Melnraksts',1)->count();
+        $user = User::where('email', Auth::user()->email)->first();
+
+        $data = Events::where('Melnraksts',1)->where('email',$user->email)->SimplePaginate(5,['*'], 'page', $page)->sortByDesc(['updated_at']);
+        $count = Events::where('Melnraksts',1)->where('email',$user->email)->count();
         $number = 1;
         while($count > 5){ // precīza paginēšanas url izvade un pogas tai
             $number++;
@@ -65,7 +69,8 @@ class EventFormsController extends Controller
             1 => 'saglabāts!',
             0 => 'izveidots!'
         );
-                
+
+        $user = User::where('email', Auth::user()->email)->first();     
         Events::create([  // ieraksta datus datubāzē 
         'Title' => $request['title'],
         'Datefrom' => $request['datefrom'],
@@ -78,6 +83,7 @@ class EventFormsController extends Controller
         'Description' => $request['description'],
         'Tickets' => $request['ticketcount'],
         'Melnraksts' => $melnraksts, // melnraksta status ir atkarīgs no kura poga tika uzpiesta
+        'email' => $user->email,
         ]);
 
         return redirect()->back()->with('message','Pasākums ir veiksmīgi ' . $message[$melnraksts]); 

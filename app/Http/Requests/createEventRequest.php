@@ -25,6 +25,8 @@ class createEventRequest extends FormRequest
     {
         $rules = array();
         if(request('action') == 'create') $rules['title'] = 'required|max:250';
+        if(request('action') == 'create') $rules['datefrom'] = 'required';
+        if(request('action') == 'create') $rules['dateto'] = 'required';
         if(request('action') == "create") $rules['address'] = 'required|max:500';
         if(request('action') == "create") $rules['anotation'] = 'required|max:500';
         if(request('action') == "create" && request('Radio') == 'Yes') $rules['ticketcount'] = 'required';

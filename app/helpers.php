@@ -1,6 +1,7 @@
 <?php
 use App\Reservation;
 use App\Events;
+use App\User;
 
 function geteventdate($eventdata){ // datumu izvade vajadzīgajā formātā
     $exp = explode('-',$eventdata);
@@ -73,5 +74,13 @@ function linecount($string){
     }
     return (int)$lines;
 
+}
+function checkAuthor($email,$id){
+
+    $user = User::where('email', $email)->first();
+    $event = Events::where('id',$id)->first();
+
+    if($event->email != $user->email) return false;
+    else return true;
 }
 ?>

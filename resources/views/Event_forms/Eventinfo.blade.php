@@ -15,7 +15,9 @@
                     @endif
                     <h6><i>{{ $myevent->Address }}</i></h6>
                     <p>{!! $description !!}</p>
+                    @if(Auth::check())
                     <a href="{{ route('showreservationcreate',$myevent->id) }}" class="btn btn-primary btn-block">Rezervēt</a>
+                    @endif
                 </div>
 
             </div>

@@ -13,6 +13,7 @@ class RegisterController extends Controller
     public function showRegister(){
 
         return view('Auth.Register');
+        
 
     }
     public function validation(Request $request){

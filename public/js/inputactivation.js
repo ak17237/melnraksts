@@ -67,8 +67,16 @@ jQuery('document').ready(function(){
     disavbletable();
     disabletickets();
     disabletransport();
-    $('textarea').each(function(){ // labo kļūdu,kad ievietojot datus tagā textareat ieliekas liela atstarpe no sākuma php koda dēļ htmlā
+
+    $('textarea').each(function(){ // labo kļūdu,kad ievietojot datus tagā textarea ieliekas liela atstarpe no sākuma php koda dēļ htmlā
         $(this).val($(this).val().trim());
+    });
+    $('#datefrom,#dateto').change(function(){
+
+        var datefrom  = new Date($('#datefrom').val());
+        var dateto  = new Date($('#dateto').val());
+         if(datefrom > dateto) $('#dateto').val($('#datefrom').val());
+
     });
     
 });
