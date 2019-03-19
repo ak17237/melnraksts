@@ -24,7 +24,8 @@ function eventvalidate($request){  // sēdvietu inicializēšana ja nav
         if($request['Radio'] == "No") $request['ticketcount'] = -999;
         if($request['customRadio'] == "No" || empty($request['seatnr'])) $request['seatnr'] = 0;
         if($request['inlineDefaultRadiosExample'] == "No" || empty($request['tablenr'])) { 
-            $request['tablenr'] = 0; 
+            $request['tablenr'] = 0;
+            $request['tablecount'] = 0; 
             $request['seatsontablenr'] = 0; 
         }
         if($request['TransportRadio'] == "Yes") $request['transport'] = 'Patstāvīgi';     
@@ -42,12 +43,12 @@ function reservinfo($id){
     
     $array = array();
 
-    $ticketnumber = $seatnumber = $tablenumber = 0; // biļešu un sēdvietu tagadējais skaits
+    $ticketnumber = $seatnumber = $tableseatnumber = 0; // biļešu un sēdvietu tagadējais skaits
         if($reservation->isNotEmpty()){
             foreach($reservation as $reservations){
                 $ticketnumber += $reservations->Tickets; // pievieno biļešu skaitu cik bija rezervēts no datubāzes
                 $seatnumber += $reservations->Seats;
-                $tablenumber += $reservations->Tables;
+                $tableseatnumber += $reservations->TableSeats;
             }
         }
         if($myevent->Tickets == -999) $array[0] = $ticketinfo = "Neierobežots"; // Biļešu ierobežošanas pārbaude
@@ -56,10 +57,10 @@ function reservinfo($id){
         if($myevent->Seatnumber == 0) $array[1] = $checkedseats = 0; // Sēdvietu un galdu pārbaude
         else $array[1] = $checkedseats = $myevent->Seatnumber - $seatnumber; // palikušo sēdvietu skaits
         if($myevent->Tablenumber == 0) $array[2] = $checkedtables = 0;
-        else $array[2] = $checkedtables = $myevent->Tablenumber - $tablenumber; // palikušo galdu skaits
+        else $array[2] = $checkedtables = $myevent->Tablenumber * $myevent->Seatsontablenumber - $tableseatnumber; // palikušo galdu sēdvietu skaits
 
         if($ticketinfo == 'Neierobežots') $array[3] = $standing = $ticketinfo; // stāvvietu skaits
-        else $array[3] = $standing = $ticketinfo - ($checkedseats + ($checkedtables * $myevent->Seatsontablenumber));
+        else $array[3] = $standing = $ticketinfo - ($checkedseats + $checkedtables);
 
         return $array;
 }
@@ -75,12 +76,30 @@ function linecount($string){
     return (int)$lines;
 
 }
-function checkAuthor($email,$id){
+function checkAuthor($email,$eventid){
 
     $user = User::where('email', $email)->first();
-    $event = Events::where('id',$id)->first();
+    $event = Events::where('id',$eventid)->first();
 
     if($event->email != $user->email) return false;
     else return true;
+}
+function tableSeats($eventid,$nrid){
+
+    $reservations = Reservation::where('EventID',$eventid)->where('TableNr',$nrid)->get();
+    $count = 0;
+    foreach($reservations as $reserv){
+        $count += $reserv->TableSeats;
+    }
+    return $count;
+}
+function checkResrvationCount($eventid,$email){
+
+    $reservations = Reservation::where('EventID',$eventid)->where('email',$email)->get();
+    $count = 0;
+    foreach($reservations as $reserv){
+        $count += $reserv->Tickets;
+    }
+    return $count;
 }
 ?>

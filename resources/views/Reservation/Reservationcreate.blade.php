@@ -26,6 +26,8 @@
                 </div>
                 @if($ticketinfo == 0 && $myevent->Tickets != -999)
                 <h3>Biļetes ir beigušās</h3>
+                @elseif(checkResrvationCount($myevent->id,Auth::user()->email) >= 2) 
+                <h3>Jūs pasūtījāt maksimāli pieļaujamo biļešu skaitu uz lietotāju šajā pasākumā</h3>
                 @else
                 <form action="{{ route('reservationcreate',$myevent->id) }}" method="POST">
                     {{csrf_field()}}    
@@ -48,8 +50,8 @@
 
                             <div class="col-lg-11 eventcreate">
                             <div class="col-lg-8 eventcreate">
-                                <label>Biļešu skaits (No tām stāvvietas - <span class="stand-tickets">0</span>)</label> {{-- Cilvēka vēlamais biļešu skaits --}}
-                                <input type="number" name='ticketcount' class="count form-control {{ $errors->has('ticketcount') ? ' is-invalid' : '' }}" id="ticketcount" value="{{ old('ticketcount') }}">
+                                <label>Biļešu skaits (No tām stāvvietas - <span class="stand-tickets">0</span>) MAX 2</label> {{-- Cilvēka vēlamais biļešu skaits --}}
+                                <input type="number" min="1" name='ticketcount' class="count form-control {{ $errors->has('ticketcount') ? ' is-invalid' : '' }}" id="ticketcount" value="{{ old('ticketcount') }}">
                                 @if ($errors->has('ticketcount'))
                                     <span class="invalid-feedback" role="alert">
                                     <strong>{{ $errors->first('ticketcount') }}</strong>
@@ -57,7 +59,7 @@
                                  @endif
                             </div>
                             <div class="radiocontainer eventcreate ticketinfo"><span>{{ $ticketinfo }}</span><div class="help-tip"> {{-- Biļešu informācija --}}
-                                    <p>{{ '* Atlikušās biļetes no kurām ' . $checkedseats . ' ir sēdvietas un ' . $checkedtables . ' ir galdi,pārējās ir stāvvietas(' 
+                                    <p>{{ '* Atlikušās biļetes no kurām ' . $checkedseats . ' ir sēdvietas un ' . $checkedtables . ' ir sēdvietas pie galdiem,pārējās ir stāvvietas(' 
                                     . $standing . ')' }}</p>
                                 </div></div>
                         </div>
@@ -84,7 +86,7 @@
                                 </div>
                                 <div class="col-lg-2 eventcreate">
                                     <label>Seats number</label>
-                                    <input type="number" name='seatnr' id="seatcount" class="count form-control eventseat {{ $errors->has('seatnr') ? ' is-invalid' : '' }}"
+                                    <input type="number" min="1" name='seatnr' id="seatcount" class="count form-control eventseat {{ $errors->has('seatnr') ? ' is-invalid' : '' }}"
                                     @if(old('customRadio') == "No") {{-- ja vecā bija NO tad atslēgt input un noņemt vērtību --}}
                                     disabled
                                     value=''
@@ -121,17 +123,27 @@
                                     </div>
 
                                     <div class="col-lg-2 eventcreate">
-                                        <label>Table number</label>
-                                        <input type="number" name='tablenr' id="tablecount" class="count form-control eventtable {{ $errors->has('tablenr') ? ' is-invalid' : '' }}" 
+                                        <label>Seats on table</label>
+                                        <select name="tablenr" id="tablenr">
+                                            @for ($i = 1; $i <= $myevent->Tablenumber; $i++)
+                                            <option data-descr="{{ $myevent->Seatsontablenumber - tableSeats($myevent->id,$i) . '/' . $myevent->Seatsontablenumber }}"value="{{ $i }}"
+                                                    @if($i == old('tablenr')) selected @endif
+                                                    @if($myevent->Seatsontablenumber - tableSeats($myevent->id,$i) == 0) disabled @endif>{{ $i }}</option>
+                                            <p id="tooltipBox" class="col-sm-6" style="z-index:9999;"></p>
+                                            @endfor
+                                            
+                                        </select>
+                                        
+                                        <input type="number" min="1" name='tablecount' id="tablecount" class="count form-control eventtable {{ $errors->has('tablecount') ? ' is-invalid' : '' }}" 
                                         @if(old('inlineDefaultRadiosExample') == "No") {{-- ja vecā bija NO tad atslēgt input un noņemt vērtību --}}
                                         disabled
                                         value=''
                                         @else {{-- ja bija YES,tad ielikt vērtību (ja pirmo reizi tad vērtības nevar būt) --}}
-                                        value="{{ old('tablenr') }}"
+                                        value="{{ old('tablecount') }}"
                                         @endif>
-                                        @if ($errors->has('tablenr'))
+                                        @if ($errors->has('tablecount'))
                                             <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $errors->first('tablenr') }}</strong>
+                                            <strong>{{ $errors->first('tablecount') }}</strong>
                                             </span>
                                         @endif
                                     </div>
@@ -179,7 +191,8 @@
                                             
                                         </div> {{-- Pasakaidrojums formai --}}
                                         <div class="col-lg-11 eventcreate ticketinfo">
-                                            <span>Sēdvietas nekādā veidā nav saistītas ar sēdvietām pie galda,tās ir neatkarīgās sēdvietas</span>    
+                                            <span>Sēdvietas nekādā veidā nav saistītas ar sēdvietām pie galda,tās ir neatkarīgās sēdvietas
+                                                <b><h1>TURPINĀT AR VALIDĀCIJU RULES RESERVATIONREQUESTĀ</h1></b></span>    
                                         </div>
 
 

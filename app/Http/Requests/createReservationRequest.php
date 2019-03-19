@@ -34,13 +34,18 @@ class createReservationRequest extends FormRequest
         $tablesinfo = $data[2];
         $standinginfo = $data[3];
 
-        $standing = getdata($this->get('ticketcount'),0) - (getdata($this->get('tablenr'),0) * $myevent->Seatsontablenumber + getdata($this->get('seatnr'),0)); // izvēlēto stāvvietu skaits
+        $standing = getdata($this->get('ticketcount'),0) - (getdata($this->get('tablecount'),0) + getdata($this->get('seatnr'),0)); // izvēlēto stāvvietu skaits
 
+        if($ticketinfo > 2 || $ticketinfo === "Neierobežots") $ticketinfo = 2;
+        if($tablesinfo > 2) $tablesinfo = 2;
+
+        $maxtableseats = $myevent->Seatsontablenumber - tableSeats($myevent->id,request('tablenr'));
+        
         $rules = array();
-        if($myevent->Tickets == -999) $rules['ticketcount'] = ['required','gte: ' . (getdata($this->get('tablenr'),0) * $myevent->Seatsontablenumber +  getdata($this->get('seatnr'),0)),new ValidReserv($standinginfo,$standing)];
-        else $rules['ticketcount'] = ['required','lte: ' . $ticketinfo ,'gte: ' . (getdata($this->get('tablenr'),0) * $myevent->Seatsontablenumber +  getdata($this->get('seatnr'),0)),new ValidReserv($standinginfo,$standing)];
-        if(request('customRadio') == 'Yes') $rules['seatnr'] = 'required|lte: ' . $seatsinfo;
-        if(request('inlineDefaultRadiosExample') == 'Yes') $rules['tablenr'] = 'required|lte: ' . $tablesinfo;
+        if($myevent->Tickets == -999) $rules['ticketcount'] = ['required','lte: ' . $ticketinfo ,'gte: ' . (getdata($this->get('tablecount'),0) +  getdata($this->get('seatnr'),0)),new ValidReserv($standinginfo,$standing,1)];
+        else $rules['ticketcount'] = ['required','lte: ' . $ticketinfo ,'gte: ' . (getdata($this->get('tablecount'),0) +  getdata($this->get('seatnr'),0)),new ValidReserv($standinginfo,$standing,1)];
+        if(request('customRadio') == 'Yes') $rules['seatnr'] = 'required|max:2|lte: ' . $seatsinfo;
+        if(request('inlineDefaultRadiosExample') == 'Yes') $rules['tablecount'] = ['required','lte: ' . $tablesinfo,new ValidReserv($maxtableseats,request('tablecount'),2)];
         
 
         

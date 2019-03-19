@@ -215,3 +215,7 @@ td.top{
     font-style: italic;
     color: #636b6f;
 }
+#tablenr{
+    position: fixed;
+    margin-left: 10px;
+}

@@ -13,15 +13,17 @@ class ReservationController extends Controller
 {
     public function showreservationcreate($id){
         $myevent = Events::find($id);
+
+        if(!empty($myevent) && $myevent->Melnraksts == 1) return response("There is no such event",404); // Ja atrastais id ir melnraksts vai neeksistē izdod kļūdu
+        else if(empty($myevent)) return response("There is no such event",404);
+        
         $data = reservinfo($id); // funkcija kura ir helpers.php failā un kura atgriež datus par atlikušajām vietām
 
         $ticketinfo = $data[0]; 
         $checkedseats = $data[1]; // (0 = biļešu skaits,1 = sēdvietu skaits,2 = galdu skaits,3 = stāvvietu skaits)
         $checkedtables = $data[2];
         $standing = $data[3];
-
-        if(!empty($myevent) && $myevent->Melnraksts == 1) return response("There is no such event",404); // Ja atrastais id ir melnraksts vai neeksistē izdod kļūdu
-        else if(empty($myevent)) return response("There is no such event",404);
+        
 
         $description = str_replace("\r\n",'<br>',$myevent->Description);
         
@@ -33,13 +35,13 @@ class ReservationController extends Controller
         $user = User::where('email', Auth::user()->email)->first();
 
         eventvalidate($request);
-        
         Reservation::create([  // ieraksta datus datubāzē 
             'email' => $user->email,
             'EventID' => $myevent->id,
             'Tickets' => $request['ticketcount'],
             'Seats' => $request['seatnr'],
-            'Tables' => $request['tablenr'],
+            'TableNr' => $request['tablenr'],
+            'TableSeats' => $request['tablecount'],
             'Transport' => $request['transport'],
             ]);
         return redirect()->back()->with('message','Pasākums rezervēts');

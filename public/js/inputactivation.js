@@ -9,14 +9,17 @@ jQuery('document').ready(function(){
         }
         else jQuery('.eventseat').prop('disabled',false);
     };
-    function disavbletable (){
+    function disabletable (){
         if($('input#defaultInline2').is(':checked')) {
 
             jQuery('.eventtable').prop('disabled',true);
             jQuery('.eventtable').val('');
+            jQuery('#tablenr').prop('disabled',true);
+            jQuery('#tablenr').val('');
 
         }
-        else jQuery('.eventtable').prop('disabled',false);
+        else {jQuery('.eventtable').prop('disabled',false);
+        jQuery('#tablenr').prop('disabled',false);}
     };
     function disabletickets(){
         if($('input#Radio2').is(':checked')) {
@@ -42,7 +45,7 @@ jQuery('document').ready(function(){
     };
     $('input[name="inlineDefaultRadiosExample"]').click(function(){ 
 
-        disavbletable();
+        disabletable();
         
     });
 
@@ -64,7 +67,7 @@ jQuery('document').ready(function(){
 
     });
     disableseat();
-    disavbletable();
+    disabletable();
     disabletickets();
     disabletransport();
 
@@ -78,5 +81,20 @@ jQuery('document').ready(function(){
          if(datefrom > dateto) $('#dateto').val($('#datefrom').val());
 
     });
-    
+    function focus() {
+        [].forEach.call(this.options, function(o) {
+          o.textContent = o.getAttribute('value') + ' (' + o.getAttribute('data-descr') + ')';
+        });
+      }
+      function blur() {
+        [].forEach.call(this.options, function(o) {
+          console.log(o);
+          o.textContent = o.getAttribute('value');
+        });
+      }
+      [].forEach.call(document.querySelectorAll('#tablenr'), function(s) {
+        s.addEventListener('focus', focus);
+        s.addEventListener('blur', blur);
+        blur.call(s);
+      });
 });

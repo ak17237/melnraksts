@@ -12,9 +12,8 @@ jQuery('document').ready(function(){
         ticketcount = getdata(parseInt(jQuery('#ticketcount').val()),0);
         seatcount = getdata(parseInt(jQuery('#seatcount').val()),0);
         tablecount = getdata(parseInt(jQuery('#tablecount').val()),0);
-        tabelseatscount = getdata(parseInt(jQuery('#tableseats').html()),0);
 
-        standcount = ticketcount - (tablecount * tabelseatscount + seatcount);
+        standcount = ticketcount - (tablecount + seatcount);
 
         if(standcount < 0) standcount = 0;
         jQuery('.stand-tickets').html(standcount);

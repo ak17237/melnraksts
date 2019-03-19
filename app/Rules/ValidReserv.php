@@ -13,11 +13,13 @@ class ValidReserv implements Rule
      *
      * @return void
      */
-    public function __construct($standinginfo,$standing)
+    public function __construct($max,$current,$type)
     {
-        
-        $this->standmax = $standinginfo; // max pieļauto stāvvietu skaits
-        $this->standcurr = $standing; // izvēlēto stāvvietu skaits
+
+        $this->max = $max; // max pieļauto stāvvietu/sēdvietu skaits
+        $this->curr = $current; // izvēlēto stāvvietu/sēdvietu skaits
+        $this->type = $type;
+
     }
 
     /**
@@ -29,7 +31,7 @@ class ValidReserv implements Rule
      */
     public function passes($attribute, $value)
     {
-        if($this->standcurr <= $this->standmax || $this->standmax == "Neierobežots") return true;
+        if($this->curr <= $this->max || $this->max === "Neierobežots") return true;
     }
 
     /**
@@ -39,6 +41,9 @@ class ValidReserv implements Rule
      */
     public function message()
     {
-        return 'Stavvietu skaitam jabut mazakam par ' . $this->standmax;
+        if($this->type == 1)
+        return 'Stavvietu skaitam jabut mazakam par ' . $this->max;
+        if($this->type == 2)
+        return 'Šajā galdiņa nepietiek vietas';
     }
 }
