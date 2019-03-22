@@ -24,8 +24,9 @@ class HomeController extends Controller
         if(check(3)) $dataplus3 = get(3); else $dataplus3 = '';
         if(check(4)) $dataplus4 = get(4); else $dataplus4 = '';
         if(check(5)) $dataplus5 = get(5); else $dataplus5 = '';
+        $count = 0;
         
-        return view('home',compact('data','dataplus1','dataplus2','dataplus3','dataplus4','dataplus5'));
+        return view('home',compact('data','dataplus1','dataplus2','dataplus3','dataplus4','dataplus5','count'));
 
     }
 }

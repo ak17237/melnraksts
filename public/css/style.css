@@ -216,6 +216,14 @@ td.top{
     color: #636b6f;
 }
 #tablenr{
-    position: fixed;
+    position: absolute;
     margin-left: 10px;
+}
+.vipevent{
+    float: right;
+    padding-right: 10px;
+}
+.p-top-5{
+    padding-top: 5px;
+    padding-left: 3px;
 }

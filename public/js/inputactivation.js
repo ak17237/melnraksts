@@ -97,4 +97,15 @@ jQuery('document').ready(function(){
         s.addEventListener('blur', blur);
         blur.call(s);
       });
+
+
+      $('#viplength').on('change', function () {
+    
+        var value = $(this).val();
+        
+        if (value !== '') {
+            
+            $(this).val(Math.max(Math.min(value, 30), 10));
+        }
+    });
 });

@@ -81,6 +81,8 @@ function checkAuthor($email,$eventid){
     $user = User::where('email', $email)->first();
     $event = Events::where('id',$eventid)->first();
 
+    if(empty($event)) return response("There is no such event",404);
+
     if($event->email != $user->email) return false;
     else return true;
 }
@@ -101,5 +103,48 @@ function checkResrvationCount($eventid,$email){
         $count += $reserv->Tickets;
     }
     return $count;
+}
+function generateRandomString($length = 10) {
+    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $charactersLength = strlen($characters);
+    $randomString = '';
+    for ($i = 0; $i < $length; $i++) {
+        $randomString .= $characters[rand(0, $charactersLength - 1)];
+    }
+    return $randomString;
+}
+function checkEvent($eventid,$save = 0,$extension = null,&$status = null){
+    
+    $event = Events::where('id',$eventid)->first();
+    
+    if(empty($event)) return false;
+    elseif($save != 0){
+        
+        if($event->Melnraksts == 1) return false;
+        
+
+        elseif($save == 2){
+            if($event->VIP == 1 && $extension != $event->linkcode) {
+    
+                $status = 2;
+                return false;
+            }
+            elseif($extension != $event->linkcode) {
+    
+                $status = 1;
+                return false;
+    
+            }
+            else return true;       
+    
+        }
+        else return true;
+
+    }
+    else return true;
+
+}
+function countbyoneVIP(&$count){
+    $count++;
 }
 ?>

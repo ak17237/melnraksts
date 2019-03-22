@@ -3,10 +3,11 @@
 <div class="container">
     <br>
     @if(session()->has('message'))
-        <div class="alert alert-success">
-            {{ session()->get('message') }}
-        </div>
-        @endif
+    <div class="alert alert-dismissible alert-success">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <p>{{ session()->get('message') }}</p>
+    </div>
+    @endif
         <a href="/" class="btn btn-primary back">Back</a>
 <div class="content">
     <div class="title m-b-md">

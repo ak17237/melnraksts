@@ -14,7 +14,6 @@ class EventFormsController extends Controller
     public function showcreate(){ // formas izvade ar pareizu datuma formātu
         date_default_timezone_set("Europe/Riga");
         $date = date("Y-m-d");
-        
 
         return view('Event_forms.Eventcreate',compact('date'));
 
@@ -51,9 +50,6 @@ class EventFormsController extends Controller
 
         $myevent = Events::find($id);
 
-        if(!empty($myevent) && $myevent->Melnraksts == 1) return response("There is no such event",404); // Ja atrastais id ir melnraksts vai neeksistē izdod kļūdu
-        else if(empty($myevent)) return response("There is no such event",404);
-
         $description = str_replace("\r\n",'<br>',$myevent->Description);
 
         return view('Event_forms.Eventinfo',compact('myevent','description'));
@@ -70,6 +66,19 @@ class EventFormsController extends Controller
             0 => 'izveidots!'
         );
 
+        if(empty($request['vipswitch'])) $vip = 0;
+        else $vip = 1;
+
+        if($vip == 1){
+
+        $info = 'VIP';
+        $linkcode = generateRandomString();
+
+        }else {
+            $info = 0;
+            $linkcode = "show";
+        }
+
         $user = User::where('email', Auth::user()->email)->first();     
         Events::create([  // ieraksta datus datubāzē 
         'Title' => $request['title'],
@@ -83,10 +92,12 @@ class EventFormsController extends Controller
         'Description' => $request['description'],
         'Tickets' => $request['ticketcount'],
         'Melnraksts' => $melnraksts, // melnraksta status ir atkarīgs no kura poga tika uzpiesta
+        'VIP' => $vip,
         'email' => $user->email,
+        'linkcode' => $linkcode,
         ]);
 
-        return redirect()->back()->with('message','Pasākums ir veiksmīgi ' . $message[$melnraksts]); 
+        return redirect()->back()->with('message','Pasākums ir veiksmīgi ' . $message[$melnraksts])->with('info',$info);
         
     }
     public function edit(createEventRequest $request,$id){
@@ -113,6 +124,26 @@ class EventFormsController extends Controller
 
         eventvalidate($request); // funkcija no helpers
 
+        if($request['vipswitch'] == "off") $vip = 0;
+        else $vip = 1;
+
+        if($vip == $myevent->VIP){
+            
+            $linkcode = $myevent->linkcode;
+            $info = 0;
+        }
+        elseif($vip == 1){
+        
+        $linkcode = generateRandomString();
+        $info = "VIP";
+        
+        }
+        else{
+
+            $linkcode = "show";
+            $info = 0;
+        }
+
         $myevent->fill([    // ieraksta izmainīšana 
             'Title' => $request['title'],
             'Datefrom' => $request['datefrom'],
@@ -125,10 +156,12 @@ class EventFormsController extends Controller
             'Description' => $request['description'],
             'Tickets' => $request['ticketcount'],
             'Melnraksts' => $index,
+            'VIP' => $vip,
+            'linkcode' => $linkcode,
             ]);
         $myevent->save();
 
-        return redirect($route[$myevent->Melnraksts])->with('message','Pasākums ir veiksmīgi ' . $message[$status]);
+        return redirect($route[$myevent->Melnraksts])->with('message','Pasākums ir veiksmīgi ' . $message[$status])->with('info',$info);
 
 }
     public function delete($id){ // ieraksta dzēšana

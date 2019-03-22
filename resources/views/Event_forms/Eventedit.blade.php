@@ -14,12 +14,22 @@
                 <form action="{{ route('edit',$myevent->id) }}" method="POST">
                     {{csrf_field()}}    
                         <fieldset>
-                        <legend>Rediģēt pasākumu "{{ $myevent->Title }}"</legend>
+                        <legend><p class="eventcreate">Rediģēt pasākumu "{{ $myevent->Title }}"</p>
+                        <input id="reservlink" class="form-control col-lg-5 eventcreate" value="{{ route('showreservationcreate', ['id' => $myevent->id,'extension' => $myevent->linkcode]) }}">
+                        <button id="copybtn" type="button" class="btn btn-secondary clippy eventcreate">
+                            <img id='imgcopy' src="{{ asset('clippy.svg') }}" width="25" height="25">
+                        </button>
+                    </legend>
+                        <div class="alert alert-dismissible alert-warning" style="display: none;">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <p class="mb-0"><strong>Uzmanību!</strong> Rezervācijas piekļuves url links tiks mainīts</p>
+                        </div>
                         @if(session()->has('message'))
-                                    <div class="alert alert-success">
-                                        {{ session()->get('message') }}
-                                    </div>
-                                @endif
+                        <div class="alert alert-dismissible alert-success">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <p>{{ session()->get('message') }}</p>
+                        </div>
+                        @endif
                             <div class="col-lg-5 eventcreate">
                                 <label>Title</label>
                                 <input type="text" name='title' class="form-control {{ $errors->has('title') ? ' is-invalid' : '' }}" id="title" 
@@ -283,6 +293,20 @@
                                 </textarea>
                             </div>
 
+                            <div class="custom-control custom-switch col-lg-11 eventcreate">
+                                <div class="col-lg-2 eventcreate">
+                              <input type="hidden" name="vipswitch" value="off" />
+                              <input type="checkbox" class="custom-control-input" id="customSwitch1" name="vipswitch" 
+                              @if(old('vipswitch') == "on") checked=""
+                              @elseif(old('vipswitch') == "off")
+                              @else
+                                    @if ($myevent->VIP == 1)
+                                        checked=""
+                                    @endif
+                                @endif>
+                              <label class="custom-control-label" for="customSwitch1">VIP pasākums</label>
+                            </div>
+
                             <div class="col-lg-11 eventcreate">
                                         <span class="eventcreatebutton"><button type="submit" class="btn btn-primary" name="action" value="create">
                                             @if ($myevent->Melnraksts == 0)
@@ -303,6 +327,5 @@
         </div>
     </div>
 </div>
-{{-- {{ dd($checkedseats) }} --}}
 
 @endsection

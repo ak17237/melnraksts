@@ -55,8 +55,18 @@ $(document).ready(function(){
             jQuery('#month'+ i).html(months[index]);
 
         }
+        $(".vip").mouseover(function(){
+            $(this).data('clicked', true);
+        });
+        $(".vip").mouseout(function(){
+            $(this).data('clicked', false);
+        });
         $("td.top").click(function() {
+            
+            if($('.vip').data('clicked') != true)
             window.location = $(this).find("a").attr("href");
-         });
+         });  
+            
+        
     
 });

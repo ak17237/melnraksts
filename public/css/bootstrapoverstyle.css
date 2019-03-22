@@ -67,7 +67,31 @@
 .custom-checkbox{
     padding-left: 41px;
 }
-
+.clippy{
+    background: #dadada;
+    padding-bottom: 4px;
+    padding-top: 4px;
+}
+.clippy:hover{
+    background:#a5a1a1;
+}
+#reservlink{
+    margin-left: 12px;
+}
+.block{
+    display: block;
+}
+#popoverclose{
+    position: absolute;
+    top: 0%;
+    right: 2%;
+}
+.linkcopy{
+        position: absolute;
+        opacity: .01;
+        height: 0;
+        overflow: hidden;   
+}
 /* CSS animation */
 
 @-webkit-keyframes fadeIn {

@@ -17,7 +17,7 @@
                     @if(empty($description))
                     <p>Nav apraksta</p>
                     @elseif(linecount($description) > 10)
-                    <a href="{{ route('showevent',$myevent->id) }}">Apskatīt aprakstu</a>
+                    <a href="{{ route('showevent',['id' => $myevent->id, 'extension' => $myevent->linkcode]) }}">Apskatīt aprakstu</a>
                     @else
                     <p>{!! $description !!}</p>
                     @endif
@@ -29,15 +29,16 @@
                 @elseif(checkResrvationCount($myevent->id,Auth::user()->email) >= 2) 
                 <h3>Jūs pasūtījāt maksimāli pieļaujamo biļešu skaitu uz lietotāju šajā pasākumā</h3>
                 @else
-                <form action="{{ route('reservationcreate',$myevent->id) }}" method="POST">
+                <form action="{{ route('reservationcreate',['id' => $myevent->id, 'extension' => $myevent->linkcode]) }}" method="POST">
                     {{csrf_field()}}    
                         <fieldset>
                         <legend>Rezervēt pasākumu "{{ $myevent->Title }}"</legend>
-                        @if(session()->has('message')) {{-- Veiksmīgas rezervācijas paziņojums --}}
-                                    <div class="alert alert-success">
-                                        {{ session()->get('message') }}
-                                    </div>
-                                @endif
+                        @if(session()->has('message'))
+                        <div class="alert alert-dismissible alert-success">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <p>{{ session()->get('message') }}</p>
+                        </div>
+                        @endif
                             <div class="col-lg-5 eventcreate">
                                 <label>Title</label> {{-- Nosaukums no datu bāzes --}}
                                 <input type="text" name='title'  disabled class="form-control" id="title" value="{{ $myevent->Title }}">
@@ -129,7 +130,7 @@
                                             <option data-descr="{{ $myevent->Seatsontablenumber - tableSeats($myevent->id,$i) . '/' . $myevent->Seatsontablenumber }}"value="{{ $i }}"
                                                     @if($i == old('tablenr')) selected @endif
                                                     @if($myevent->Seatsontablenumber - tableSeats($myevent->id,$i) == 0) disabled @endif>{{ $i }}</option>
-                                            <p id="tooltipBox" class="col-sm-6" style="z-index:9999;"></p>
+                                            <p id="tooltipBox" class="col-sm-6"></p>
                                             @endfor
                                             
                                         </select>
@@ -191,8 +192,7 @@
                                             
                                         </div> {{-- Pasakaidrojums formai --}}
                                         <div class="col-lg-11 eventcreate ticketinfo">
-                                            <span>Sēdvietas nekādā veidā nav saistītas ar sēdvietām pie galda,tās ir neatkarīgās sēdvietas
-                                                <b><h1>TURPINĀT AR VALIDĀCIJU RULES RESERVATIONREQUESTĀ</h1></b></span>    
+                                            <span>Sēdvietas nekādā veidā nav saistītas ar sēdvietām pie galda,tās ir neatkarīgās sēdvietas</span>    
                                         </div>
 
 

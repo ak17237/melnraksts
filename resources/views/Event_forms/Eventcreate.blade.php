@@ -12,10 +12,17 @@
                         <fieldset>
                         <legend>Create event</legend>
                         @if(session()->has('message'))
-                                    <div class="alert alert-success">
-                                        {{ session()->get('message') }}
-                                    </div>
-                                @endif
+                        <div class="alert alert-dismissible alert-success">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <p>{{ session()->get('message') }}</p>
+                        </div>
+                        @endif
+                        @if(session()->get('info') === 'VIP')
+                        <div class="alert alert-dismissible alert-primary">
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        <strong>Tika izveidots VIP pasākums!</strong><p class="mb-0">Linku uz izveidoto VIP pasākumu var atrast slaiderī pie pasākuma,rediģēšanas formā un pie pasākuma apskata</p>
+                        </div>
+                        @endif
                             <div class="col-lg-5 eventcreate">
                                 <label>Title</label>
                                 <input type="text" name='title' class="form-control {{ $errors->has('title') ? ' is-invalid' : '' }}" id="title" value="{{ old('title') }}">
@@ -206,6 +213,13 @@
                                 <label>Event description</label>
                                 <textarea class="form-control" name='description' id="eventdescription" rows="3">{{ old('description') }}</textarea>
                             </div>
+                            
+                                <div class="custom-control custom-switch col-lg-11 eventcreate">
+                                    <div class="col-lg-2 eventcreate">
+                                  <input type="checkbox" class="custom-control-input" id="customSwitch1" name="vipswitch" {{ old('vipswitch') ? 'checked' : '' }}>
+                                  <label class="custom-control-label" for="customSwitch1">VIP pasākums</label>
+                                  
+                                </div>
 
                             <div class="col-lg-11 eventcreate">
                                         <span class="eventcreatebutton"><button type="submit" class="btn btn-primary" name="action" value="create">Create</button></span>

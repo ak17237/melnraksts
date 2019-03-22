@@ -22,8 +22,15 @@
         @endif
             <div class="content">
                 @if(session()->has('message'))
-                <div class="alert alert-success">
-                    {{ session()->get('message') }}
+                  <div class="alert alert-dismissible alert-success">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <p class="mb-0">{{ session()->get('message') }}</p>
+                  </div>
+                @endif
+                @if(session()->get('info') === 'VIP')
+                <div class="alert alert-dismissible alert-primary">
+                  <button type="button" class="close" data-dismiss="alert">&times;</button>
+                  <strong>Tika izveidots VIP pasākums!</strong><p class="mb-0">Linku uz izveidoto VIP pasākumu var atrast slaiderī pie pasākuma,rediģēšanas formā un pie pasākuma apskata</p>
                 </div>
                 @endif
                 <div class="title m-b-md">
@@ -62,9 +69,7 @@
                         <th class="space" scope="col"></th>
                       </tr>
                     </thead>
-              
                     @foreach ($data as $d) {{-- izvada piecus pēc šī meneša --}}
-  
                     <tbody>
                       <tr>
                         <td class="top">
@@ -77,6 +82,15 @@
                         <td class="top space eventinfo">
                             <a href="{{ route('showevent',$d->id) }}"></a>
                             <h5>{{ $d->Title }}
+                            @if($d->VIP == 1) {{countbyoneVIP($count)}}
+                            (VIP)
+                            @if(Auth::check() && Auth::user()->hasRole('Admin'))
+                            <button type="button" class="vip btn btn-secondary clippy homecopybtn{{ $count }}">
+                                <input type="text" id="linkcopy{{ $count }}"class="linkcopy" value="{{ route('showreservationcreate', ['id' => $d->id,'extension' => $d->linkcode]) }}">
+                                <img id='imgcopy' src="{{ asset('clippy.svg') }}" width="15" height="15">
+                            </button>
+                            @endif
+                            @endif
                             @if(reservinfo($d->id)[0] == 0 && $d->Tickets != -999)
                             (Biļetes beidzās)
                             @endif</h5>
@@ -86,10 +100,12 @@
                         </td>
                         @if(Auth::check())
                         <td @if (Auth::user()->hasRole('Admin') && !checkAuthor(Auth::user()->email,$d->id)) colspan="2" {{-- ja nav piekļuves pogai lai būtu centrēts --}}
-                          style="text-align: center" @endif class="space" ><a href="{{ route('showreservationcreate',$d->id) }}" class="button">
-                        @if(reservinfo($d->id)[0] == 0 && $d->Tickets != -999)
-                        Apskatīt
+                          style="text-align: center" @endif class="space" >
+                        @if((reservinfo($d->id)[0] == 0 && $d->Tickets != -999) || $d->VIP == 1)
+                        <a href="{{ route('showevent',$d->id) }}" class="button">
+                        Apskatīt </a>
                         @else
+                        <a href="{{ route('showreservationcreate',['id' => $d->id, 'extension' => $d->linkcode]) }}" class="button">
                         Rezervēt
                         @endif</a></td>
                         @if (Auth::user()->hasRole('Admin') && checkAuthor(Auth::user()->email,$d->id)) {{-- Tikai administrācijas piekļuve un tikai pasākuma autoram--}}
@@ -101,6 +117,7 @@
                       </tr>
                     </tbody>
                     @endforeach
+                    <span id="countVIP0" style="display:none">{{$count}}</span>
               @endif
             </table>
             </div>
@@ -123,13 +140,24 @@
                       <tbody>
                         <tr>
                           <td class="top">
+                            <a href="{{ route('showevent',$dp1->id) }}"></a>
                               <div class="eventdate">
                                   <div class="eventday block h-center v-center"><span class="daystyle">{{ geteventday($dp1->Datefrom) }}</span></div>
                                   <div class="eventmonth block h-center v-center"><span class="month">Mēnesis</span></div>
                               </div>
                           </td>
                           <td class="top space eventinfo">
+                            <a href="{{ route('showevent',$dp1->id) }}"></a>
                               <h5>{{ $dp1->Title }}
+                              @if($dp1->VIP == 1){{countbyoneVIP($count)}}
+                              (VIP)
+                              @if(Auth::check() && Auth::user()->hasRole('Admin'))
+                                      <button type="button" class="vip btn btn-secondary clippy homecopybtn{{ $count }}">
+                                      <input type="text" id="linkcopy{{ $count }}"class="linkcopy" value="{{ route('showreservationcreate', ['id' => $dp1->id,'extension' => $dp1->linkcode]) }}">
+                                      <img id='imgcopy' src="{{ asset('clippy.svg') }}" width="15" height="15">
+                                      </button>
+                                      @endif
+                              @endif
                               @if(reservinfo($dp1->id)[0] == 0 && $dp1->Tickets != -999)
                               (Biļetes beidzās)
                               @endif</h5>
@@ -137,20 +165,26 @@
                               <p>Kur: {{ $dp1->Address }}</p>
                               <i>{{ $dp1->Anotation }}</i>
                           </td>
-                          <td class="space"><a href="{{ route('showreservationcreate',$dp1->id) }}" class="button">
-                          @if(reservinfo($dp1->id)[0] == 0 && $dp1->Tickets != -999)
-                          Apskatīt
+                          @if(Auth::check())
+                          <td @if (Auth::user()->hasRole('Admin') && !checkAuthor(Auth::user()->email,$dp1->id)) colspan="2" {{-- ja nav piekļuves pogai lai būtu centrēts --}}
+                            style="text-align: center" @endif class="space" >
+                          @if(reservinfo($dp1->id)[0] == 0 && $dp1->Tickets != -999 || $dp1->VIP == 1)
+                          <a href="{{ route('showevent',$dp1->id) }}" class="button">
+                          Apskatīt </a>
                           @else
+                          <a href="{{ route('showreservationcreate',['id' => $dp1->id, 'extension' => $dp1->linkcode]) }}" class="button">
                           Rezervēt
                           @endif</a></td>
-                          @if (Auth::check())
-                          @if (Auth::user()->hasRole('Admin') && checkAuthor(Auth::user()->email,$dp1->id))
+                          @if (Auth::user()->hasRole('Admin') && checkAuthor(Auth::user()->email,$dp1->id)) {{-- Tikai administrācijas piekļuve un tikai pasākuma autoram--}}
                           <td class="space"><a href="{{ route('showedit',$dp1->id) }}" class="button">Rediģēt</a></td>
+                          @else <td></td>
                           @endif
+                          @else <td class="space"><a href="{{ route('showevent',$dp1->id) }}" class="button">Apskatīt</a>
                           @endif
                         </tr>
                       </tbody>
                       @endforeach
+                      <span id="countVIP1" style="display:none">{{$count}}</span>
                 @endif
               </table>
               </div>
@@ -173,13 +207,24 @@
                         <tbody>
                           <tr>
                             <td class="top">
+                              <a href="{{ route('showevent',$dp2->id) }}"></a>
                                 <div class="eventdate">
                                     <div class="eventday block h-center v-center"><span class="daystyle">{{ geteventday($dp2->Datefrom) }}</span></div>
                                     <div class="eventmonth block h-center v-center"><span class="month">Mēnesis</span></div>
                                 </div>
                             </td>
                             <td class="top space eventinfo">
+                              <a href="{{ route('showevent',$dp2->id) }}"></a>
                                 <h5>{{ $dp2->Title }}
+                                @if($dp2->VIP == 1){{countbyoneVIP($count)}}
+                                (VIP)
+                                @if(Auth::check() && Auth::user()->hasRole('Admin'))
+                                      <button type="button" class="vip btn btn-secondary clippy homecopybtn{{ $count }}">
+                                      <input type="text" id="linkcopy{{ $count }}"class="linkcopy" value="{{ route('showreservationcreate', ['id' => $dp2->id,'extension' => $dp2->linkcode]) }}">
+                                      <img id='imgcopy' src="{{ asset('clippy.svg') }}" width="15" height="15">
+                                      </button>
+                                      @endif
+                                @endif
                                 @if(reservinfo($dp2->id)[0] == 0 && $dp2->Tickets != -999)
                                 (Biļetes beidzās)
                                 @endif</h5>
@@ -187,20 +232,26 @@
                                 <p>Kur: {{ $dp2->Address }}</p>
                                 <i>{{ $dp2->Anotation }}</i>
                             </td>
-                            <td class="space"><a href="{{ route('showreservationcreate',$dp2->id) }}" class="button">
-                            @if(reservinfo($dp2->id)[0] == 0 && $dp2->Tickets != -999)
-                            Apskatīt
+                            @if(Auth::check())
+                            <td @if (Auth::user()->hasRole('Admin') && !checkAuthor(Auth::user()->email,$dp2->id)) colspan="2" {{-- ja nav piekļuves pogai lai būtu centrēts --}}
+                              style="text-align: center" @endif class="space" >
+                            @if(reservinfo($dp2->id)[0] == 0 && $dp2->Tickets != -999 || $dp2->VIP == 1)
+                            <a href="{{ route('showevent',$dp2->id) }}" class="button">
+                            Apskatīt </a>
                             @else
+                            <a href="{{ route('showreservationcreate',['id' => $dp2->id, 'extension' => $dp2->linkcode]) }}" class="button">
                             Rezervēt
                             @endif</a></td>
-                            @if (Auth::check())
-                            @if (Auth::user()->hasRole('Admin') && checkAuthor(Auth::user()->email,$dp2->id))
+                            @if (Auth::user()->hasRole('Admin') && checkAuthor(Auth::user()->email,$dp2->id)) {{-- Tikai administrācijas piekļuve un tikai pasākuma autoram--}}
                             <td class="space"><a href="{{ route('showedit',$dp2->id) }}" class="button">Rediģēt</a></td>
+                            @else <td></td>
                             @endif
+                            @else <td class="space"><a href="{{ route('showevent',$dp2->id) }}" class="button">Apskatīt</a>
                             @endif
                           </tr>
                         </tbody>
                         @endforeach
+                        <span id="countVIP2" style="display:none">{{$count}}</span>
                   @endif
                 </table>
                 </div>
@@ -223,13 +274,24 @@
                           <tbody>
                             <tr>
                               <td class="top">
+                                <a href="{{ route('showevent',$dp3->id) }}"></a>
                                   <div class="eventdate">
                                       <div class="eventday block h-center v-center"><span class="daystyle">{{ geteventday($dp3->Datefrom) }}</span></div>
                                       <div class="eventmonth block h-center v-center"><span class="month">Mēnesis</span></div>
                                   </div>
                               </td>
                               <td class="top space eventinfo">
+                                <a href="{{ route('showevent',$dp3->id) }}"></a>
                                   <h5>{{ $dp3->Title }}
+                                  @if($dp3->VIP == 1){{countbyoneVIP($count)}}
+                                  (VIP)
+                                  @if(Auth::check() && Auth::user()->hasRole('Admin'))
+                                      <button type="button" class="vip btn btn-secondary clippy homecopybtn{{ $count }}">
+                                      <input type="text" id="linkcopy{{ $count }}"class="linkcopy" value="{{ route('showreservationcreate', ['id' => $dp3->id,'extension' => $dp3->linkcode]) }}">
+                                      <img id='imgcopy' src="{{ asset('clippy.svg') }}" width="15" height="15">
+                                      </button>
+                                      @endif
+                                  @endif
                                   @if(reservinfo($dp3->id)[0] == 0 && $dp3->Tickets != -999)
                                   (Biļetes beidzās)
                                   @endif</h5>
@@ -237,20 +299,26 @@
                                   <p>Kur: {{ $dp3->Address }}</p>
                                   <i>{{ $dp3->Anotation }}</i>
                               </td>
-                              <td class="space"><a href="{{ route('showreservationcreate',$dp3->id) }}" class="button">
-                              @if(reservinfo($dp3->id)[0] == 0 && $dp3->Tickets != -999)
-                              Apskatīt
+                              @if(Auth::check())
+                              <td @if (Auth::user()->hasRole('Admin') && !checkAuthor(Auth::user()->email,$dp3->id)) colspan="2" {{-- ja nav piekļuves pogai lai būtu centrēts --}}
+                                style="text-align: center" @endif class="space" >
+                              @if(reservinfo($dp3->id)[0] == 0 && $dp3->Tickets != -999 || $dp3->VIP == 1)
+                              <a href="{{ route('showevent',$dp3->id) }}" class="button">
+                              Apskatīt </a>
                               @else
+                              <a href="{{ route('showreservationcreate',['id' => $dp3->id, 'extension' => $dp3->linkcode]) }}" class="button">
                               Rezervēt
                               @endif</a></td>
-                              @if (Auth::check())
-                              @if (Auth::user()->hasRole('Admin') && checkAuthor(Auth::user()->email,$dp3->id))
+                              @if (Auth::user()->hasRole('Admin') && checkAuthor(Auth::user()->email,$dp3->id)) {{-- Tikai administrācijas piekļuve un tikai pasākuma autoram--}}
                               <td class="space"><a href="{{ route('showedit',$dp3->id) }}" class="button">Rediģēt</a></td>
+                              @else <td></td>
                               @endif
+                              @else <td class="space"><a href="{{ route('showevent',$dp3->id) }}" class="button">Apskatīt</a>
                               @endif
                             </tr>
                           </tbody>
                           @endforeach
+                          <span id="countVIP3" style="display:none">{{$count}}</span>
                     @endif
                   </table>
                   </div>
@@ -273,13 +341,24 @@
                             <tbody>
                               <tr>
                                 <td class="top">
+                                  <a href="{{ route('showevent',$dp4->id) }}"></a>
                                     <div class="eventdate">
                                         <div class="eventday block h-center v-center"><span class="daystyle">{{ geteventday($dp4->Datefrom) }}</span></div>
                                         <div class="eventmonth block h-center v-center"><span class="month">Mēnesis</span></div>
                                     </div>
                                 </td>
                                 <td class="top space eventinfo">
+                                  <a href="{{ route('showevent',$dp4->id) }}"></a>
                                     <h5>{{ $dp4->Title }}
+                                    @if($dp4->VIP == 1){{countbyoneVIP($count)}}
+                                    (VIP)
+                                    @if(Auth::check() && Auth::user()->hasRole('Admin'))
+                                      <button type="button" class="vip btn btn-secondary clippy homecopybtn{{ $count }}">
+                                      <input type="text" id="linkcopy{{ $count }}"class="linkcopy" value="{{ route('showreservationcreate', ['id' => $dp4->id,'extension' => $dp4->linkcode]) }}">
+                                      <img id='imgcopy' src="{{ asset('clippy.svg') }}" width="15" height="15">
+                                      </button>
+                                      @endif
+                                    @endif
                                     @if(reservinfo($dp4->id)[0] == 0 && $dp4->Tickets != -999)
                                     (Biļetes beidzās)
                                     @endif</h5>
@@ -287,20 +366,26 @@
                                     <p>Kur: {{ $dp4->Address }}</p>
                                     <i>{{ $dp4->Anotation }}</i>
                                 </td>
-                                <td class="space"><a href="{{ route('showreservationcreate',$dp4->id) }}" class="button">
-                                @if(reservinfo($dp4->id)[0] == 0 && $dp4->Tickets != -999)
-                                Apskatīt
+                                @if(Auth::check())
+                                <td @if (Auth::user()->hasRole('Admin') && !checkAuthor(Auth::user()->email,$dp4->id)) colspan="2" {{-- ja nav piekļuves pogai lai būtu centrēts --}}
+                                  style="text-align: center" @endif class="space" >
+                                @if(reservinfo($dp4->id)[0] == 0 && $dp4->Tickets != -999 || $dp4->VIP == 1)
+                                <a href="{{ route('showevent',$dp4->id) }}" class="button">
+                                Apskatīt </a>
                                 @else
+                                <a href="{{ route('showreservationcreate',['id' => $dp4->id, 'extension' => $dp4->linkcode]) }}" class="button">
                                 Rezervēt
                                 @endif</a></td>
-                                @if (Auth::check())
-                                @if (Auth::user()->hasRole('Admin') && checkAuthor(Auth::user()->email,$dp4->id))
+                                @if (Auth::user()->hasRole('Admin') && checkAuthor(Auth::user()->email,$dp4->id)) {{-- Tikai administrācijas piekļuve un tikai pasākuma autoram--}}
                                 <td class="space"><a href="{{ route('showedit',$dp4->id) }}" class="button">Rediģēt</a></td>
+                                @else <td></td>
                                 @endif
+                                @else <td class="space"><a href="{{ route('showevent',$dp4->id) }}" class="button">Apskatīt</a>
                                 @endif
                               </tr>
                             </tbody>
                             @endforeach
+                            <span id="countVIP4" style="display:none">{{$count}}</span>
                       @endif
                     </table>
                     </div>
@@ -323,13 +408,24 @@
                               <tbody>
                                 <tr>
                                   <td class="top">
+                                    <a href="{{ route('showevent',$dp5->id) }}"></a>
                                       <div class="eventdate">
                                           <div class="eventday block h-center v-center"><span class="daystyle">{{ geteventday($dp5->Datefrom) }}</span></div>
                                           <div class="eventmonth block h-center v-center"><span class="month">Mēnesis</span></div>
                                       </div>
                                   </td>
                                   <td class="top space eventinfo">
+                                    <a href="{{ route('showevent',$dp5->id) }}"></a>
                                       <h5>{{ $dp5->Title }}
+                                      @if($dp5->VIP == 1){{countbyoneVIP($count)}}
+                                      (VIP)
+                                      @if(Auth::check() && Auth::user()->hasRole('Admin'))
+                                      <button type="button" class="vip btn btn-secondary clippy homecopybtn{{ $count }}">
+                                      <input type="text" id="linkcopy{{ $count }}"class="linkcopy" value="{{ route('showreservationcreate', ['id' => $dp5->id,'extension' => $dp5->linkcode]) }}">
+                                      <img id='imgcopy' src="{{ asset('clippy.svg') }}" width="15" height="15">
+                                      </button>
+                                      @endif
+                                      @endif
                                       @if(reservinfo($d->id)[0] == 0 && $dp5->Tickets != -999)
                                       (Biļetes beidzās)
                                       @endif</h5>
@@ -337,20 +433,26 @@
                                       <p>Kur: {{ $dp5->Address }}</p>
                                       <i>{{ $dp5->Anotation }}</i>
                                   </td>
-                                  <td class="space"><a href="{{ route('showreservationcreate',$dp5->id) }}" class="button">
-                                  @if(reservinfo($dp5->id)[0] == 0 && $dp5->Tickets != -999)
-                                  Apskatīt
+                                  @if(Auth::check())
+                                  <td @if (Auth::user()->hasRole('Admin') && !checkAuthor(Auth::user()->email,$dp5->id)) colspan="2" {{-- ja nav piekļuves pogai lai būtu centrēts --}}
+                                    style="text-align: center" @endif class="space" >
+                                  @if(reservinfo($dp5->id)[0] == 0 && $dp5->Tickets != -999 || $dp5->VIP == 1)
+                                  <a href="{{ route('showevent',$dp5->id) }}" class="button">
+                                  Apskatīt </a>
                                   @else
+                                  <a href="{{ route('showreservationcreate',['id' => $dp5->id, 'extension' => $dp5->linkcode]) }}" class="button">
                                   Rezervēt
-                                  @endif</a></td><br>
-                                  @if (Auth::check())
-                                  @if (Auth::user()->hasRole('Admin') && checkAuthor(Auth::user()->email,$d->id))
+                                  @endif</a></td>
+                                  @if (Auth::user()->hasRole('Admin') && checkAuthor(Auth::user()->email,$dp5->id)) {{-- Tikai administrācijas piekļuve un tikai pasākuma autoram--}}
                                   <td class="space"><a href="{{ route('showedit',$dp5->id) }}" class="button">Rediģēt</a></td>
+                                  @else <td></td>
                                   @endif
+                                  @else <td class="space"><a href="{{ route('showevent',$dp5->id) }}" class="button">Apskatīt</a>
                                   @endif
                                 </tr>
                               </tbody>
                               @endforeach
+                              <span id="countVIP5" style="display:none">{{$count}}</span>
                         @endif
                       </table>
                       </div>        

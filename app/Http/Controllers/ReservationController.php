@@ -11,11 +11,8 @@ use App\Http\Requests\createReservationRequest;
 
 class ReservationController extends Controller
 {
-    public function showreservationcreate($id){
+    public function showreservationcreate($id,$extension){
         $myevent = Events::find($id);
-
-        if(!empty($myevent) && $myevent->Melnraksts == 1) return response("There is no such event",404); // Ja atrastais id ir melnraksts vai neeksistē izdod kļūdu
-        else if(empty($myevent)) return response("There is no such event",404);
         
         $data = reservinfo($id); // funkcija kura ir helpers.php failā un kura atgriež datus par atlikušajām vietām
 

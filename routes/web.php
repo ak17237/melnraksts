@@ -46,29 +46,34 @@ Route::get('/create-event',[
     'roles' => ['Admin']
         ]);
 Route::post('/create-event/results','EventFormsController@create')->name('create');
-Route::get('/event-{id}/edit',[
+Route::get('/event/{id}/edit',[
     'uses' => 'EventFormsController@showedit',
     'as' => 'showedit',
-    'middleware' =>  ['roles','author'],
+    'middleware' =>  ['roles','author','existevent'],
     'roles' => ['Admin']
         ]);
-Route::post('/event-{id}/edit/record','EventFormsController@edit')->name('edit');
-Route::delete('event-{id}/delete','EventFormsController@delete')->name('delete');
+Route::post('/event/{id}/edit/record','EventFormsController@edit')->name('edit')->middleware('existevent');
+Route::delete('event/{id}/delete',[
+    'uses' => 'EventFormsController@delete',
+    'as' => 'delete',
+    'middleware' =>  ['roles','existevent'],
+    'roles' => ['Admin']
+        ]);
 Route::get('/saved-events-{page}',[
     'uses' => 'EventFormsController@showsavedevents',
     'as' => 'showsavedevents',
     'middleware' =>  'roles',
     'roles' => ['Admin']
         ]);
-Route::get('/event-{id}','EventFormsController@showevent')->name('showevent');
+Route::get('/event/{id}/show','EventFormsController@showevent')->name('showevent')->middleware('saveevent');
 // Rezervāciju pārvalde
-Route::get('event-{id}/reservation',[
+Route::get('event/{id}/{extension}/reservation',[
     'uses' => 'ReservationController@showreservationcreate',
     'as' => 'showreservationcreate',
-    'middleware' =>  'roles',
+    'middleware' =>  ['roles','vipevent'],
     'roles' => ['User','Admin']
         ]);
-Route::post('event-{id}/reservation/result','ReservationController@reservationcreate')->name('reservationcreate');
+Route::post('event/{id}/{extension}/reservation/result','ReservationController@reservationcreate')->name('reservationcreate')->middleware('vipevent');
 
 
 

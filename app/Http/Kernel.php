@@ -61,7 +61,10 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'roles' => \App\Http\Middleware\CheckRole::class,
-        'author' => \App\Http\Middleware\CheckAuthor::class
+        'author' => \App\Http\Middleware\CheckAuthor::class,
+        'existevent' => \App\Http\Middleware\CheckEvent::class,
+        'saveevent' => \App\Http\Middleware\CheckSavedEvent::class,
+        'vipevent' => \App\Http\Middleware\CheckVIPEvent::class,
     ];
 
     /**
