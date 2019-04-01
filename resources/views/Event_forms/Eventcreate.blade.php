@@ -102,7 +102,7 @@
                                     value="{{ old('ticketcount') }}"
                                     @endif>
                                     @if ($errors->has('ticketcount'))
-                                        <span class="invalid-feedback" role="alert">
+                                        <span class="invalid-feedback alertticketcount" role="alert">
                                         <strong>{{ $errors->first('ticketcount') }}</strong>
                                         </span>
                                     @endif
@@ -139,7 +139,7 @@
                                     value="{{ old('seatnr') }}"
                                     @endif>
                                     @if ($errors->has('seatnr'))
-                                        <span class="invalid-feedback" role="alert">
+                                        <span class="invalid-feedback alertseatnr" role="alert">
                                         <strong>{{ $errors->first('seatnr') }}</strong>
                                         </span>
                                     @endif
@@ -175,7 +175,7 @@
                                         value="{{ old('tablenr') }}"
                                         @endif>
                                         @if ($errors->has('tablenr'))
-                                            <span class="invalid-feedback" role="alert">
+                                            <span class="invalid-feedback alerttablenr" role="alert">
                                             <strong>{{ $errors->first('tablenr') }}</strong>
                                             </span>
                                         @endif
@@ -190,7 +190,7 @@
                                         value="{{ old('seatsontablenr') }}"
                                         @endif>
                                         @if ($errors->has('seatsontablenr'))
-                                            <span class="invalid-feedback" role="alert">
+                                            <span class="invalid-feedback alerttablenr" role="alert">
                                             <strong>{{ $errors->first('seatsontablenr') }}</strong>
                                             </span>
                                         @endif

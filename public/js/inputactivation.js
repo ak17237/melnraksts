@@ -5,9 +5,26 @@ jQuery('document').ready(function(){
 
             jQuery('.eventseat').prop('disabled',true);
             jQuery('.eventseat').val('');
-    
+            jQuery('.alertseatnr').hide();
+            jQuery('[name="seatnr"]').removeClass('is-invalid');
+            
         }
-        else jQuery('.eventseat').prop('disabled',false);
+        
+    };
+    function enableseat(){
+
+        if($('input#customRadio1').is(':checked')) {
+
+            jQuery('.eventseat').prop('disabled',false);
+            if($('.alertseatnr').text() != ''){
+
+                jQuery('.alertseatnr').show();
+                jQuery('[name="seatnr"]').addClass('is-invalid');
+
+            }
+
+        }
+
     };
     function disabletable (){
         if($('input#defaultInline2').is(':checked')) {
@@ -16,20 +33,57 @@ jQuery('document').ready(function(){
             jQuery('.eventtable').val('');
             jQuery('#tablenr').prop('disabled',true);
             jQuery('#tablenr').val('');
+            jQuery('.alerttablenr').hide();
+            jQuery('[name="tablenr"]').removeClass('is-invalid');
+            jQuery('[name="seatsontablenr"]').removeClass('is-invalid');
 
         }
-        else {jQuery('.eventtable').prop('disabled',false);
-        jQuery('#tablenr').prop('disabled',false);}
+        
+    };
+    function enabletable(){
+
+        if($('input#defaultInline1').is(':checked')) {
+
+            jQuery('.eventtable').prop('disabled',false);
+            jQuery('#tablenr').prop('disabled',false);
+            jQuery('#tablenr').val('1');
+            if($('.alerttablenr').text() != ''){
+
+                jQuery('.alerttablenr').show();
+                jQuery('[name="tablenr"]').addClass('is-invalid');
+                jQuery('[name="seatsontablenr"]').addClass('is-invalid');
+
+            }
+
+        }
+
     };
     function disabletickets(){
         if($('input#Radio2').is(':checked')) {
 
             jQuery('.tickets').prop('disabled',true);
             jQuery('.tickets').val('');
+            jQuery('.alertticketcount').hide();
+            jQuery('[name="ticketcount"]').removeClass('is-invalid');
 
         }
-        else jQuery('.tickets').prop('disabled',false);
+        
     };
+    function enabletickets(){
+        
+        if($('input#Radio1').is(':checked')) {
+
+            jQuery('.tickets').prop('disabled',false);
+            if($('.alertticketcount').text() != ''){
+
+                jQuery('.alertticketcount').show();
+                jQuery('[name="ticketcount"]').addClass('is-invalid');
+
+            }
+
+        }
+
+    }
     function disabletransport(){
         if($('input#Radio1').is(':checked')) {
 
@@ -46,12 +100,13 @@ jQuery('document').ready(function(){
     $('input[name="inlineDefaultRadiosExample"]').click(function(){ 
 
         disabletable();
+        enabletable();
         
     });
 
     $('input[name="customRadio"]').click(function(){
-
         disableseat();
+        enableseat();
 
     });
     
@@ -59,6 +114,7 @@ jQuery('document').ready(function(){
     $('input[name="Radio"]').click(function(){
 
         disabletickets();
+        enabletickets();
 
     });
     $('input[name="TransportRadio"]').click(function(){
@@ -88,7 +144,6 @@ jQuery('document').ready(function(){
       }
       function blur() {
         [].forEach.call(this.options, function(o) {
-          console.log(o);
           o.textContent = o.getAttribute('value');
         });
       }
@@ -97,15 +152,4 @@ jQuery('document').ready(function(){
         s.addEventListener('blur', blur);
         blur.call(s);
       });
-
-
-      $('#viplength').on('change', function () {
-    
-        var value = $(this).val();
-        
-        if (value !== '') {
-            
-            $(this).val(Math.max(Math.min(value, 30), 10));
-        }
-    });
 });

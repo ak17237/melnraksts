@@ -134,7 +134,7 @@
                                             @endif
                                         @endif> 
                                         @if ($errors->has('ticketcount'))
-                                            <span class="invalid-feedback" role="alert">
+                                            <span class="invalid-feedback alertticketcount" role="alert">
                                             <strong>{{ $errors->first('ticketcount') }}</strong>
                                             </span>
                                         @endif
@@ -185,7 +185,7 @@
                                     @endif
                                         @endif>
                                     @if ($errors->has('seatnr'))
-                                        <span class="invalid-feedback" role="alert">
+                                        <span class="invalid-feedback alertseatnr" role="alert">
                                         <strong>{{ $errors->first('seatnr') }}</strong>
                                         </span>
                                     @endif
@@ -236,7 +236,7 @@
                                     @endif
                                         @endif>
                                         @if ($errors->has('tablenr'))
-                                            <span class="invalid-feedback" role="alert">
+                                            <span class="invalid-feedback alerttablenr" role="alert">
                                             <strong>{{ $errors->first('tablenr') }}</strong>
                                             </span>
                                         @endif

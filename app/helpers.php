@@ -147,4 +147,15 @@ function checkEvent($eventid,$save = 0,$extension = null,&$status = null){
 function countbyoneVIP(&$count){
     $count++;
 }
+function geteventbyreservation($id,&$event){
+
+    $reservation = Reservation::find($id);
+
+    $event = Events::where('id',$reservation->EventID)->first(); 
+}
+function getuserbyemail($email){
+
+    return User::where('email',$email)->first();
+
+}
 ?>

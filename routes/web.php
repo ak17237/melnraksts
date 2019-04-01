@@ -74,6 +74,12 @@ Route::get('event/{id}/{extension}/reservation',[
     'roles' => ['User','Admin']
         ]);
 Route::post('event/{id}/{extension}/reservation/result','ReservationController@reservationcreate')->name('reservationcreate')->middleware('vipevent');
+Route::get('/myreservations-{page}','ReservationController@showreservationusers')->name('reservationusers');
+Route::get('reservation/{id}/show','ReservationController@showreservation')->name('showreservation');
+Route::get('reservation/{id}/edit','ReservationController@showreservationedit')->name('showreservationedit');
+Route::get('event/{id}/reservations','ReservationController@showreservationadmins')->name('showreservationadmins');
+Route::post('reservation/{id}/edit/result','ReservationController@reservationedit')->name('reservationedit');
+Route::delete('reservation/{id}/delete','ReservationController@reservationdelete')->name('reservationdelete');
 
 
 

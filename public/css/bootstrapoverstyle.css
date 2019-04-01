@@ -92,6 +92,31 @@
         height: 0;
         overflow: hidden;   
 }
+#tablenr{
+    border:0px;
+    -webkit-appearance: none;
+}
+.question{
+    padding-top: 30px;
+}
+hr{
+    background-color: #4c4e5040;
+    float: left;
+    width: 90%;
+    margin-left: 11px;
+}
+.deletebtn{
+    float: left;
+}
+.formbtn{
+    width: 200px;
+}
+ td{
+    border: 1px solid black;
+}
+.reservshow{
+    width: 193px;
+}
 /* CSS animation */
 
 @-webkit-keyframes fadeIn {

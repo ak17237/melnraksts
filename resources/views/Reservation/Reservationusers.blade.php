@@ -12,12 +12,12 @@
 <div class="content">
     <div class="title m-b-md">
      
-        Pasākumi
+        Manas rezervācijas
     </div>
     <div class="contain" style="width: 70%"> 
         <table class="eventtable">
-          @if ($data->count() == 0)
-            <h3><i>Nav saglabātu pasākumu.</i></h3>
+          @if ($reservations->count() == 0)
+            <h3><i>Nav rezervētu pasākumu.</i></h3>
           @else
                 <thead>
                   <tr>
@@ -27,22 +27,24 @@
                   </tr>
                 </thead>
           
-                @foreach ($data as $d){{-- līdzīgi kā slierī izvada pasākumus (home.blade.php) --}}
-                <tbody>
+                @foreach ($reservations as $r){{-- līdzīgi kā slierī izvada pasākumus (home.blade.php) --}}
+                <tbody> {{ geteventbyreservation($r->id,$event) }}
                   <tr>
-                    <td class="top">
+                    <td class="top clickshow">
+                        <a class='divlink' href="{{ route('showreservation',$r->id) }}"></a>
                         <div class="eventdate">
-                            <div class="eventday block h-center v-center"><span class="daystyle">{{ geteventday($d->Datefrom) }}</span></div>
+                            <div class="eventday block h-center v-center"><span class="daystyle">{{ geteventday($event->Datefrom) }}</span></div>
                             <div class="eventmonth block h-center v-center"><span class="pagmonth{{ $counter }}">Mēnesis</span></div>
                         </div>
                     </td>
-                    <td class="top space eventinfo">
-                        <h5>{{ $d->Title }}</h5>
-                        <p>Kad: {{ geteventdate($d->Datefrom) }}</p><span id='eventdate{{ $counter++ }}'style="display:none">{{ $d->Datefrom }}</span>
-                        <p>Kur: {{ $d->Address }}</p>
-                        <i>{{ $d->Anotation }}</i>
+                    <td class="top space eventinfo clickshow">
+                        <a class='divlink' href="{{ route('showreservation',$r->id) }}"></a>
+                        <h5>{{ $event->Title }}</h5>
+                        <p>Kad: {{ geteventdate($event->Datefrom) }}</p><span id='eventdate{{ $counter++ }}'style="display:none">{{ $event->Datefrom }}</span>
+                        <p>Kur: {{ $event->Address }}</p>
+                        <i>Biļešu skaits: {{ $r->Tickets }}</i>
                     </td>
-                    <td class="space"><a href="{{ route('showedit',$d->id) }}" class="button">Rediģēt</a></td>
+                    <td class="space"><a href="{{ route('showreservation',$r->id) }}" class="button">Apskatīt</a></td>
                   </tr>
                 </tbody>
                 @endforeach
@@ -50,11 +52,11 @@
         </table>
         </div> {{-- paginācijas linki --}}
         <span style="display:none" id="counter">{{ $counter }}</span>
-        @if ($data->count() > 0)
+        @if($reservations->count() > 0)
         <ul class="slider-months">
             @for ($i = 0; $i < count($pagenumber); $i++)
                 <li class="slider-months_item">
-                    <a href="{{ route('showsavedevents',$i + 1)}}"  class="button">{{ $i + 1 }}</a>
+                    <a href="{{ route('reservationusers',$i + 1) }}"  class="button">{{ $i + 1 }}</a>
                 </li>
             @endfor
               </ul>

@@ -26,11 +26,69 @@ class ReservationController extends Controller
         
         return view('Reservation.Reservationcreate',compact('myevent','checkedtables','checkedseats','ticketinfo','standing','description'));
     }
+    public function showreservationusers($page){
+
+        $elements = 5;
+        $counter = 1;
+
+        $user = User::where('email', Auth::user()->email)->first();
+        $reservations = Reservation::where('email',$user->email)->SimplePaginate($elements,['*'], 'page', $page)->sortByDesc(['updated_at']);
+        $event = null;
+
+        $count = Reservation::where('email',$user->email)->count();
+        
+        $number = 1;
+        while($count > $elements){ // precīza paginēšanas url izvade un pogas tai
+            $number++;
+            $count = $count - $elements;
+        }
+        for($i = 1;$i <= $number; $i++) $pagenumber[] = $i;
+        return view('Reservation.Reservationusers',compact('pagenumber','reservations','event','counter'));
+
+    }
+    public function showreservation($id){
+
+        $reservation = Reservation::find($id);
+        $myevent = Events::find($reservation->EventID);
+        $user = User::where('email',$reservation->email)->first();
+
+        $data = reservinfo($reservation->EventID); // funkcija kura ir helpers.php failā un kura atgriež datus par atlikušajām vietām
+ 
+        $checkedseats = $data[1]; // (0 = biļešu skaits,1 = sēdvietu skaits,2 = galdu skaits,3 = stāvvietu skaits)
+        $checkedtables = $data[2];
+
+        return view('Reservation.Reservationinfo',compact('reservation','myevent','user','checkedseats','checkedtables'));
+
+    }
+    public function showreservationedit($id){
+        
+        $reservation = Reservation::find($id);
+        $myevent = Events::find($reservation->EventID);
+        $user = User::where('email',$reservation->email)->first();
+
+        $data = reservinfo($reservation->EventID); // funkcija kura ir helpers.php failā un kura atgriež datus par atlikušajām vietām
+ 
+        $checkedseats = $data[1]; // (0 = biļešu skaits,1 = sēdvietu skaits,2 = galdu skaits,3 = stāvvietu skaits)
+        $checkedtables = $data[2];
+
+        return view('Reservation.Reservationedit',compact('reservation','myevent','user','checkedseats','checkedtables'));
+
+    }
+    public function showreservationadmins($id){
+
+        $myevent = Events::find($id);
+        $reservation = Reservation::where('EventID',$id)->get();
+
+        $count = $reservation->count();
+        $number = $tempnumber = 5; // cik ieraksti rādās vienā lapā // korektai skaitļu izvadei katrā lapā
+        return view('Reservation.Reservationadmins',compact('myevent','reservation','user','count','number','tempnumber'));
+
+    }
     public function reservationcreate(createReservationRequest $request,$id){
         
         $myevent = Events::find($id);
         $user = User::where('email', Auth::user()->email)->first();
-
+        
         eventvalidate($request);
         Reservation::create([  // ieraksta datus datubāzē 
             'email' => $user->email,
@@ -44,4 +102,15 @@ class ReservationController extends Controller
         return redirect()->back()->with('message','Pasākums rezervēts');
         
     }
+    public function reservationedit(){
+
+
+
+    }
+    public function reservationdelete($id){
+
+        Reservation::find($id)->delete();
+
+    }
+    
 }

@@ -40,13 +40,14 @@
                 
             </div>
             @if (Auth::check())
-            @if (Auth::user()->hasRole('Admin')) {{-- tikai admini var skatīti šo --}}
             <div class="top-left links">
+            @if (Auth::user()->hasRole('Admin')) {{-- tikai admini var skatīti šo --}}
             <a href="{{ route('showcreate') }}">Create event</a>
-            <a href="/saved-events-1">Saved events</a>
+            <a href="{{ route('showsavedevents',1) }}">Saved events</a>
             @endif
+            <a href="{{ route('reservationusers',1) }}">My reservations</a>
+            </div>
             @endif
-        </div>
         
         
         <div class="contain">
@@ -63,6 +64,7 @@
                 <h3><i>Nav plānotu pasākumu šajā mēnesī.</i></h3>
               @else {{-- jeb izvada visus pasākumus --}}
                     <thead>
+                      
                       <tr>
                         <th scope="col" class="content">Datums</th>
                         <th class="space" scope="col">Pasākums</th>
@@ -72,15 +74,21 @@
                     @foreach ($data as $d) {{-- izvada piecus pēc šī meneša --}}
                     <tbody>
                       <tr>
-                        <td class="top">
-                            <a href="{{ route('showevent',$d->id) }}"></a>
+                        <td></td>
+                        <td></td>
+                        <td colspan="2" style="text-align:center;"><a href="{{ route('showreservationadmins',$d->id) }}" class="button reservshow">Apskatīt rezervācijas</a></td>
+                        <td></td>
+                      </tr>
+                      <tr>
+                        <td class="top clickshow">
+                            <a class='divlink' href="{{ route('showevent',$d->id) }}"></a>
                             <div class="eventdate"> {{-- geteventdate,geteventd funckijas helpers.php failā lai korrekti izvadīt informāciju --}}
                                 <div class="eventday block h-center v-center"><span class="daystyle">{{ geteventday($d->Datefrom) }}</span></div>
                                 <div class="eventmonth block h-center v-center"><span class="month">Mēnesis</span></div>
                             </div>
                         </td>
-                        <td class="top space eventinfo">
-                            <a href="{{ route('showevent',$d->id) }}"></a>
+                        <td class="top space eventinfo clickshow">
+                            <a class='divlink' href="{{ route('showevent',$d->id) }}"></a>
                             <h5>{{ $d->Title }}
                             @if($d->VIP == 1) {{countbyoneVIP($count)}}
                             (VIP)
@@ -89,6 +97,7 @@
                                 <input type="text" id="linkcopy{{ $count }}"class="linkcopy" value="{{ route('showreservationcreate', ['id' => $d->id,'extension' => $d->linkcode]) }}">
                                 <img id='imgcopy' src="{{ asset('clippy.svg') }}" width="15" height="15">
                             </button>
+                            <div class="vip" id='popover{{ $count }}'></div>
                             @endif
                             @endif
                             @if(reservinfo($d->id)[0] == 0 && $d->Tickets != -999)
@@ -99,8 +108,15 @@
                             <i>{{ $d->Anotation }}</i>
                         </td>
                         @if(Auth::check())
+  
                         <td @if (Auth::user()->hasRole('Admin') && !checkAuthor(Auth::user()->email,$d->id)) colspan="2" {{-- ja nav piekļuves pogai lai būtu centrēts --}}
                           style="text-align: center" @endif class="space" >
+                        @if(Auth::user()->hasRole('Admin'))
+                        
+
+
+
+                        @endif
                         @if((reservinfo($d->id)[0] == 0 && $d->Tickets != -999) || $d->VIP == 1)
                         <a href="{{ route('showevent',$d->id) }}" class="button">
                         Apskatīt </a>
@@ -117,7 +133,6 @@
                       </tr>
                     </tbody>
                     @endforeach
-                    <span id="countVIP0" style="display:none">{{$count}}</span>
               @endif
             </table>
             </div>
@@ -156,6 +171,7 @@
                                       <input type="text" id="linkcopy{{ $count }}"class="linkcopy" value="{{ route('showreservationcreate', ['id' => $dp1->id,'extension' => $dp1->linkcode]) }}">
                                       <img id='imgcopy' src="{{ asset('clippy.svg') }}" width="15" height="15">
                                       </button>
+                                      <div class="vip" id='popover{{ $count }}'></div>
                                       @endif
                               @endif
                               @if(reservinfo($dp1->id)[0] == 0 && $dp1->Tickets != -999)
@@ -184,7 +200,6 @@
                         </tr>
                       </tbody>
                       @endforeach
-                      <span id="countVIP1" style="display:none">{{$count}}</span>
                 @endif
               </table>
               </div>
@@ -223,6 +238,7 @@
                                       <input type="text" id="linkcopy{{ $count }}"class="linkcopy" value="{{ route('showreservationcreate', ['id' => $dp2->id,'extension' => $dp2->linkcode]) }}">
                                       <img id='imgcopy' src="{{ asset('clippy.svg') }}" width="15" height="15">
                                       </button>
+                                      <div class="vip" id='popover{{ $count }}'></div>
                                       @endif
                                 @endif
                                 @if(reservinfo($dp2->id)[0] == 0 && $dp2->Tickets != -999)
@@ -251,7 +267,6 @@
                           </tr>
                         </tbody>
                         @endforeach
-                        <span id="countVIP2" style="display:none">{{$count}}</span>
                   @endif
                 </table>
                 </div>
@@ -290,6 +305,7 @@
                                       <input type="text" id="linkcopy{{ $count }}"class="linkcopy" value="{{ route('showreservationcreate', ['id' => $dp3->id,'extension' => $dp3->linkcode]) }}">
                                       <img id='imgcopy' src="{{ asset('clippy.svg') }}" width="15" height="15">
                                       </button>
+                                      <div class="vip" id='popover{{ $count }}'></div>
                                       @endif
                                   @endif
                                   @if(reservinfo($dp3->id)[0] == 0 && $dp3->Tickets != -999)
@@ -318,7 +334,6 @@
                             </tr>
                           </tbody>
                           @endforeach
-                          <span id="countVIP3" style="display:none">{{$count}}</span>
                     @endif
                   </table>
                   </div>
@@ -357,6 +372,7 @@
                                       <input type="text" id="linkcopy{{ $count }}"class="linkcopy" value="{{ route('showreservationcreate', ['id' => $dp4->id,'extension' => $dp4->linkcode]) }}">
                                       <img id='imgcopy' src="{{ asset('clippy.svg') }}" width="15" height="15">
                                       </button>
+                                      <div class="vip" id='popover{{ $count }}'></div>
                                       @endif
                                     @endif
                                     @if(reservinfo($dp4->id)[0] == 0 && $dp4->Tickets != -999)
@@ -385,7 +401,6 @@
                               </tr>
                             </tbody>
                             @endforeach
-                            <span id="countVIP4" style="display:none">{{$count}}</span>
                       @endif
                     </table>
                     </div>
@@ -407,14 +422,14 @@
             
                               <tbody>
                                 <tr>
-                                  <td class="top">
+                                  <td class="top clickshow">
                                     <a href="{{ route('showevent',$dp5->id) }}"></a>
                                       <div class="eventdate">
                                           <div class="eventday block h-center v-center"><span class="daystyle">{{ geteventday($dp5->Datefrom) }}</span></div>
                                           <div class="eventmonth block h-center v-center"><span class="month">Mēnesis</span></div>
                                       </div>
                                   </td>
-                                  <td class="top space eventinfo">
+                                  <td class="top space eventinfo clickshow">
                                     <a href="{{ route('showevent',$dp5->id) }}"></a>
                                       <h5>{{ $dp5->Title }}
                                       @if($dp5->VIP == 1){{countbyoneVIP($count)}}
@@ -424,6 +439,7 @@
                                       <input type="text" id="linkcopy{{ $count }}"class="linkcopy" value="{{ route('showreservationcreate', ['id' => $dp5->id,'extension' => $dp5->linkcode]) }}">
                                       <img id='imgcopy' src="{{ asset('clippy.svg') }}" width="15" height="15">
                                       </button>
+                                      <div class="vip" id='popover{{ $count }}'></div>
                                       @endif
                                       @endif
                                       @if(reservinfo($d->id)[0] == 0 && $dp5->Tickets != -999)
@@ -452,12 +468,11 @@
                                 </tr>
                               </tbody>
                               @endforeach
-                              <span id="countVIP5" style="display:none">{{$count}}</span>
                         @endif
                       </table>
                       </div>        
         </div>
-        
+        <span id="countVIP" style="display:none">{{$count}}</span>
         <ul class="slider-months"> {{-- mēneši kurus apstrādā javascript --}}
           <li class="slider-months_item">
             <a href="" class="button" id="month0" data-slide-index="0"></a>

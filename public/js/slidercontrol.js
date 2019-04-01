@@ -1,7 +1,5 @@
 $(document).ready(function(){
 
-    var currentslide = 3; // Sākuma slaida numurs
-
     var months = [] // Masīvs mēneša korektai izvadei vārdos
     months[0] = 'Janvāris';
     months[1] = 'Februāris';
@@ -20,7 +18,7 @@ $(document).ready(function(){
     var todaymonth = today.getMonth(); // saņem šodienas mēnesi
     jQuery('.month').html(months[todaymonth]); // ievieto šodienas mēnesi slaidera galvenē
 
-    $('.slider').bxSlider({ // bxSlider plugina iestatījumi atrodami mājaslapā
+    $('.slider').bxSlider({ // bxSlider plugina iestatījumi
         mode: 'fade',
         keyboardEnabled: true,
         controls: true,
@@ -41,9 +39,16 @@ $(document).ready(function(){
             jQuery('.month').hide().fadeOut('fast').html(months[monthindex]).fadeIn('slow');
         },
         pagerCustom: '.slider-months',
-        adaptiveHeight: true
+        adaptiveHeight: true,
+        touchEnabled: false
     });
-    
+
+    for(var i = 1;i <= $('#counter').text(); i++){
+
+    var eventdate = new Date($('#eventdate' + i).text());
+    jQuery('.pagmonth' + i).html(months[eventdate.getMonth()]);
+
+    }
     // pogu zem slidera mēnešu uzstādīšana
         for(var i = 0;i <= 5;i++){
 
@@ -60,13 +65,11 @@ $(document).ready(function(){
         });
         $(".vip").mouseout(function(){
             $(this).data('clicked', false);
-        });
-        $("td.top").click(function() {
-            
-            if($('.vip').data('clicked') != true)
+        });/* $(e.target).closest('td').find('popover') */
+        $("td.clickshow").click(function(e) {
+            if($('.vip').data('clicked') != true && $(e.target).is('.close') == false && !$(e.target).closest('tr').find('div.popover').hasClass('popover')) 
             window.location = $(this).find("a").attr("href");
-         });  
-            
+         });
         
     
 });

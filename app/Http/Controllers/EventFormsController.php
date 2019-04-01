@@ -34,6 +34,8 @@ class EventFormsController extends Controller
     }
     public function showsavedevents($page){ // parāda saglabātos pasākumus sākumā nesen izmainītos,kuriem ir melnraksts 1
 
+        $counter = 1;
+
         $user = User::where('email', Auth::user()->email)->first();
 
         $data = Events::where('Melnraksts',1)->where('email',$user->email)->SimplePaginate(5,['*'], 'page', $page)->sortByDesc(['updated_at']);
@@ -44,7 +46,7 @@ class EventFormsController extends Controller
             $count = $count - 5;
         }
         for($i = 1;$i <= $number; $i++) $pagenumber[] = $i;
-        return view('Event_forms.Savedevents',compact('data','pagenumber'));
+        return view('Event_forms.Savedevents',compact('data','pagenumber','counter'));
     }
     public function showevent($id){
 

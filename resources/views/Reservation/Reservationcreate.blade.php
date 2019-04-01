@@ -49,7 +49,6 @@
                                 <input type="date" name="datefrom"  disabled class="form-control" id="datefrom"  value="{{ $myevent->Datefrom }}">
                             </div>
 
-                            <div class="col-lg-11 eventcreate">
                             <div class="col-lg-8 eventcreate">
                                 <label>Biļešu skaits (No tām stāvvietas - <span class="stand-tickets">0</span>) MAX 2</label> {{-- Cilvēka vēlamais biļešu skaits --}}
                                 <input type="number" min="1" name='ticketcount' class="count form-control {{ $errors->has('ticketcount') ? ' is-invalid' : '' }}" id="ticketcount" value="{{ old('ticketcount') }}">
@@ -58,105 +57,98 @@
                                     <strong>{{ $errors->first('ticketcount') }}</strong>
                                      </span>
                                  @endif
-                            </div>
-                            <div class="radiocontainer eventcreate ticketinfo"><span>{{ $ticketinfo }}</span><div class="help-tip"> {{-- Biļešu informācija --}}
+                                </div>
+                            <div class="col-lg-3 radiocontainer eventcreate ticketinfo"><span>{{ $ticketinfo }}</span><div class="help-tip"> {{-- Biļešu informācija --}}
                                     <p>{{ '* Atlikušās biļetes no kurām ' . $checkedseats . ' ir sēdvietas un ' . $checkedtables . ' ir sēdvietas pie galdiem,pārējās ir stāvvietas(' 
                                     . $standing . ')' }}</p>
                                 </div></div>
-                        </div>
-                        <div class="col-lg-11 eventcreate">
                                 @if($checkedseats != 0) {{-- Ja pasākums neparedz sēdvietas nerāda lauku --}}
-                                <div class="radiocontainer eventcreate">
-                                    <label class="seats">Seats</label>
-                                    <div class="radio">
-                                      <div class="custom-radio control-radio">
-                                        <input type="radio" id="customRadio1" name="customRadio" class="custom-control-input" value="Yes"  
-                                        @if(old('customRadio') == "Yes" || empty(old('customRadio'))) {{-- ja vecā vērtība ir YES jeb ja vecās nebija(validācijas nebija),tad atzīmēt šo radio --}}
-                                        checked="" 
-                                        @endif>
-                                        <label class="custom-control-label" for="customRadio1">Yes</label>
-                                      </div>
-                                      <div class="custom-radio control-radio">
-                                        <input type="radio" id="customRadio2" name="customRadio" class="custom-control-input" value="No"
-                                        @if(old('customRadio') == "No") {{-- ja vecā bija NO tikai tad atzīmēt --}}
-                                        checked="" 
-                                        @endif>
-                                        <label class="custom-control-label" for="customRadio2">No</label>
-                                      </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-2 eventcreate">
-                                    <label>Seats number</label>
-                                    <input type="number" min="1" name='seatnr' id="seatcount" class="count form-control eventseat {{ $errors->has('seatnr') ? ' is-invalid' : '' }}"
-                                    @if(old('customRadio') == "No") {{-- ja vecā bija NO tad atslēgt input un noņemt vērtību --}}
-                                    disabled
-                                    value=''
-                                    @else {{-- ja bija YES,tad ielikt vērtību (ja pirmo reizi tad vērtības nevar būt) --}}
-                                    value="{{ old('seatnr') }}"
-                                    @endif>
-                                    @if ($errors->has('seatnr'))
-                                        <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('seatnr') }}</strong>
-                                        </span>
-                                    @endif
-                                </div>
-                                @else
-                                @endif
-                                @if($checkedtables != 0) {{-- Ja pasākums neparedz galdus nerāda lauku --}}
-                                <div class="radiocontainer eventcreate">
-                                        <label class="seats">Tables</label>
+                                <div class="col-lg-11 eventcreate">
+                                    <div class="radiocontainer eventcreate">
+                                        <label class="seats">Seats</label>
                                         <div class="radio">
-                                        <div class="custom-control custom-radio custom-control-inline">
-                                            <input type="radio" class="custom-control-input" id="defaultInline1" name="inlineDefaultRadiosExample" value="Yes" 
-                                            @if(old('inlineDefaultRadiosExample') == "Yes" || empty(old('inlineDefaultRadiosExample'))) {{-- ja vecā vērtība ir YES jeb ja vecās nebija(validācijas nebija),tad atzīmēt šo radio --}}
+                                          <div class="custom-radio control-radio">
+                                            <input type="radio" id="customRadio1" name="customRadio" class="custom-control-input" value="Yes"  
+                                            @if(old('customRadio') == "Yes" || empty(old('customRadio'))) {{-- ja vecā vērtība ir YES jeb ja vecās nebija(validācijas nebija),tad atzīmēt šo radio --}}
                                             checked="" 
                                             @endif>
-                                            <label class="custom-control-label" for="defaultInline1">Yes</label>
-                                        </div>
-                                        <div class="custom-control custom-radio custom-control-inline">
-                                            <input type="radio" class="custom-control-input" id="defaultInline2" name="inlineDefaultRadiosExample" value="No"
-                                            @if(old('inlineDefaultRadiosExample') == "No") {{-- ja vecā bija NO tikai tad atzīmēt --}}
+                                            <label class="custom-control-label" for="customRadio1">Yes</label>
+                                          </div>
+                                          <div class="custom-radio control-radio">
+                                            <input type="radio" id="customRadio2" name="customRadio" class="custom-control-input" value="No"
+                                            @if(old('customRadio') == "No") {{-- ja vecā bija NO tikai tad atzīmēt --}}
                                             checked="" 
                                             @endif>
-                                            <label class="custom-control-label" for="defaultInline2">No</label>
-                                        </div>
+                                            <label class="custom-control-label" for="customRadio2">No</label>
+                                          </div>
                                         </div>
                                     </div>
-
                                     <div class="col-lg-2 eventcreate">
-                                        <label>Seats on table</label>
-                                        <select name="tablenr" id="tablenr">
-                                            @for ($i = 1; $i <= $myevent->Tablenumber; $i++)
-                                            <option data-descr="{{ $myevent->Seatsontablenumber - tableSeats($myevent->id,$i) . '/' . $myevent->Seatsontablenumber }}"value="{{ $i }}"
-                                                    @if($i == old('tablenr')) selected @endif
-                                                    @if($myevent->Seatsontablenumber - tableSeats($myevent->id,$i) == 0) disabled @endif>{{ $i }}</option>
-                                            <p id="tooltipBox" class="col-sm-6"></p>
-                                            @endfor
-                                            
-                                        </select>
-                                        
-                                        <input type="number" min="1" name='tablecount' id="tablecount" class="count form-control eventtable {{ $errors->has('tablecount') ? ' is-invalid' : '' }}" 
-                                        @if(old('inlineDefaultRadiosExample') == "No") {{-- ja vecā bija NO tad atslēgt input un noņemt vērtību --}}
+                                        <label>Seats number</label>
+                                        <input type="number" min="1" name='seatnr' id="seatcount" class="count form-control eventseat {{ $errors->has('seatnr') ? ' is-invalid' : '' }}"
+                                        @if(old('customRadio') == "No") {{-- ja vecā bija NO tad atslēgt input un noņemt vērtību --}}
                                         disabled
                                         value=''
                                         @else {{-- ja bija YES,tad ielikt vērtību (ja pirmo reizi tad vērtības nevar būt) --}}
-                                        value="{{ old('tablecount') }}"
+                                        value="{{ old('seatnr') }}"
                                         @endif>
-                                        @if ($errors->has('tablecount'))
-                                            <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $errors->first('tablecount') }}</strong>
+                                        @if ($errors->has('seatnr'))
+                                            <span class="invalid-feedback alertseatnr" role="alert">
+                                            <strong>{{ $errors->first('seatnr') }}</strong>
                                             </span>
                                         @endif
                                     </div>
-                                    <div class="col-lg-4 eventcreate ticketinfo">{{-- Paziņojums cik ir sēdvietas aiz galdiņa --}}
-                                        <span>Aiz viena galdiņa ir <span id="tableseats">{{ $myevent->Seatsontablenumber }}</span> sēdvietas</span><div class="help-tip">
-                                                <p class="second">Biļešu skaitam jābūt ne mazākam par galdu sēdvietu skaitau,ja pie galda ir 2 sēdvietas,tad rezervējot galdu ir jārezervē 2 biļetes</p>
-                                            </div>
-                                    </div>
                                     @else
                                     @endif
-                        </div>
-
+                                    @if($checkedtables != 0) {{-- Ja pasākums neparedz galdus nerāda lauku --}}
+                                    <div class="radiocontainer eventcreate">
+                                            <label class="seats">Tables</label>
+                                            <div class="radio">
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                <input type="radio" class="custom-control-input" id="defaultInline1" name="inlineDefaultRadiosExample" value="Yes" 
+                                                @if(old('inlineDefaultRadiosExample') == "Yes" || empty(old('inlineDefaultRadiosExample'))) {{-- ja vecā vērtība ir YES jeb ja vecās nebija(validācijas nebija),tad atzīmēt šo radio --}}
+                                                checked="" 
+                                                @endif>
+                                                <label class="custom-control-label" for="defaultInline1">Yes</label>
+                                            </div>
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                <input type="radio" class="custom-control-input" id="defaultInline2" name="inlineDefaultRadiosExample" value="No"
+                                                @if(old('inlineDefaultRadiosExample') == "No") {{-- ja vecā bija NO tikai tad atzīmēt --}}
+                                                checked="" 
+                                                @endif>
+                                                <label class="custom-control-label" for="defaultInline2">No</label>
+                                            </div>
+                                            </div>
+                                        </div>
+    
+                                        <div class="col-lg-2 eventcreate">
+                                            <label>Seats on table</label>
+                                            <select name="tablenr" id="tablenr">
+                                                @for ($i = 1; $i <= $myevent->Tablenumber; $i++)
+                                                <option data-descr="{{ $myevent->Seatsontablenumber - tableSeats($myevent->id,$i) . '/' . $myevent->Seatsontablenumber }}"value="{{ $i }}"
+                                                        @if($i == old('tablenr')) selected @endif
+                                                        @if($myevent->Seatsontablenumber - tableSeats($myevent->id,$i) == 0) disabled @endif>{{ $i }}</option>
+                                                <p id="tooltipBox" class="col-sm-6"></p>
+                                                @endfor
+                                                
+                                            </select>
+                                            
+                                            <input type="number" min="1" name='tablecount' id="tablecount" class="count form-control eventtable {{ $errors->has('tablecount') ? ' is-invalid' : '' }}" 
+                                            @if(old('inlineDefaultRadiosExample') == "No") {{-- ja vecā bija NO tad atslēgt input un noņemt vērtību --}}
+                                            disabled
+                                            value=''
+                                            @else {{-- ja bija YES,tad ielikt vērtību (ja pirmo reizi tad vērtības nevar būt) --}}
+                                            value="{{ old('tablecount') }}"
+                                            @endif>
+                                            @if ($errors->has('tablecount'))
+                                                <span class="invalid-feedback alerttablenr" role="alert">
+                                                <strong>{{ $errors->first('tablecount') }}</strong>
+                                                </span>
+                                            @endif
+                                        </div>
+                                        @else
+                                        @endif
+                            </div>
                                         <div class="radiocontainer eventcreate">
                                                 <label class="ticketcount">Ieradīšos patstāvīgi</label>
                                             <div class="radio">

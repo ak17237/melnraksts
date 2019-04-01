@@ -1,41 +1,46 @@
 jQuery('document').ready(function(){
 
     function VIPtooltip(number){
+        var homecopybtn = $('.homecopybtn' + number);
+        var linkcopy = jQuery('#linkcopy' + number);
+        var popovers = $('#popover' + number);
 
-        $('.homecopybtn' + number).tooltip({title: 'Uzspiest lai nokopēt rezervācijas linku vip pasākumam', placement: "bottom",trigger: 'hover'});
+        homecopybtn.tooltip({title: 'Uzspiest lai nokopēt rezervācijas linku vip pasākumam', placement: "top",trigger: 'hover'});
 
-        jQuery('.homecopybtn' + number).click(function(){
-     
-         $('.homecopybtn' + number).tooltip('dispose');
-         $('.homecopybtn' + number).tooltip({title: 'Copied', placement: "bottom",trigger: 'hover',delay: {show: 500, hide: 100}});
-         $('.homecopybtn' + number).tooltip('show');
-     
-         setTimeout(function(){
-     
-             $('.homecopybtn' + number).tooltip('hide');
-             $('.homecopybtn' + number).tooltip('dispose');
-             $('.homecopybtn' + number).tooltip({title: 'Uzspiest lai nokopēt rezervācijas linku vip pasākumam', placement: "bottom",trigger: 'hover'});
-     
-         }, 1000);
-     
-         $('.homecopybtn' + number).popover({title: "Rezervācijas links", content: jQuery('#linkcopy' + number).val(),placement: 'top',trigger: 'manual'}); 
-         $('.homecopybtn' + number).popover("show");
+        homecopybtn.on('click', function(){
+            homecopybtn.tooltip('dispose');
+            homecopybtn.tooltip({title: 'Copied', placement: "top",trigger: 'hover',delay: {show: 500, hide: 100}});
+            homecopybtn.tooltip('show');
+        
+            setTimeout(function(){
+    
+                homecopybtn.tooltip('hide');
+                homecopybtn.tooltip('dispose');
+                homecopybtn.tooltip({title: 'Uzspiest lai nokopēt rezervācijas linku vip pasākumam', placement: "top",trigger: 'hover'});
+        
+            }, 1000);
+        
+            homecopybtn.popover({title: "Rezervācijas links", content: linkcopy.val(),placement: 'bottom',trigger: 'manual',container: popovers}); 
+            homecopybtn.popover("show");
+            
+            $('#popover' + number + ' .popover-header').append('<a href="#" id="popoverclose'+ number +'" class="close" data-dismiss="alert">&times;</a>');
+        
+            linkcopy.select();
+            document.execCommand("copy");
+      
+         });
          
-         $('.popover-header').append('<a href="#" id="popoverclose" class="close" data-dismiss="alert">&times;</a>');
-     
-         jQuery('#linkcopy' + number).select();
-         document.execCommand("copy");
-     
-         });
-         $('.homecopybtn' + number).click(function (e) {
-             e.stopPropagation();
-         });
+          homecopybtn.click(function (e) {
+              e.stopPropagation();
+          });
+          
          
          $(document).click(function (e) {
-             if (($('.popover').has(e.target).length == 0) || $(e.target).is('.close')) {
-                 $('.homecopybtn' + number).popover('hide');
+             if ($(e.target).is('#popoverclose'+ number)) {
+                homecopybtn.popover('hide'); 
              }
          });
+         
 
     }
 
@@ -61,9 +66,20 @@ jQuery('document').ready(function(){
         $('#copybtn').tooltip('hide');
 
     });
-for(var j = 0;j < 6;j++){
-    for(var i = 1;i <= $('#countVIP' + j).text();i++){
+    
+    for(var i = 1;i <= $('#countVIP').text();i++){
         VIPtooltip(i);
     }
-}
+
+    $('.question #tabletooltip').tooltip({title: 'Lai izvēlēties galda numuru ir jāizvēlas galda numurs kuram ir brīvas vietas', placement: "bottom",trigger: 'hover'});
+
+    $('.question #tabletooltip').mouseover(function(){
+        $('#tablenr').tooltip({title: 'Izvēleties galdiņu',placement:'right',trigger: 'hover'});
+        $('#tablenr').tooltip('show');
+    });
+    $('.question #tabletooltip').mouseout(function(){
+        $('#tablenr').tooltip('dispose');
+    });
+
+
 });

@@ -168,7 +168,7 @@ td.top{
     transition: 0.4s;
   }
   
- .button:hover,.button:active,.slider-months_item a.active{
+ .button:hover,.button:active,.slider-months_item a.active, .slider-reservation_item a.active{
     background-color: green;
     border-radius: 50px 20px; 
   }
@@ -178,7 +178,7 @@ td.top{
   .bold{
     font-weight: bold;
   }
-.slider-months {
+.slider-months, .slider-reservation {
     list-style-type: none;
     margin: 0;
     padding: 0;
@@ -187,21 +187,21 @@ td.top{
     
   }
   
-.slider-months{
+.slider-months, .slider-reservation{
     font-size: 12px;
     list-style:none;
     margin:0;
     padding:0;
     text-align:center;
 }
-.slider-months_item{
+.slider-months_item, .slider-reservation_item{
     display:inline;
 }
-.slider-months_item a{
+.slider-months_item a,.slider-reservation_item a{
     display:inline-block;
     padding:10px;
 }
-.slider-months_item .button{
+.slider-months_item .button,.slider-reservation_item .button{
     padding: 8px 12px;
 }
 .daystyle{
@@ -227,3 +227,4 @@ td.top{
     padding-top: 5px;
     padding-left: 3px;
 }
+
