@@ -3,7 +3,7 @@
 
 <div class="container">
     <br>
-        <a href="{{ route('reservationusers',1) }}" class="btn btn-primary back">Back</a>
+        <a href="javascript:history.go(-1)" class="btn btn-primary back">Back</a>
         <div class="row">
             <div class="col-lg-offset-3 col-lg-11">
 
@@ -91,9 +91,10 @@
                             <h6>{{ $user->email }}</h6>
                         </div>
                         <div class="col-lg-11 eventcreate">
-                            
+                        
+                        @if($myevent->Editable == 1)
                         <a href="{{ route('showreservationedit',$reservation->id) }}" class="btn btn-primary btn-block">Rediģēt pasākumu</a>
-                            
+                        @endif 
                         </div>
             </div>
         </div>

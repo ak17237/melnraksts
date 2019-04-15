@@ -3,6 +3,12 @@
 
 <div class="contain">
         <a href="/" class="btn btn-primary back">Back</a>
+        @if(session()->has('message'))
+    <div class="alert alert-dismissible alert-success">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <p>{{ session()->get('message') }}</p>
+    </div>
+    @endif
     <div class="slidercontainer color-green">
       <a class="prev"></a> {{-- Pasākuma nosaukums --}}
       <span class="uppercase bold">{{ $myevent->Title }}</span> 

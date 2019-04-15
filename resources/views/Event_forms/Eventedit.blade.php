@@ -307,6 +307,19 @@
                               <label class="custom-control-label" for="customSwitch1">VIP pasākums</label>
                             </div>
 
+                            <div class="col-lg-4 eventcreate">
+                                <input type="hidden" name="editableswitch" value="off" />
+                                <input type="checkbox" class="custom-control-input" id="customSwitch2" name="editableswitch" 
+                                @if(old('editableswitch') == "on") checked=""
+                                @elseif(old('editableswitch') == "off")
+                                @else
+                                      @if ($myevent->Editable == 1)
+                                          checked=""
+                                      @endif
+                                  @endif>
+                                <label class="custom-control-label" for="customSwitch2">Rediģējams pasākums</label>
+                              </div>
+
                             <div class="col-lg-11 eventcreate">
                                         <span class="eventcreatebutton"><button type="submit" class="btn btn-primary" name="action" value="create">
                                             @if ($myevent->Melnraksts == 0)

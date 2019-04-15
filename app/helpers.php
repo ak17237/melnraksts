@@ -86,6 +86,17 @@ function checkAuthor($email,$eventid){
     if($event->email != $user->email) return false;
     else return true;
 }
+function checkCreator($email,$reservid){
+
+    $user = User::where('email', $email)->first();
+    $reserv = Reservation::where('id',$reservid)->first();
+
+    if(empty($reserv)) return response("There is no such event",404);
+
+    if($reserv->email != $user->email) return false;
+    else return true;
+
+}
 function tableSeats($eventid,$nrid){
 
     $reservations = Reservation::where('EventID',$eventid)->where('TableNr',$nrid)->get();
@@ -144,6 +155,14 @@ function checkEvent($eventid,$save = 0,$extension = null,&$status = null){
     else return true;
 
 }
+function checkReserv($reservid){
+
+    $reserv = Reservation::where('id',$reservid)->first();
+
+    if(empty($reserv)) return false;
+    else return true;
+
+}
 function countbyoneVIP(&$count){
     $count++;
 }
@@ -157,5 +176,13 @@ function getuserbyemail($email){
 
     return User::where('email',$email)->first();
 
+}
+function checkEditable($reservid){
+
+    $reservation = Reservation::find($reservid);
+    $event = Events::where('id',$reservation->EventID)->first(); 
+
+    if($event->Editable == 1) return true;
+    else false;
 }
 ?>

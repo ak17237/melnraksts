@@ -51,10 +51,10 @@
 
                             <div class="col-lg-8 eventcreate">
                                 <label>Biļešu skaits (No tām stāvvietas - <span class="stand-tickets">0</span>) MAX 2</label> {{-- Cilvēka vēlamais biļešu skaits --}}
-                                <input type="number" min="1" name='ticketcount' class="count form-control {{ $errors->has('ticketcount') ? ' is-invalid' : '' }}" id="ticketcount" value="{{ old('ticketcount') }}">
-                                @if ($errors->has('ticketcount'))
+                                <input type="number" min="1" name='tickets' class="count form-control {{ $errors->has('tickets') ? ' is-invalid' : '' }}" id="tickets" value="{{ old('tickets') }}">
+                                @if ($errors->has('tickets'))
                                     <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $errors->first('ticketcount') }}</strong>
+                                    <strong>{{ $errors->first('tickets') }}</strong>
                                      </span>
                                  @endif
                                 </div>

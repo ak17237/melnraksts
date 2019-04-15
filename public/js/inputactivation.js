@@ -36,6 +36,7 @@ jQuery('document').ready(function(){
             jQuery('.alerttablenr').hide();
             jQuery('[name="tablenr"]').removeClass('is-invalid');
             jQuery('[name="seatsontablenr"]').removeClass('is-invalid');
+            jQuery('[name="tablecount"]').removeClass('is-invalid');
 
         }
         
@@ -52,6 +53,7 @@ jQuery('document').ready(function(){
                 jQuery('.alerttablenr').show();
                 jQuery('[name="tablenr"]').addClass('is-invalid');
                 jQuery('[name="seatsontablenr"]').addClass('is-invalid');
+                jQuery('[name="tablecount"]').addClass('is-invalid');
 
             }
 

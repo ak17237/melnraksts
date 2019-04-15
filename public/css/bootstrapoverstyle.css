@@ -111,11 +111,22 @@ hr{
 .formbtn{
     width: 200px;
 }
- td{
-    border: 1px solid black;
-}
 .reservshow{
     width: 193px;
+    position: absolute;
+    bottom: 0;
+    left: 10%
+}
+.showreserv{
+    position: relative;
+    text-align: center;
+    height: 73px;
+}
+.relative{
+    position: relative;
+}
+.sliderbutton{
+    padding-bottom: 45px;
 }
 /* CSS animation */
 

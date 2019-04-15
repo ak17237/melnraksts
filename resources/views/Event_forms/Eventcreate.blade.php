@@ -218,7 +218,10 @@
                                     <div class="col-lg-2 eventcreate">
                                   <input type="checkbox" class="custom-control-input" id="customSwitch1" name="vipswitch" {{ old('vipswitch') ? 'checked' : '' }}>
                                   <label class="custom-control-label" for="customSwitch1">VIP pasākums</label>
-                                  
+                                </div>
+                                <div class="col-lg-4 eventcreate">
+                                    <input type="checkbox" class="custom-control-input" id="customSwitch2" name="editableswitch" {{ old('editableswitch') ? 'checked' : '' }}>
+                                    <label class="custom-control-label" for="customSwitch2">Rediģējamas rezervācijas</label> 
                                 </div>
 
                             <div class="col-lg-11 eventcreate">

@@ -65,6 +65,9 @@ class Kernel extends HttpKernel
         'existevent' => \App\Http\Middleware\CheckEvent::class,
         'saveevent' => \App\Http\Middleware\CheckSavedEvent::class,
         'vipevent' => \App\Http\Middleware\CheckVIPEvent::class,
+        'existreserv' => \App\Http\Middleware\CheckReserv::class,
+        'creator' => \App\Http\Middleware\CheckCreator::class,
+        'editable' => \App\Http\Middleware\CheckReservEditable::class,
     ];
 
     /**

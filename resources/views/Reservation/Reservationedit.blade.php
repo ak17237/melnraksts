@@ -3,12 +3,12 @@
 
 <div class="container">
     <br>
-        <a href="{{ route('showreservation',$reservation->id) }}" class="btn btn-primary back">Back</a>
+        <a href="javascript:history.go(-1)" class="btn btn-primary back">Back</a>
         <div class="row">
             <div class="col-lg-offset-1 col-lg-11">
                 
-                <form action="#" method="POST">
-                    {{csrf_field()}}    
+                <form action="{{ route('reservationedit',$reservation->id) }}" method="POST">
+                    {{csrf_field()}}     
                         <fieldset>
                         <legend>Manas rezervācijas</legend>
                         @if(session()->has('message'))
@@ -47,16 +47,16 @@
                             <hr>
                             <div class="col-lg-2 eventcreate">
                                     <label>Biļešu skaits</label> {{-- Cilvēka rezervētais biļešu skaits --}}
-                                    <input type="number" min="1" name='ticketcount' class="count form-control {{ $errors->has('ticketcount') ? ' is-invalid' : '' }}" id="ticketcount" value="{{ $reservation->Tickets }}">
-                                    @if ($errors->has('ticketcount'))
+                                    <input type="number" min="1" name='tickets' class="count form-control {{ $errors->has('tickets') ? ' is-invalid' : '' }}" id="tickets" value="{{ $reservation->Tickets }}">
+                                    @if ($errors->has('tickets'))
                                         <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('ticketcount') }}</strong>
+                                        <strong>{{ $errors->first('tickets') }}</strong>
                                          </span>
                                      @endif
                             </div>
 
                             @if($checkedseats != 0) {{-- Ja pasākums neparedz sēdvietas nerāda lauku --}}
-                                <div class="col-lg-10 eventcreate">
+                                
                                     <div class="radiocontainer eventcreate">
                                         <label class="seats">Sēdvietas</label>
                                         <div class="radio">
@@ -153,7 +153,7 @@
                                         disabled
                                         value=''
                                         @else {{-- ja bija YES,tad ielikt vērtību --}}
-                                        value="{{ old('seatnr') }}"
+                                        value="{{ old('tablecount') }}"
                                         @endif>
                                             @if ($errors->has('tablecount'))
                                                 <span class="invalid-feedback alerttablenr" role="alert">
@@ -164,7 +164,7 @@
                                         <div class="eventcreate ticketinfo question"><img class="questiontooltip" id="tabletooltip" src="{{ asset('questionmark.png') }}" width="35" height="35"></div>
                                         @else
                                         @endif
-                            </div>
+                            
                             <div class="radiocontainer eventcreate">
                                 <label class="ticketcount">Ieradīšos patstāvīgi</label>
                             <div class="radio">
@@ -223,18 +223,21 @@
                         </div>
                         <div class="col-lg-11 eventcreate">
                             @if (Auth::user()->hasRole('Admin'))
-                            <span class="eventcreatebutton"><button type="submit" class="btn btn-primary formbtn" name="edit" value="edit">Saglabāt izmaiņas</button></span>
-                            {!! Form::open(['method' => 'DELETE','route' => ['reservationdelete',$myevent->id]]) !!}
-                            <span class="deletebtn"><button onclick="return confirm('Vai esi pārliecināts?')" type="submit" 
-                                class="btn btn-danger formbtn" name="delete" value="delete">Dzēst rezervāciju</button></span>
+                            <span class="eventcreatebutton"><button type="submit" class="btn btn-primary formbtn" name="action" value="edit">Saglabāt izmaiņas</button></span>
+                            </fieldset>
+                        </form>
+                            {!! Form::open(['method' => 'DELETE','route' => ['reservationdelete',$reservation->id]]) !!}
+                            <span style="position: absolute; bottom: 6.3%;" class="deletebtn"><button onclick="return confirm('Vai esi pārliecināts?')" type="submit" 
+                                class="btn btn-danger formbtn" name="action" value="delete">Dzēst rezervāciju</button></span>
                             {!! Form::close() !!}
                             @elseif (Auth::user()->hasRole('User'))
-                            <span class="eventcreatebutton"><button type="submit" class="btn btn-primary formbtn" name="edit" value="edit">Saglabāt izmaiņas</button></span>
+                            <span class="eventcreatebutton"><button type="submit" class="btn btn-primary formbtn" name="action" value="edit">Saglabāt izmaiņas</button></span>
+                            </fieldset>
+                        </form>
                             @endif
                         </div>
 
-                    </fieldset>
-                </form>
+                    
             </div>
         </div>
     </div>

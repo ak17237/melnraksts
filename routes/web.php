@@ -74,12 +74,37 @@ Route::get('event/{id}/{extension}/reservation',[
     'roles' => ['User','Admin']
         ]);
 Route::post('event/{id}/{extension}/reservation/result','ReservationController@reservationcreate')->name('reservationcreate')->middleware('vipevent');
-Route::get('/myreservations-{page}','ReservationController@showreservationusers')->name('reservationusers');
-Route::get('reservation/{id}/show','ReservationController@showreservation')->name('showreservation');
-Route::get('reservation/{id}/edit','ReservationController@showreservationedit')->name('showreservationedit');
-Route::get('event/{id}/reservations','ReservationController@showreservationadmins')->name('showreservationadmins');
+Route::get('/myreservations-{page}',[
+    'uses' => 'ReservationController@showreservationusers',
+    'as' => 'reservationusers',
+    'middleware' =>  ['roles'],
+    'roles' => ['User','Admin']
+        ]);
+Route::get('reservation/{id}/show',[
+    'uses' => 'ReservationController@showreservation',
+    'as' => 'showreservation',
+    'middleware' =>  ['roles','creator','existreserv'],
+    'roles' => ['User','Admin']
+        ]);
+Route::get('reservation/{id}/edit',[
+    'uses' => 'ReservationController@showreservationedit',
+    'as' => 'showreservationedit',
+    'middleware' =>  ['roles','creator','existreserv','editable'],
+    'roles' => ['User','Admin']
+        ]);
+Route::get('event/{id}/reservations',[
+    'uses' => 'ReservationController@showreservationadmins',
+    'as' => 'showreservationadmins',
+    'middleware' =>  ['roles','existevent'],
+    'roles' => ['Admin']
+        ]);
 Route::post('reservation/{id}/edit/result','ReservationController@reservationedit')->name('reservationedit');
-Route::delete('reservation/{id}/delete','ReservationController@reservationdelete')->name('reservationdelete');
+Route::delete('reservation/{id}/delete',[
+    'uses' => 'ReservationController@reservationdelete',
+    'as' => 'reservationdelete',
+    'middleware' =>  ['roles'],
+    'roles' => ['Admin']
+        ]);
 
 
 

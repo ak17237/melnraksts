@@ -43,6 +43,7 @@ class ReservationController extends Controller
             $count = $count - $elements;
         }
         for($i = 1;$i <= $number; $i++) $pagenumber[] = $i;
+        session(['way' => 'users']);
         return view('Reservation.Reservationusers',compact('pagenumber','reservations','event','counter'));
 
     }
@@ -71,6 +72,9 @@ class ReservationController extends Controller
         $checkedseats = $data[1]; // (0 = biļešu skaits,1 = sēdvietu skaits,2 = galdu skaits,3 = stāvvietu skaits)
         $checkedtables = $data[2];
 
+        $checkedseats += $reservation->Seats;
+        $checkedtables += $reservation->TableSeats;
+
         return view('Reservation.Reservationedit',compact('reservation','myevent','user','checkedseats','checkedtables'));
 
     }
@@ -78,9 +82,10 @@ class ReservationController extends Controller
 
         $myevent = Events::find($id);
         $reservation = Reservation::where('EventID',$id)->get();
-
+        
         $count = $reservation->count();
         $number = $tempnumber = 5; // cik ieraksti rādās vienā lapā // korektai skaitļu izvadei katrā lapā
+        session(['way' => 'admins']);
         return view('Reservation.Reservationadmins',compact('myevent','reservation','user','count','number','tempnumber'));
 
     }
@@ -93,7 +98,7 @@ class ReservationController extends Controller
         Reservation::create([  // ieraksta datus datubāzē 
             'email' => $user->email,
             'EventID' => $myevent->id,
-            'Tickets' => $request['ticketcount'],
+            'Tickets' => $request['tickets'],
             'Seats' => $request['seatnr'],
             'TableNr' => $request['tablenr'],
             'TableSeats' => $request['tablecount'],
@@ -102,14 +107,37 @@ class ReservationController extends Controller
         return redirect()->back()->with('message','Pasākums rezervēts');
         
     }
-    public function reservationedit(){
+    public function reservationedit(createReservationRequest $request,$id){
 
+        $reservation = Reservation::find($id);
 
+        eventvalidate($request);
+
+        $reservation->fill([    // ieraksta izmainīšana 
+            'Tickets' => $request['tickets'],
+            'Seats' => $request['seatnr'],
+            'TableNr' => $request['tablenr'],
+            'TableSeats' => $request['tablecount'],
+            'Transport' => $request['transport'],
+            ]);
+        $reservation->save();
+
+        if(\Session::get('way') == 'users')
+        return redirect()->route('reservationusers',1)->with('message','Rezervācija Izmainīta');
+        else 
+        return redirect()->route('showreservationadmins',$reservation->EventID)->with('message','Rezervācija Izmainīta');
 
     }
     public function reservationdelete($id){
 
-        Reservation::find($id)->delete();
+        $reservation = Reservation::find($id);
+        $myevent = Events::where('id',$reservation->EventID)->first();
+        $reservation->delete();
+
+        if(\Session::get('way') == 'users')
+        return redirect()->route('reservationusers',1)->with('message','Rezervācija Dzēsta');
+        else 
+        return redirect()->route('showreservationadmins',$myevent->id)->with('message','Rezervācija Dzēsta');
 
     }
     

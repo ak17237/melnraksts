@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\createEventRequest;
 
 use App\Events;
+use App\Reservation;
 use App\User;
 use Auth;
 
@@ -71,6 +72,9 @@ class EventFormsController extends Controller
         if(empty($request['vipswitch'])) $vip = 0;
         else $vip = 1;
 
+        if(empty($request['editableswitch'])) $editable = 0;
+        else $editable = 1;
+
         if($vip == 1){
 
         $info = 'VIP';
@@ -95,6 +99,7 @@ class EventFormsController extends Controller
         'Tickets' => $request['ticketcount'],
         'Melnraksts' => $melnraksts, // melnraksta status ir atkarīgs no kura poga tika uzpiesta
         'VIP' => $vip,
+        'Editable' => $editable,
         'email' => $user->email,
         'linkcode' => $linkcode,
         ]);
@@ -129,6 +134,9 @@ class EventFormsController extends Controller
         if($request['vipswitch'] == "off") $vip = 0;
         else $vip = 1;
 
+        if($request['editableswitch'] == "off") $editable = 0;
+        else $editable = 1;
+
         if($vip == $myevent->VIP){
             
             $linkcode = $myevent->linkcode;
@@ -159,6 +167,7 @@ class EventFormsController extends Controller
             'Tickets' => $request['ticketcount'],
             'Melnraksts' => $index,
             'VIP' => $vip,
+            'Editable' => $editable,
             'linkcode' => $linkcode,
             ]);
         $myevent->save();
@@ -169,6 +178,13 @@ class EventFormsController extends Controller
     public function delete($id){ // ieraksta dzēšana
 
         $myevent = Events::find($id);
+        $reservations = Reservation::where('EventID',$id)->get();
+
+        foreach($reservations as $r){
+
+            $r->delete();
+
+        }
 
         if($myevent->Melnraksts == 1){ // ja dzēsts melnraksts atgriezt uz melnrakstiem
 
