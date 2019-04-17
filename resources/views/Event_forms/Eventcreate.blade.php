@@ -7,7 +7,7 @@
         <div class="row">
             <div class="col-lg-offset-3 col-lg-11">
                 
-                <form action="{{ route('create') }}" method="POST">
+                <form action="{{ route('create') }}" method="POST" enctype="multipart/form-data">
                     {{csrf_field()}}    
                         <fieldset>
                         <legend>Create event</legend>
@@ -223,6 +223,18 @@
                                     <input type="checkbox" class="custom-control-input" id="customSwitch2" name="editableswitch" {{ old('editableswitch') ? 'checked' : '' }}>
                                     <label class="custom-control-label" for="customSwitch2">Rediģējamas rezervācijas</label> 
                                 </div>
+                                
+                                <div class="col-lg-5 eventcreate">
+                                    
+                                    <input type="file" name="file" class="custom-file-input {{ $errors->has('file') ? ' is-invalid' : '' }}" id="inputGroupFile02">
+                                    @if ($errors->has('file'))
+                                    <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $errors->first('file') }}</strong>
+                                    </span>
+                                    @endif
+                                    <label class="custom-file-label {{ $errors->has('file') ? ' is-invalid' : '' }}" id="filename" for="inputGroupFile02">Choose file</label>
+                                        
+                                  </div>
 
                             <div class="col-lg-11 eventcreate">
                                         <span class="eventcreatebutton"><button type="submit" class="btn btn-primary" name="action" value="create">Create</button></span>
@@ -234,5 +246,4 @@
         </div>
     </div>
 </div>
-
 @endsection

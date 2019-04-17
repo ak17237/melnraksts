@@ -35,14 +35,13 @@ class createEventRequest extends FormRequest
             $rules['tablenr'] = 'required';
             $rules['seatsontablenr'] = 'required';
         }
-
+        $rules['file'] = 'image|dimensions:min_width=100,min_height=100,max_width=1920,max_height=1080';
         if(request('action') == "create" && request('Radio') == 'Yes' && request('customRadio') == 'Yes' && request('inlineDefaultRadiosExample') == 'Yes')
             $rules['ticketcount'] = 'required|gte:' . (getdata($this->get('tablenr'),0) * getdata($this->get('seatsontablenr'),0) + getdata($this->get('seatnr'),0));
         else if(request('action') == "create" && request('Radio') == 'Yes' && request('customRadio') == 'Yes')
             $rules['ticketcount'] = 'required|gte:' . getdata($this->get('seatnr'),0);
         else if(request('action') == "create" && request('Radio') == 'Yes' && request('inlineDefaultRadiosExample') == 'Yes')
             $rules['ticketcount'] = 'required|gte:' . getdata($this->get('tablenr'),0) * getdata($this->get('seatsontablenr'),0);
-
         return $rules;
     }
 }

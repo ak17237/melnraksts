@@ -128,6 +128,26 @@ hr{
 .sliderbutton{
     padding-bottom: 45px;
 }
+.deletephoto{
+    color: #495057;
+    padding: 0;
+}
+.spandeletephoto{
+    padding-bottom: 4px;
+}
+.spandeletephoto:hover .deletephoto{
+    color: white;
+}
+.deleteform{
+    display: -webkit-box;
+    position: absolute;
+    top: 88.4%;
+}
+.divdeletephoto{
+    position: absolute;
+    top: 81.5%;
+    right: 15.4%;
+}
 /* CSS animation */
 
 @-webkit-keyframes fadeIn {

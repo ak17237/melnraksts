@@ -22,6 +22,9 @@
                     <p>{{ geteventdate($myevent->Datefrom) . '-' . geteventdate($myevent->Dateto) }}</p>
                     @endif
                     <h6><i>{{ $myevent->Address }}</i></h6>
+                    @if(Storage::disk('public')->has(str_replace(' ', '_',$myevent->Title) . '-' . $myevent->id . '.' . $myevent->imgextension))
+                        <img src="{{ asset('event-images/' . str_replace(' ', '_',$myevent->Title) . '-' . $myevent->id . '.' . $myevent->imgextension) }}" class="img-responsive">
+                    @endif
                     <p>{!! $description !!}</p>
                     @if(Auth::check() && $myevent->VIP != 1)
                     <a href="{{ route('showreservationcreate',['id' => $myevent->id, 'extension' => $myevent->linkcode]) }}" class="btn btn-primary btn-block">Rezervēt</a>

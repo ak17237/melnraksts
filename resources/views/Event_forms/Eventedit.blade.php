@@ -11,7 +11,7 @@
         <div class="row">
             <div class="col-lg-offset-3 col-lg-11">
                 
-                <form action="{{ route('edit',$myevent->id) }}" method="POST">
+                <form action="{{ route('edit',$myevent->id) }}" method="POST" enctype="multipart/form-data">
                     {{csrf_field()}}    
                         <fieldset>
                         <legend><p class="eventcreate">Rediģēt pasākumu "{{ $myevent->Title }}"</p>
@@ -38,7 +38,7 @@
                                 @else {{-- ja bija tad ievietot veco vērtību --}}
                                 value="{{ old('title') }}"
                                 @endif>
-                                @if ($errors->has('title'))
+                                @if ($errors->has('title')) <code style="display: none">{{ $top[0] = 0.5 }}</code>
                                     <span class="invalid-feedback" role="alert">
                                     <strong>{{ $errors->first('title') }}</strong>
                                      </span>
@@ -82,7 +82,7 @@
                                 @else
                                 value="{{ old('address') }}"
                                 @endif>
-                                @if ($errors->has('address'))
+                                @if ($errors->has('address')) <code style="display: none">{{ $top[1] = 0.5 }}</code>
                                     <span class="invalid-feedback" role="alert">
                                     <strong>{{ $errors->first('address') }}</strong>
                                      </span>
@@ -133,7 +133,7 @@
                                                 value="{{ $myevent->Tickets }}"
                                             @endif
                                         @endif> 
-                                        @if ($errors->has('ticketcount'))
+                                        @if ($errors->has('ticketcount')) <code style="display: none">{{ $top[2] = 0.5 }}</code>
                                             <span class="invalid-feedback alertticketcount" role="alert">
                                             <strong>{{ $errors->first('ticketcount') }}</strong>
                                             </span>
@@ -184,7 +184,7 @@
                                              value="{{ $myevent->Seatnumber }}"
                                     @endif
                                         @endif>
-                                    @if ($errors->has('seatnr'))
+                                    @if ($errors->has('seatnr')) <code style="display: none">{{ $top[3] = 0.9 }}</code>
                                         <span class="invalid-feedback alertseatnr" role="alert">
                                         <strong>{{ $errors->first('seatnr') }}</strong>
                                         </span>
@@ -235,7 +235,7 @@
                                              value="{{ $myevent->Tablenumber }}"
                                     @endif
                                         @endif>
-                                        @if ($errors->has('tablenr'))
+                                        @if ($errors->has('tablenr')) <code style="display: none">{{ $top[3] = 0.9 }}</code>
                                             <span class="invalid-feedback alerttablenr" role="alert">
                                             <strong>{{ $errors->first('tablenr') }}</strong>
                                             </span>
@@ -274,7 +274,7 @@
                                 @else
                                 value="{{ old('anotation') }}"
                                 @endif>
-                                @if ($errors->has('anotation'))
+                                @if ($errors->has('anotation')) <code style="display: none">{{ $top[4] = 0.5 }}</code>
                                     <span class="invalid-feedback" role="alert">
                                     <strong>{{ $errors->first('anotation') }}</strong>
                                     </span>
@@ -320,7 +320,22 @@
                                 <label class="custom-control-label" for="customSwitch2">Rediģējams pasākums</label>
                               </div>
 
-                            <div class="col-lg-11 eventcreate">
+                              <div class="col-lg-4 eventcreate">
+                                    
+                                    <input type="file" name="file" class="custom-file-input {{ $errors->has('file') ? ' is-invalid' : '' }}" id="inputGroupFile02">
+                                    @if ($errors->has('file')) <code style="display: none">{{ $top[5] = -2 }}</code>
+                                    <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $errors->first('file') }}</strong>
+                                    </span>
+                                    @endif
+                                    @if(Storage::disk('public')->has(str_replace(' ', '_',$myevent->Title) . '-' . $myevent->id . '.' . $myevent->imgextension))
+                                    <label class="custom-file-label {{ $errors->has('file') ? ' is-invalid' : '' }}" id="filename" for="inputGroupFile02">{{str_replace(' ', '_',$myevent->Title) . '-' . $myevent->id . '.' . $myevent->imgextension}}</label>
+                                    @else
+                                    <label class="custom-file-label {{ $errors->has('file') ? ' is-invalid' : '' }}" id="filename" for="inputGroupFile02">Choose file</label>
+                                    @endif
+                                  </div>
+
+                            <div class="col-lg-12 eventcreate">
                                         <span class="eventcreatebutton"><button type="submit" class="btn btn-primary" name="action" value="create">
                                             @if ($myevent->Melnraksts == 0)
                                                 Rediģēt
@@ -331,9 +346,21 @@
                             </div>
                         </fieldset>
                 </form>
-                <div class="col-lg-11 eventcreate"> {{-- Dzēst funkcionalitāte --}}
+                @if(Storage::disk('public')->has(str_replace(' ', '_',$myevent->Title) . '-' . $myevent->id . '.' . $myevent->imgextension)) {{ deletebuttonstyle($top) }}
+            <div class="input-group-append divdeletephoto" style="top: {{ 81.5 + $top[0] + + $top[1] + $top[2] + $top[3] + $top[4] + $top[5] + $top[6] }}%;">
+                                    
+                        <form action="{{ route('deletefile',['id' => $myevent->id,
+                        'filename' => str_replace(' ', '_',$myevent->Title) . '-' . $myevent->id . '.' . $myevent->imgextension]) }}" 
+                        enctype="multipart/form-data" method="POST">
+                            {{csrf_field()}}
+                            <span class="spandeletephoto input-group-text deletebtn btn-danger"><button onclick="return confirm('Vai esi pārliecināts?')" type="submit" 
+                            class="btn deletephoto" name="action" value="deletephoto">Dzēst foto</button></span>
+                        </form>
+                     </div>
+                @endif
+                <div class="col-lg-1 eventcreate deleteform"> {{-- Dzēst funkcionalitāte --}}
                 {!! Form::open(['method' => 'DELETE','route' => ['delete',$myevent->id]]) !!}
-                    <span class="eventcreatebutton"><button onclick="return confirm('Vai esi pārliecināts?')" 
+                    <span class=""><button onclick="return confirm('Vai esi pārliecināts?')" 
                         type="submit" class="btn btn-primary" name="action" value="delete">Dzēst</button></span>
                 {!! Form::close() !!}
             </div>

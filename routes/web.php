@@ -66,6 +66,9 @@ Route::get('/saved-events-{page}',[
     'roles' => ['Admin']
         ]);
 Route::get('/event/{id}/show','EventFormsController@showevent')->name('showevent')->middleware('saveevent');
+Route::get('event/{id}/{filename}','EventFormsController@getfile')->name('showfile');
+Route::post('event/{id}/edit/{filename}/delete','EventFormsController@deletefile')->name('deletefile');
+
 // Rezervāciju pārvalde
 Route::get('event/{id}/{extension}/reservation',[
     'uses' => 'ReservationController@showreservationcreate',

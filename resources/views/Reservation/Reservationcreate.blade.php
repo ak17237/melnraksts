@@ -16,7 +16,7 @@
                     <h6><i>{{ $myevent->Address }}</i></h6>
                     @if(empty($description))
                     <p>Nav apraksta</p>
-                    @elseif(linecount($description) > 10)
+                    @elseif(linecount($description) > 10 || Storage::disk('public')->has(str_replace(' ', '_',$myevent->Title) . '-' . $myevent->id . '.' . $myevent->imgextension))
                     <a href="{{ route('showevent',['id' => $myevent->id, 'extension' => $myevent->linkcode]) }}">Apskatīt aprakstu</a>
                     @else
                     <p>{!! $description !!}</p>

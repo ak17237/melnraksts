@@ -132,6 +132,11 @@ jQuery('document').ready(function(){
     $('textarea').each(function(){ // labo kļūdu,kad ievietojot datus tagā textarea ieliekas liela atstarpe no sākuma php koda dēļ htmlā
         $(this).val($(this).val().trim());
     });
+    $('input[name="file"]').change(function(){ // lai parādītos faila izvēles laukā izvēlētā faila nosaukums
+        if($('input[name="file"]').val() == '') $('#filename').html('Choose file'); 
+        else $('#filename').html($('input[name="file"]').val().replace(/C:\\fakepath\\/i, ''));
+    });
+    
     $('#datefrom,#dateto').change(function(){
 
         var datefrom  = new Date($('#datefrom').val());
