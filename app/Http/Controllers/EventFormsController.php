@@ -32,9 +32,8 @@ class EventFormsController extends Controller
         if($myevent->Tablenumber == 0) $checkedtables = false;
         else $checkedtables = true;
 
-        $top = [0,0,0,0,0,0,0];
         return view('Event_forms.Eventedit',['myevent' => $myevent,'checkedseats' => $checkedseats,'checkedtables' => $checkedtables,
-        'checkedtickets' => $checkedtickets,'top' => $top]);
+        'checkedtickets' => $checkedtickets]);
     }
     public function showsavedevents($page){ // parāda saglabātos pasākumus sākumā nesen izmainītos,kuriem ir melnraksts 1
 
@@ -88,6 +87,9 @@ class EventFormsController extends Controller
             $linkcode = "show";
         }
 
+        if($request['file'] == NULL) $img = NULL;
+        else $img = $request['file']->getClientOriginalExtension();
+
         $user = User::where('email', Auth::user()->email)->first();     
         Events::create([  // ieraksta datus datubāzē 
         'Title' => $request['title'],
@@ -103,7 +105,7 @@ class EventFormsController extends Controller
         'Melnraksts' => $melnraksts, // melnraksta status ir atkarīgs no kura poga tika uzpiesta
         'VIP' => $vip,
         'Editable' => $editable,
-        'imgextension' => $request['file']->getClientOriginalExtension(),
+        'imgextension' => $img,
         'email' => $user->email,
         'linkcode' => $linkcode,
         ]);
@@ -111,8 +113,8 @@ class EventFormsController extends Controller
         $id = Events::all()->sortByDesc(['updated_at'])->first()->id;
 
         $file = $request['file'];
-        $filename = str_replace(' ', '_', $request['title']) . '-' . $id . '.' . $request['file']->getClientOriginalExtension();
         if($file){
+            $filename = str_replace(' ', '_', $request['title']) . '-' . $id . '.' . $request['file']->getClientOriginalExtension();
             Storage::disk('public')->put($filename,File::get($file));
         }
 
@@ -179,6 +181,9 @@ class EventFormsController extends Controller
             $info = 0;
         }
 
+        if($request['file'] == NULL) $img = NULL;
+        else $img = $request['file']->getClientOriginalExtension();
+
         $myevent->fill([    // ieraksta izmainīšana 
             'Title' => $request['title'],
             'Datefrom' => $request['datefrom'],
@@ -193,15 +198,15 @@ class EventFormsController extends Controller
             'Melnraksts' => $index,
             'VIP' => $vip,
             'Editable' => $editable,
-            'imgextension' => $request['file']->getClientOriginalExtension(),
+            'imgextension' => $img,
             'linkcode' => $linkcode,
             ]);
         $myevent->save();
 
         $file = $request['file'];
-        $filename = str_replace(' ', '_', $request['title']) . '-' . $id . '.' . $request['file']->getClientOriginalExtension();
 
         if($file){
+            $filename = str_replace(' ', '_', $request['title']) . '-' . $id . '.' . $request['file']->getClientOriginalExtension();
             Storage::disk('public')->put($filename,File::get($file));
         }
 

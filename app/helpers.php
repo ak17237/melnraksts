@@ -185,16 +185,4 @@ function checkEditable($reservid){
     if($event->Editable == 1) return true;
     else false;
 }
-function deletebuttonstyle(&$top){
-    $count = 0;
-
-    for($i = 0;$i < 6;$i++){
-        if($top[$i] != 0) $count ++;
-    }
-
-    if($count == 2 || $count == 3) $top[6] = -0.1;
-    elseif($count == 4) $top[6] = -0.2;
-    elseif($count == 5 || $count == 6) $top[6] = -0.3;
-
-}
 ?>

@@ -7,6 +7,13 @@
         <div class="row">
             <div class="col-lg-offset-3 col-lg-11">
 
+                    @if(session()->has('message'))
+                    <div class="alert alert-dismissible alert-success">
+                      <button type="button" class="close" data-dismiss="alert">&times;</button>
+                      <p class="mb-0">{{ session()->get('message') }}</p>
+                    </div>
+                    @endif
+
                         <legend>Manas rezervācijas</legend>
                             <div class="col-lg-5 eventcreate">
                                 <label>Title</label>
@@ -92,7 +99,7 @@
                         </div>
                         <div class="col-lg-11 eventcreate">
                         
-                        @if($myevent->Editable == 1)
+                        @if($myevent->Editable == 1 || Auth::user()->hasRole('Admin'))
                         <a href="{{ route('showreservationedit',$reservation->id) }}" class="btn btn-primary btn-block">Rediģēt pasākumu</a>
                         @endif 
                         </div>

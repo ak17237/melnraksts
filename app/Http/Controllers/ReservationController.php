@@ -123,9 +123,10 @@ class ReservationController extends Controller
         $reservation->save();
 
         if(\Session::get('way') == 'users')
-        return redirect()->route('reservationusers',1)->with('message','Rezervācija Izmainīta');
+        return redirect()->route('showreservation',$id)->with('message','Rezervācija Izmainīta');
         else 
-        return redirect()->route('showreservationadmins',$reservation->EventID)->with('message','Rezervācija Izmainīta');
+        return redirect()->route('showreservationadmins',$reservation->EventID)->with('message','Rezervācija Izmainīta'); 
+        // kad back pogas strādās pareizi redirects būs uz apskates lapu tā pat kā augstaāk
 
     }
     public function reservationdelete($id){

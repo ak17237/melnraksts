@@ -1,9 +1,11 @@
 jQuery('document').ready(function(){
     /* Funkcijas kas atslēdz text input negatīva radio izvēles gadījumā */
+    var seatval = tableval = seatontableval = ticketval = transportval = "";
     function disableseat (){
         if($('input#customRadio2').is(':checked')) {
 
             jQuery('.eventseat').prop('disabled',true);
+            seatval = jQuery('.eventseat').val();
             jQuery('.eventseat').val('');
             jQuery('.alertseatnr').hide();
             jQuery('[name="seatnr"]').removeClass('is-invalid');
@@ -16,6 +18,7 @@ jQuery('document').ready(function(){
         if($('input#customRadio1').is(':checked')) {
 
             jQuery('.eventseat').prop('disabled',false);
+            jQuery('.eventseat').val(seatval);
             if($('.alertseatnr').text() != ''){
 
                 jQuery('.alertseatnr').show();
@@ -30,10 +33,14 @@ jQuery('document').ready(function(){
         if($('input#defaultInline2').is(':checked')) {
 
             jQuery('.eventtable').prop('disabled',true);
+            tableval =  jQuery('#eventtable').val();
+            seatontableval = jQuery('#seatsontable').val();
             jQuery('.eventtable').val('');
             jQuery('#tablenr').prop('disabled',true);
             jQuery('#tablenr').val('');
             jQuery('.alerttablenr').hide();
+            jQuery('.alertseattable').hide();
+            jQuery('.alerttablecount').hide();
             jQuery('[name="tablenr"]').removeClass('is-invalid');
             jQuery('[name="seatsontablenr"]').removeClass('is-invalid');
             jQuery('[name="tablecount"]').removeClass('is-invalid');
@@ -46,13 +53,25 @@ jQuery('document').ready(function(){
         if($('input#defaultInline1').is(':checked')) {
 
             jQuery('.eventtable').prop('disabled',false);
+            jQuery('#eventtable').val(tableval);
+            jQuery('#seatsontable').val(seatontableval);
             jQuery('#tablenr').prop('disabled',false);
             jQuery('#tablenr').val('1');
             if($('.alerttablenr').text() != ''){
 
                 jQuery('.alerttablenr').show();
                 jQuery('[name="tablenr"]').addClass('is-invalid');
+
+            }
+            if($('.alertseattable').text() != ''){
+
+                jQuery('.alertseattable').show();
                 jQuery('[name="seatsontablenr"]').addClass('is-invalid');
+
+            }
+            if($('.alerttablecount').text() != ''){
+                
+                jQuery('.alerttablecount').show();
                 jQuery('[name="tablecount"]').addClass('is-invalid');
 
             }
@@ -64,9 +83,10 @@ jQuery('document').ready(function(){
         if($('input#Radio2').is(':checked')) {
 
             jQuery('.tickets').prop('disabled',true);
+            ticketval =  jQuery('.tickets').val();
             jQuery('.tickets').val('');
             jQuery('.alertticketcount').hide();
-            jQuery('[name="ticketcount"]').removeClass('is-invalid');
+            jQuery('[name="ticketcount"]').removeClass('is-invalid');       
 
         }
         
@@ -76,6 +96,7 @@ jQuery('document').ready(function(){
         if($('input#Radio1').is(':checked')) {
 
             jQuery('.tickets').prop('disabled',false);
+            jQuery('.tickets').val(ticketval);
             if($('.alertticketcount').text() != ''){
 
                 jQuery('.alertticketcount').show();
@@ -90,11 +111,12 @@ jQuery('document').ready(function(){
         if($('input#Radio1').is(':checked')) {
 
             jQuery('#transport').prop('disabled',true);
+            transportval =  jQuery('#transport').val();
             jQuery('#transport').val('');
-
         }
         else {
             jQuery('#transport').prop('disabled',false);
+            jQuery('#transport').val(transportval);
             $("#transport option[value='Empty']").remove();
             /* jQuery('#transport').val('Riga'); */
         }
@@ -119,6 +141,7 @@ jQuery('document').ready(function(){
         enabletickets();
 
     });
+    
     $('input[name="TransportRadio"]').click(function(){
 
         disabletransport();
@@ -136,6 +159,11 @@ jQuery('document').ready(function(){
         if($('input[name="file"]').val() == '') $('#filename').html('Choose file'); 
         else $('#filename').html($('input[name="file"]').val().replace(/C:\\fakepath\\/i, ''));
     });
+
+    $('#tickettooltip').tooltip({title: 'Atlikušās biļetes no kurām ' + $('#chseat').text() + 
+    ' ir sēdvietas un ' + $('#chtable').text() + 
+    ' ir sēdvietas pie galdiem,pārējās ir stāvvietas(' + $('#chstand').text() + ')', placement: "top",trigger: 'hover'});
+    $('#reserveditabletooltip').tooltip({title: 'Vai lietotāji varēs rediģēt savas rezervācijas šim pasākumam vai nē', placement: "top",trigger: 'hover'});
     
     $('#datefrom,#dateto').change(function(){
 

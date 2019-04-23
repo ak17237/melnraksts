@@ -58,10 +58,15 @@
                                      </span>
                                  @endif
                                 </div>
-                            <div class="col-lg-3 radiocontainer eventcreate ticketinfo"><span>{{ $ticketinfo }}</span><div class="help-tip"> {{-- Biļešu informācija --}}
-                                    <p>{{ '* Atlikušās biļetes no kurām ' . $checkedseats . ' ir sēdvietas un ' . $checkedtables . ' ir sēdvietas pie galdiem,pārējās ir stāvvietas(' 
-                                    . $standing . ')' }}</p>
-                                </div></div>
+                            <div class="col-lg-3 radiocontainer eventcreate ticketinfo">
+                                <span>{{ $ticketinfo }}</span> 
+                                @if($ticketinfo !== "Neierobežots")
+                                <span style="display:none;" id="chseat">{{ $checkedseats }}</span>
+                                <span style="display:none;" id="chtable">{{ $checkedtables }}</span>
+                                <span style="display:none;" id="chstand">{{ $standing }}</span>
+                                <img class="questiontooltip" id="tickettooltip" src="{{ asset('questionmark.png') }}" width="35" height="35">
+                                @endif
+                            </div>
                                 @if($checkedseats != 0) {{-- Ja pasākums neparedz sēdvietas nerāda lauku --}}
                                 <div class="col-lg-11 eventcreate">
                                     <div class="radiocontainer eventcreate">
@@ -141,7 +146,7 @@
                                             value="{{ old('tablecount') }}"
                                             @endif>
                                             @if ($errors->has('tablecount'))
-                                                <span class="invalid-feedback alerttablenr" role="alert">
+                                                <span class="invalid-feedback alerttablecount" role="alert">
                                                 <strong>{{ $errors->first('tablecount') }}</strong>
                                                 </span>
                                             @endif

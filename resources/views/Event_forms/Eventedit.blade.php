@@ -38,7 +38,7 @@
                                 @else {{-- ja bija tad ievietot veco vērtību --}}
                                 value="{{ old('title') }}"
                                 @endif>
-                                @if ($errors->has('title')) <code style="display: none">{{ $top[0] = 0.5 }}</code>
+                                @if ($errors->has('title'))
                                     <span class="invalid-feedback" role="alert">
                                     <strong>{{ $errors->first('title') }}</strong>
                                      </span>
@@ -82,7 +82,7 @@
                                 @else
                                 value="{{ old('address') }}"
                                 @endif>
-                                @if ($errors->has('address')) <code style="display: none">{{ $top[1] = 0.5 }}</code>
+                                @if ($errors->has('address'))
                                     <span class="invalid-feedback" role="alert">
                                     <strong>{{ $errors->first('address') }}</strong>
                                      </span>
@@ -133,7 +133,7 @@
                                                 value="{{ $myevent->Tickets }}"
                                             @endif
                                         @endif> 
-                                        @if ($errors->has('ticketcount')) <code style="display: none">{{ $top[2] = 0.5 }}</code>
+                                        @if ($errors->has('ticketcount'))
                                             <span class="invalid-feedback alertticketcount" role="alert">
                                             <strong>{{ $errors->first('ticketcount') }}</strong>
                                             </span>
@@ -184,7 +184,7 @@
                                              value="{{ $myevent->Seatnumber }}"
                                     @endif
                                         @endif>
-                                    @if ($errors->has('seatnr')) <code style="display: none">{{ $top[3] = 0.9 }}</code>
+                                    @if ($errors->has('seatnr'))
                                         <span class="invalid-feedback alertseatnr" role="alert">
                                         <strong>{{ $errors->first('seatnr') }}</strong>
                                         </span>
@@ -221,7 +221,7 @@
 
                                     <div class="col-lg-2 eventcreate">
                                         <label>Table number</label>
-                                        <input type="number" name='tablenr' class="form-control eventtable {{ $errors->has('tablenr') ? ' is-invalid' : '' }}" 
+                                        <input type="number" name='tablenr' id="eventtable" class="form-control eventtable {{ $errors->has('tablenr') ? ' is-invalid' : '' }}" 
                                         @if(old('inlineDefaultRadiosExample') == "No")
                                         disabled
                                         value=""
@@ -235,7 +235,7 @@
                                              value="{{ $myevent->Tablenumber }}"
                                     @endif
                                         @endif>
-                                        @if ($errors->has('tablenr')) <code style="display: none">{{ $top[3] = 0.9 }}</code>
+                                        @if ($errors->has('tablenr'))
                                             <span class="invalid-feedback alerttablenr" role="alert">
                                             <strong>{{ $errors->first('tablenr') }}</strong>
                                             </span>
@@ -243,7 +243,7 @@
                                     </div>
                                     <div class="col-lg-2 eventcreate">
                                         <label>Seats on table</label>
-                                        <input type="number" name='seatsontablenr' class="form-control eventtable {{ $errors->has('seatsontablenr') ? ' is-invalid' : '' }}"
+                                        <input type="number" name='seatsontablenr' id="seatsontable" class="form-control eventtable {{ $errors->has('seatsontablenr') ? ' is-invalid' : '' }}"
                                         @if(old('inlineDefaultRadiosExample') == "No")
                                         disabled
                                         value=""
@@ -258,7 +258,7 @@
                                     @endif
                                         @endif>
                                         @if ($errors->has('seatsontablenr'))
-                                            <span class="invalid-feedback" role="alert">
+                                            <span class="invalid-feedback alertseattable" role="alert">
                                             <strong>{{ $errors->first('seatsontablenr') }}</strong>
                                             </span>
                                         @endif
@@ -274,7 +274,7 @@
                                 @else
                                 value="{{ old('anotation') }}"
                                 @endif>
-                                @if ($errors->has('anotation')) <code style="display: none">{{ $top[4] = 0.5 }}</code>
+                                @if ($errors->has('anotation'))
                                     <span class="invalid-feedback" role="alert">
                                     <strong>{{ $errors->first('anotation') }}</strong>
                                     </span>
@@ -323,7 +323,7 @@
                               <div class="col-lg-4 eventcreate">
                                     
                                     <input type="file" name="file" class="custom-file-input {{ $errors->has('file') ? ' is-invalid' : '' }}" id="inputGroupFile02">
-                                    @if ($errors->has('file')) <code style="display: none">{{ $top[5] = -2 }}</code>
+                                    @if ($errors->has('file'))
                                     <span class="invalid-feedback" role="alert">
                                     <strong>{{ $errors->first('file') }}</strong>
                                     </span>
@@ -346,8 +346,8 @@
                             </div>
                         </fieldset>
                 </form>
-                @if(Storage::disk('public')->has(str_replace(' ', '_',$myevent->Title) . '-' . $myevent->id . '.' . $myevent->imgextension)) {{ deletebuttonstyle($top) }}
-            <div class="input-group-append divdeletephoto" style="top: {{ 81.5 + $top[0] + + $top[1] + $top[2] + $top[3] + $top[4] + $top[5] + $top[6] }}%;">
+                @if(Storage::disk('public')->has(str_replace(' ', '_',$myevent->Title) . '-' . $myevent->id . '.' . $myevent->imgextension))
+            <div class="input-group-append divdeletephoto">
                                     
                         <form action="{{ route('deletefile',['id' => $myevent->id,
                         'filename' => str_replace(' ', '_',$myevent->Title) . '-' . $myevent->id . '.' . $myevent->imgextension]) }}" 

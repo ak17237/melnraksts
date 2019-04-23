@@ -20,6 +20,7 @@ Route::get('/register','RegisterController@showRegister')->name('showregister')-
 Route::get('/login','LoginController@showLogin')->name('showlogin')->middleware('guest');
 Route::post('/login/check','LoginController@Login')->name('login');
 Route::post('/register','RegisterController@Register')->name('register');
+Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 // Profila maiņa
 Route::get('/profile',[
     'uses' => 'ProfileController@index',
@@ -66,7 +67,6 @@ Route::get('/saved-events-{page}',[
     'roles' => ['Admin']
         ]);
 Route::get('/event/{id}/show','EventFormsController@showevent')->name('showevent')->middleware('saveevent');
-Route::get('event/{id}/{filename}','EventFormsController@getfile')->name('showfile');
 Route::post('event/{id}/edit/{filename}/delete','EventFormsController@deletefile')->name('deletefile');
 
 // Rezervāciju pārvalde

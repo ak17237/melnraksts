@@ -222,6 +222,7 @@
                                 <div class="col-lg-4 eventcreate">
                                     <input type="checkbox" class="custom-control-input" id="customSwitch2" name="editableswitch" {{ old('editableswitch') ? 'checked' : '' }}>
                                     <label class="custom-control-label" for="customSwitch2">Rediģējamas rezervācijas</label> 
+                                    <img class="questiontooltip" id="reserveditabletooltip" src="{{ asset('questionmark.png') }}" width="35" height="35">
                                 </div>
                                 
                                 <div class="col-lg-5 eventcreate">
