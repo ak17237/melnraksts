@@ -24,6 +24,23 @@ class createReservationRequest extends FormRequest
      *
      * @return array
      */
+    public function attributes()
+    {
+       return[
+        'tickets' => 'Biļešu skaits',
+        'seatnr' => 'Sēdvietu skaits',
+        'tablecount' => 'Sēdvietu skaits pie galda',
+       ];
+    }
+    public function messages()
+    {
+        return[
+            'max' => 'Māksimāls pieļaujamais garums ir :max',
+            'required' => ':attribute ir obligāts',
+            'gte' => ':attribute jābūt lielāks vai vienāds par :value',
+            'lte' => ':attribute jābūt mazāks vai vienāds par :value',
+        ];
+    }
     public function rules()
     {
         if($this->route()->getName() == 'reservationedit'){

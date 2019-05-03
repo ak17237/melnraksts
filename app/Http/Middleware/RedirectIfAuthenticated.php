@@ -18,7 +18,13 @@ class RedirectIfAuthenticated
     public function handle($request, Closure $next, $guard = null)
     {
         if (Auth::guard($guard)->check()) {
-            return response('Have to be a guest', 403);
+            
+            $message[0] = 'Jūs jau ielogojāties!';
+            $message[1] = 'Nevar piekļūt pie reģistrācijas vai ielogošanas formas ja jūs jau ielogojāties sistēmā!';
+            $state = '3';
+
+            return response()->view('errors.specificerrors',compact('message','state'));
+
         }
 
         return $next($request);

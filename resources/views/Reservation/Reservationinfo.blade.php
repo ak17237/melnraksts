@@ -2,10 +2,10 @@
 @section('content')
 
 <div class="container">
+    <a href="javascript:history.go(-1)" class="btn btn-primary back">Atpakaļ</a>
     <br>
-        <a href="javascript:history.go(-1)" class="btn btn-primary back">Back</a>
         <div class="row">
-            <div class="col-lg-offset-3 col-lg-11">
+            <div class="col-lg-offset-3 col-lg-11 center">
 
                     @if(session()->has('message'))
                     <div class="alert alert-dismissible alert-success">
@@ -14,38 +14,38 @@
                     </div>
                     @endif
 
-                        <legend>Manas rezervācijas</legend>
-                            <div class="col-lg-5 eventcreate">
-                                <label>Title</label>
-                                <h4>{{ $myevent->Title }}</h4>
+                        <legend class="eventcreate smalltitle m-b-md ml-3-p">Manas rezervācijas</legend>
+                            <div class="col-lg-5 eventcreate ml-3-p">
+                                <label>Nosaukums</label>
+                                <h4><strong>{{ $myevent->Title }}</strong></h4>
                             </div>                   
                     
                             <div class="col-lg-3 eventcreate">
                                 <label>
                                     @if(geteventdate($myevent->Datefrom) != geteventdate($myevent->Dateto))
-                                    Date from
-                                    @else Date
+                                    Datums no
+                                    @else Datums
                                     @endif
                                 </label>
-                                <h5>{{ geteventdate($myevent->Datefrom) }}</h5>
+                                <h5><strong>{{ geteventdate($myevent->Datefrom) }}</h5>
                             </div>
                             @if(geteventdate($myevent->Datefrom) != geteventdate($myevent->Dateto)) {{-- Datuma korektra izvade --}}
                             <div class="col-lg-3 eventcreate">
-                                <label>Date to</label>
-                                <h5>{{ geteventdate($myevent->Dateto) }}<h5>
+                                <label>Datums līdz</label>
+                                <h5><strong>{{ geteventdate($myevent->Dateto) }}</strong></h5>
                             </div>
                             @endif
 
 
-                            <div class="col-lg-11 eventcreate">
-                                <label>Address</label>
-                                <h6>{{ $myevent->Address }}</h6>
+                            <div class="col-lg-11 eventcreate ml-3-p">
+                                <label>Aderese</label>
+                                <h5><strong>{{ $myevent->Address }}</strong></h5>
                                  
                             </div>
-                            <hr>
-                            <div class="col-lg-2 eventcreate">
+                            <hr class="ml-3-p">
+                            <div class="col-lg-2 eventcreate ml-3-p">
                                 <label>Biļešu skaits:</label> {{-- Cilvēka rezervētais biļešu skaits --}}
-                                <h4>{{ $reservation->Tickets }}</h4>    
+                                <h4><strong>{{ $reservation->Tickets }}</strong></h4>    
                             </div>
 
                             
@@ -53,11 +53,11 @@
                                     
                                 <label>Sēdvietas:</label>
                                 @if($checkedseats == 0)
-                                <h6>Pasākums neparedz Sēdvietas</h6>
+                                <h5><strong>Pasākums neparedz Sēdvietas</strong></h5>
                                 @elseif($reservation->Seats == 0)
-                                <h6>Jūs neesat rezervējuši sēdvietas</h6>
+                                <h5><strong>Jūs neesat rezervējuši sēdvietas</strong></h5>
                                 @elseif($reservation->Seats != 0)
-                                <h4>{{ $reservation->Seats }}</h4>
+                                <h4><strong>{{ $reservation->Seats }}</strong></h4>
                                 @endif
                             </div>
 
@@ -65,42 +65,42 @@
 
                                 <label>Galdi:</label>
                                 @if($checkedtables == 0)
-                                <h6>Pasākums neparedz Galdus</h6>
+                                <h5><strong>Pasākums neparedz Galdus</strong></h5>
                                 @elseif($reservation->TableSeats == 0)
-                                <h6>Jūs neesat rezervējuši sēdvietas pie galdiem</h6>
+                                <h5><strong>Jūs neesat rezervējuši sēdvietas pie galdiem</strong></h5>
                                 @elseif($reservation->TableSeats != 0)
-                                <h5>{{ $reservation->TableSeats }} sēdvieta(s) pie {{ $reservation->TableNr }}. galda</h5>
+                                <h5><strong>{{ $reservation->TableSeats }} sēdvieta(s) pie {{ $reservation->TableNr }}. galda</strong></h5>
                                 @endif
 
                             </div>
 
-                            <div class="col-lg-11 eventcreate">
+                            <div class="col-lg-11 eventcreate ml-3-p">
 
                                 <label>Transports:</label>
                                 @if($reservation->Transport === 'Patstāvīgi')
-                                <h6>Jūs izvēlējāties,ka ieradīsaties uz pasākumu patstāvīgi</h6>
+                                <h5><strong>Jūs izvēlējāties,ka ieradīsaties uz pasākumu patstāvīgi</strong></h5>
                                 @else
-                                <h6>Jūs izvēlējāties,ka ieradīsaties uz pasākumu ar autobusu kurš savāks Jūs no reģiona: {{ $reservation->Transport }}</h6>
+                                <h5><strong>Jūs izvēlējāties,ka ieradīsaties uz pasākumu ar autobusu kurš savāks Jūs no reģiona: {{ $reservation->Transport }}</strong></h5>
                                 @endif
 
                             </div>
-                        <hr>
-                        <div class="col-lg-3 eventcreate">
+                        <hr class="ml-3-p">
+                        <div class="col-lg-3 eventcreate ml-3-p">
                             <label>Vārds</label>
-                            <h6>{{ $user->First_name }}</h6>
+                            <h5><strong>{{ $user->First_name }}</strong></h5>
                         </div>
                         <div class="col-lg-3 eventcreate">
                             <label>Uzvārds</label>
-                            <h6>{{ $user->Last_name }}</h6>
+                            <h5><strong>{{ $user->Last_name }}</strong></h5>
                         </div>
                         <div class="col-lg-5 eventcreate">
                             <label>e-pasts</label>
-                            <h6>{{ $user->email }}</h6>
+                            <h5><strong>{{ $user->email }}</strong></h5>
                         </div>
-                        <div class="col-lg-11 eventcreate">
+                        <div class="col-lg-11 eventcreate ml-3-p">
                         
                         @if($myevent->Editable == 1 || Auth::user()->hasRole('Admin'))
-                        <a href="{{ route('showreservationedit',$reservation->id) }}" class="btn btn-primary btn-block">Rediģēt pasākumu</a>
+                        <a href="{{ route('showreservationedit',$reservation->id) }}" class="btn btn-primary reserv btn-block">Rediģēt rezervāciju</a>
                         @endif 
                         </div>
             </div>

@@ -1,6 +1,6 @@
 jQuery('document').ready(function(){
     /* Funkcijas kas atslēdz text input negatīva radio izvēles gadījumā */
-    var seatval = tableval = seatontableval = ticketval = transportval = "";
+    var seatval = tableval = seatontableval = ticketval = transportval = tablecount = "";
     function disableseat (){
         if($('input#customRadio2').is(':checked')) {
 
@@ -35,6 +35,7 @@ jQuery('document').ready(function(){
             jQuery('.eventtable').prop('disabled',true);
             tableval =  jQuery('#eventtable').val();
             seatontableval = jQuery('#seatsontable').val();
+            tablecount = jQuery('#tablecount').val();
             jQuery('.eventtable').val('');
             jQuery('#tablenr').prop('disabled',true);
             jQuery('#tablenr').val('');
@@ -55,6 +56,7 @@ jQuery('document').ready(function(){
             jQuery('.eventtable').prop('disabled',false);
             jQuery('#eventtable').val(tableval);
             jQuery('#seatsontable').val(seatontableval);
+            jQuery('#tablecount').val(tablecount);
             jQuery('#tablenr').prop('disabled',false);
             jQuery('#tablenr').val('1');
             if($('.alerttablenr').text() != ''){
@@ -160,10 +162,25 @@ jQuery('document').ready(function(){
         else $('#filename').html($('input[name="file"]').val().replace(/C:\\fakepath\\/i, ''));
     });
 
-    $('#tickettooltip').tooltip({title: 'Atlikušās biļetes no kurām ' + $('#chseat').text() + 
-    ' ir sēdvietas un ' + $('#chtable').text() + 
-    ' ir sēdvietas pie galdiem,pārējās ir stāvvietas(' + $('#chstand').text() + ')', placement: "top",trigger: 'hover'});
-    $('#reserveditabletooltip').tooltip({title: 'Vai lietotāji varēs rediģēt savas rezervācijas šim pasākumam vai nē', placement: "top",trigger: 'hover'});
+        var ticketinfotext = 'Atlikušās biļetes no kurām ' + $('#chseat').text() + 
+        ' ir sēdvietas un ' + $('#chtable').text() + 
+        ' ir sēdvietas pie galdiem,pārējās ir stāvvietas(' + $('#chstand').text() + ')';
+
+        if($('#ticketinfo').text() === "Neierobežots"){
+
+            if($('#chseat').text() != 0 && $('#chtable').text() != 0) ticketinfotext = 'Šajā pasākumā ir ierobežotas sēdvietas,kuru atlikušais skaits ir: ' + $('#chseat').text() + 
+                ' un sēdvietas pie galdiem,kuru atlikušais skaits ir: ' + $('#chtable').text() + ' pārējās ir stāvvietas';
+
+            else if($('#chseat').text() == 0) ticketinfotext = 'Šajā pasākumā ir ierobežotas sēdvietas pie galdiem,kuru atlikušais skaits ir: ' + $('#chtable').text() + 
+            ' pārējās ir stāvvietas. Parastās sēdvietas nav paredzētas.';
+
+            else if($('#chtable').text() == 0) ticketinfotext = 'Šajā pasākumā ir ierobežotas sēdvietas,kuru atlikušais skaits ir: ' + $('#chseat').text() + 
+            ' pārējās ir stāvvietas. Sēdvietas pie galdiem nav paredzētas.';
+
+        }
+        $('#tickettooltip').tooltip({title: ticketinfotext, placement: "top",trigger: 'hover',container: '.questiontooltip'});
+
+    $('#reserveditabletooltip').tooltip({title: 'Vai lietotāji varēs rediģēt savas rezervācijas šim pasākumam vai nē', placement: "top",trigger: 'hover',container: '.questiontooltip'});
     
     $('#datefrom,#dateto').change(function(){
 

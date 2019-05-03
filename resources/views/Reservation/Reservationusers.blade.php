@@ -1,6 +1,7 @@
 @extends('welcome')
 @section('content')
 <div class="container">
+    <a href="/" class="btn btn-primary back">Atpakaļ</a>
     <br>
     @if(session()->has('message'))
     <div class="alert alert-dismissible alert-success">
@@ -8,9 +9,8 @@
         <p>{{ session()->get('message') }}</p>
     </div>
     @endif
-        <a href="/" class="btn btn-primary back">Back</a>
 <div class="content">
-    <div class="title m-b-md">
+    <div class="smalltitle m-b-md">
      
         Manas rezervācijas
     </div>

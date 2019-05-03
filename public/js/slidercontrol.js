@@ -30,7 +30,7 @@ $(document).ready(function(){
         hideControlOnEnd: true,
         startSlide: 0,
         onSlideBefore: function($slideElement,oldIndex,newIndex) { // funkija kura pārslēdz mēnešus galvenē atkarībā no slaida
-
+            
             var index = newIndex; //newIndex ir jauna slaida index pirmais = 0
             monthindex = todaymonth + index; // monthindex ir jauna slaida mēneša index ja esošais 0,ja 2 meneši pēc tad 2
             if(monthindex > 11) monthindex = monthindex - 12; // skaitlis nevar būt lielāks par 11 lai korekti izvadīt mēneša masīvu vārdos
@@ -38,6 +38,8 @@ $(document).ready(function(){
             
             jQuery('.month').hide().fadeOut('fast').html(months[monthindex]).fadeIn('slow');
         },
+        onSlideAfter: function(){ $('.bx-viewport').height($('.bx-viewport').height() + 20) },
+        onSliderResize: function(){ $('.bx-viewport').height($('.bx-viewport').height() + 20) },
         pagerCustom: '.slider-months',
         adaptiveHeight: true,
         touchEnabled: false
@@ -70,6 +72,6 @@ $(document).ready(function(){
             if($('.vip').data('clicked') != true && $(e.target).is('.close') == false && !$(e.target).closest('tr').find('div.popover').hasClass('popover')) 
             window.location = $(this).find("a").attr("href");
          });
-        
+         $('.bx-viewport').height($('.bx-viewport').height() + 20); 
     
 });

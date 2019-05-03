@@ -29,8 +29,8 @@ ul.bxslider {
 /** THEME
 ===================================*/
 .bx-wrapper {
-  border: 5px solid #fff;
-  background: #fff;
+  border: 5px solid aliceblue;
+  background: aliceblue;
 }
 .bx-wrapper .bx-pager,
 .bx-wrapper .bx-controls-auto {

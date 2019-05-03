@@ -1,25 +1,30 @@
 @extends('welcome')
 @section('content')
-
 <div class="container">
-    <br>
         <a @if ($myevent->Melnraksts == 0)
                 href="/"
             @else
                 href="/saved-events-1"
-            @endif class="btn btn-primary back">Back</a>
+            @endif class="btn btn-primary back">Atpakaļ</a>
+            <br>
         <div class="row">
-            <div class="col-lg-offset-3 col-lg-11">
+            <div class="col-lg-offset-3 col-lg-11 center">
                 
                 <form action="{{ route('edit',$myevent->id) }}" method="POST" enctype="multipart/form-data">
                     {{csrf_field()}}    
                         <fieldset>
-                        <legend><p class="eventcreate">Rediģēt pasākumu "{{ $myevent->Title }}"</p>
-                        <input id="reservlink" class="form-control col-lg-5 eventcreate" value="{{ route('showreservationcreate', ['id' => $myevent->id,'extension' => $myevent->linkcode]) }}">
-                        <button id="copybtn" type="button" class="btn btn-secondary clippy eventcreate">
-                            <img id='imgcopy' src="{{ asset('clippy.svg') }}" width="25" height="25">
-                        </button>
-                    </legend>
+                        <legend>
+                            <p style="float:left;">Rezervācijas links: </p>
+                                <input id="reservlink" class="form-control col-lg-5 eventcreate" value="{{ route('showreservationcreate', ['id' => $myevent->id,'extension' => $myevent->linkcode]) }}">
+                                <button id="copybtn" type="button" class="btn btn-secondary clippy eventcreate editcpy">
+                                    <img id='imgcopy' src="{{ asset('clippy.svg') }}" width="25" height="25">
+                                </button>
+                            <p class="eventinfo eventcreate smalltitle m-b-md" style="padding: unset;margin: unset;">Rediģēt pasākumu 
+                                @if(strlen($myevent->Title) > 23)
+                                @else "{{ $myevent->Title }}"
+                                @endif</p>
+                                
+                        </legend>
                         <div class="alert alert-dismissible alert-warning" style="display: none;">
                             <button type="button" class="close" data-dismiss="alert">&times;</button>
                             <p class="mb-0"><strong>Uzmanību!</strong> Rezervācijas piekļuves url links tiks mainīts</p>
@@ -30,8 +35,8 @@
                             <p>{{ session()->get('message') }}</p>
                         </div>
                         @endif
-                            <div class="col-lg-5 eventcreate">
-                                <label>Title</label>
+                            <div class="col-lg-6 eventcreate">
+                                <label>Nosaukums</label>
                                 <input type="text" name='title' class="form-control {{ $errors->has('title') ? ' is-invalid' : '' }}" id="title" 
                                 @if(empty(old('title'))) {{-- Ja vecās vērtibas nav tad ņemt no datubāzes --}}
                                 value="{{ $myevent->Title }}"
@@ -45,7 +50,7 @@
                                  @endif
                             </div>
                             <div class="col-lg-3 eventcreate">
-                                <label>Date from</label>
+                                <label>Datums no</label>
                                 <input type="date" name="datefrom" class="form-control {{ $errors->has('datefrom') ? ' is-invalid' : '' }}" id="datefrom"  
                                 @if(empty(old('datefrom')))
                                 value="{{ $myevent->Datefrom }}"
@@ -59,7 +64,7 @@
                                  @endif
                             </div>
                             <div class="col-lg-3 eventcreate">
-                                <label>Date to</label>
+                                <label>Datums līdz</label>
                                 <input type="date" name="dateto" class="form-control {{ $errors->has('dateto') ? ' is-invalid' : '' }}" id="dateto" 
                                 @if(empty(old('dateto')))
                                 value="{{ $myevent->Dateto }}"
@@ -74,8 +79,8 @@
                             </div>
 
 
-                            <div class="col-lg-11 eventcreate">
-                                <label>Address</label>
+                            <div class="col-lg-12 eventcreate">
+                                <label>Adrese</label>
                                 <input type="text" name='address' class="form-control {{ $errors->has('address') ? ' is-invalid' : '' }}" id="eventaddress" 
                                 @if(empty(old('address')))
                                 value="{{ $myevent->Address }}"
@@ -88,8 +93,8 @@
                                      </span>
                                  @endif
                             </div>
-                            <div class="col-lg-11 eventcreate">
-                                    <div class="col-lg-4 radiocontainer eventcreate">
+                            <div class="col-lg-12 eventcreate">
+                                    <div class="col-lg-4 radiocontainer eventcreate" style="padding-left: 0;">
                                             <label class="ticketcount">Biļešu skaits</label>
                                         <div class="radio">
                                         <div class="custom-radio control-radio">
@@ -142,7 +147,7 @@
                                 </div>
 
                                 <div class="radiocontainer eventcreate">
-                                    <label class="seats">Seats</label>
+                                    <label class="seats">Sēdvietas</label>
                                     <div class="radio">
                                       <div class="custom-radio control-radio">
                                         <input type="radio" id="customRadio1" name="customRadio" class="custom-control-input" value="Yes"
@@ -153,7 +158,7 @@
                                             checked=""
                                             @endif
                                         @endif>
-                                        <label class="custom-control-label" for="customRadio1">Yes</label>
+                                        <label class="custom-control-label" for="customRadio1">Jā</label>
                                       </div>
                                       <div class="custom-radio control-radio">
                                         <input type="radio" id="customRadio2" name="customRadio" class="custom-control-input" value="No"
@@ -164,13 +169,13 @@
                                             checked=""
                                             @endif
                                         @endif>  
-                                        <label class="custom-control-label" for="customRadio2">No</label>
+                                        <label class="custom-control-label" for="customRadio2">Nē</label>
                                       </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-2 eventcreate">
-                                    <label>Seats number</label>
-                                    <input type="number" name='seatnr' class="form-control eventseat {{ $errors->has('seatnr') ? ' is-invalid' : '' }}"
+                                <div class="col-lg-3 eventcreate">
+                                    <label>Sēdvietu skaits</label>
+                                    <input style="width: 62%;"type="number" name='seatnr' class="form-control eventseat {{ $errors->has('seatnr') ? ' is-invalid' : '' }}"
                                     @if(old('customRadio') == "No")
                                         disabled
                                         value=""
@@ -192,7 +197,7 @@
                                 </div>
 
                                 <div class="radiocontainer eventcreate">
-                                        <label class="seats">Tables</label>
+                                        <label class="seats">Galdi</label>
                                         <div class="radio">
                                         <div class="custom-control custom-radio custom-control-inline">
                                             <input type="radio" class="custom-control-input" id="defaultInline1" name="inlineDefaultRadiosExample" value="Yes"
@@ -203,7 +208,7 @@
                                                 checked=""
                                                 @endif
                                             @endif>
-                                            <label class="custom-control-label" for="defaultInline1">Yes</label>
+                                            <label class="custom-control-label" for="defaultInline1">Jā</label>
                                         </div>
                                         <div class="custom-control custom-radio custom-control-inline">
                                             <input type="radio" class="custom-control-input" id="defaultInline2" name="inlineDefaultRadiosExample" value="No"
@@ -214,13 +219,13 @@
                                                 checked=""
                                                 @endif
                                             @endif>
-                                            <label class="custom-control-label" for="defaultInline2">No</label>
+                                            <label class="custom-control-label" for="defaultInline2">Nē</label>
                                         </div>
                                         </div>
                                     </div>
 
                                     <div class="col-lg-2 eventcreate">
-                                        <label>Table number</label>
+                                        <label>Galdu skaits</label>
                                         <input type="number" name='tablenr' id="eventtable" class="form-control eventtable {{ $errors->has('tablenr') ? ' is-invalid' : '' }}" 
                                         @if(old('inlineDefaultRadiosExample') == "No")
                                         disabled
@@ -241,9 +246,9 @@
                                             </span>
                                         @endif
                                     </div>
-                                    <div class="col-lg-2 eventcreate">
-                                        <label>Seats on table</label>
-                                        <input type="number" name='seatsontablenr' id="seatsontable" class="form-control eventtable {{ $errors->has('seatsontablenr') ? ' is-invalid' : '' }}"
+                                    <div class="col-lg-3 eventcreate">
+                                        <label>Sēdvietas pie galda</label>
+                                        <input style="width:62%;"type="number" name='seatsontablenr' id="seatsontable" class="form-control eventtable {{ $errors->has('seatsontablenr') ? ' is-invalid' : '' }}"
                                         @if(old('inlineDefaultRadiosExample') == "No")
                                         disabled
                                         value=""
@@ -266,8 +271,8 @@
 
 
 
-                            <div class=" col-lg-11 eventcreate">
-                                <label>Event anotation</label>
+                            <div class=" col-lg-12 eventcreate">
+                                <label>Pasākuma anotācija</label>
                                 <input type="text" name='anotation' class="form-control {{ $errors->has('anotation') ? ' is-invalid' : '' }}" id="eventanotation" 
                                 @if(empty(old('anotation')))
                                 value="{{ $myevent->Anotation }}"
@@ -282,8 +287,8 @@
                             </div>
 
                         
-                            <div class=" col-lg-11 eventcreate">
-                                <label>Event description</label>
+                            <div class=" col-lg-12 eventcreate">
+                                <label>Pasākuma apraksts</label>
                                 <textarea class="form-control" name='description' id="eventdescription" rows="3">
                                     @if(empty(old('description')))
                                     {{ $myevent->Description }}
@@ -293,8 +298,8 @@
                                 </textarea>
                             </div>
 
-                            <div class="custom-control custom-switch col-lg-11 eventcreate">
-                                <div class="col-lg-2 eventcreate">
+                            <div class="custom-control custom-switch col-lg-12 eventcreate">
+                                <div class="col-lg-2 eventcreate eventswitchs">
                               <input type="hidden" name="vipswitch" value="off" />
                               <input type="checkbox" class="custom-control-input" id="customSwitch1" name="vipswitch" 
                               @if(old('vipswitch') == "on") checked=""
@@ -318,9 +323,11 @@
                                       @endif
                                   @endif>
                                 <label class="custom-control-label" for="customSwitch2">Rediģējams pasākums</label>
+                                <i class="far fa-question-circle" id="reserveditabletooltip"></i>
+                                <div class="questiontooltip"></div>
                               </div>
 
-                              <div class="col-lg-4 eventcreate">
+                              <div class="col-lg-5 eventcreate">
                                     
                                     <input type="file" name="file" class="custom-file-input {{ $errors->has('file') ? ' is-invalid' : '' }}" id="inputGroupFile02">
                                     @if ($errors->has('file'))
@@ -331,18 +338,18 @@
                                     @if(Storage::disk('public')->has(str_replace(' ', '_',$myevent->Title) . '-' . $myevent->id . '.' . $myevent->imgextension))
                                     <label class="custom-file-label {{ $errors->has('file') ? ' is-invalid' : '' }}" id="filename" for="inputGroupFile02">{{str_replace(' ', '_',$myevent->Title) . '-' . $myevent->id . '.' . $myevent->imgextension}}</label>
                                     @else
-                                    <label class="custom-file-label {{ $errors->has('file') ? ' is-invalid' : '' }}" id="filename" for="inputGroupFile02">Choose file</label>
+                                    <label class="custom-file-label {{ $errors->has('file') ? ' is-invalid' : '' }}" id="filename" for="inputGroupFile02">Izvēlēties failu</label>
                                     @endif
                                   </div>
 
                             <div class="col-lg-12 eventcreate">
-                                        <span class="eventcreatebutton"><button type="submit" class="btn btn-primary" name="action" value="create">
+                                        <span class="eventcreatebutton edit"><button type="submit" class="btn btn-primary create" name="action" value="create">
                                             @if ($myevent->Melnraksts == 0)
                                                 Rediģēt
                                             @else
                                                 Publicēt
                                             @endif</button></span>
-                                        <span class="eventcreatebutton"><button type="submit" class="btn btn-primary" name="action" value="save">Saglabāt</button></span>
+                                        <span class="eventcreatebutton edit"><button type="submit" class="btn btn-primary save" name="action" value="save">Saglabāt</button></span>
                             </div>
                         </fieldset>
                 </form>
@@ -361,7 +368,7 @@
                 <div class="col-lg-1 eventcreate deleteform"> {{-- Dzēst funkcionalitāte --}}
                 {!! Form::open(['method' => 'DELETE','route' => ['delete',$myevent->id]]) !!}
                     <span class=""><button onclick="return confirm('Vai esi pārliecināts?')" 
-                        type="submit" class="btn btn-primary" name="action" value="delete">Dzēst</button></span>
+                        type="submit" class="btn btn-primary delete" name="action" value="delete">Dzēst</button></span>
                 {!! Form::close() !!}
             </div>
         </div>

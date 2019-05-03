@@ -13,7 +13,7 @@
 
 
 Route::get('/','HomeController@index')->name('home');
-
+Route::get('/h','HomeController@indexh')->name('homeh');
 Auth::routes();
 // Autorizācija
 Route::get('/register','RegisterController@showRegister')->name('showregister')->middleware('guest');

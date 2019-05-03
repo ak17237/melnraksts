@@ -17,7 +17,15 @@ class CheckReservEditable
     public function handle($request, Closure $next)
     {
         if(Auth::user()->hasRole('Admin')) return $next($request);
-        elseif(!checkEditable($request->route('id'))) return response('Insufficient permissions',401);
+        elseif(!checkEditable($request->route('id'))) {
+
+            $message[0] = 'Rezervācijas šim pasākumam nevar rediģēt!';
+            $message[1] = 'Jūs meiģinat rediģēt rezervāciju pasākumam,kurus nevar rediģēt parasti lietotāji!';
+            $state = '3';
+
+            return response()->view('errors.specificerrors',compact('message','state'));
+
+        }
         else return $next($request);
     }
 }

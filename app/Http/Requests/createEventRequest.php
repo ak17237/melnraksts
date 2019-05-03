@@ -21,6 +21,30 @@ class createEventRequest extends FormRequest
      *
      * @return array
      */
+    public function attributes()
+    {
+       return[
+        'title' => 'Nosaukums',
+        'datefrom' => 'Datums',
+        'dateto' => 'Datums',
+        'address' => 'Adrese',
+        'anotation' => 'Anotācijas lauks',
+        'ticketcount' => 'Biļešu skaits',
+        'seatnr' => 'Sēdvietu skaits',
+        'tablenr' => 'Galdu skaits',
+        'seatsontablenr' => 'Sēdvietu skaits pie galda',
+        'file' => 'Failam',
+       ];
+    }
+    public function messages()
+    {
+        return[
+            'max' => 'Māksimāls pieļaujamais garums ir :max',
+            'required' => ':attribute ir obligāts',
+            'image' => ':attribute jābūt bildes formātā(png,jpg,gif utt.)',
+            'gte' => ':attribute jābūt lielāks vai vienāds par :value',
+        ];
+    }
     public function rules() // pasākumu saglabāšanas noteikumi ja tika nospiesta poga create
     {
         $rules = array();
@@ -35,7 +59,7 @@ class createEventRequest extends FormRequest
             $rules['tablenr'] = 'required';
             $rules['seatsontablenr'] = 'required';
         }
-        $rules['file'] = 'image|dimensions:min_width=100,min_height=100,max_width=1920,max_height=1080';
+        $rules['file'] = 'image';
         if(request('action') == "create" && request('Radio') == 'Yes' && request('customRadio') == 'Yes' && request('inlineDefaultRadiosExample') == 'Yes')
             $rules['ticketcount'] = 'required|gte:' . (getdata($this->get('tablenr'),0) * getdata($this->get('seatsontablenr'),0) + getdata($this->get('seatnr'),0));
         else if(request('action') == "create" && request('Radio') == 'Yes' && request('customRadio') == 'Yes')

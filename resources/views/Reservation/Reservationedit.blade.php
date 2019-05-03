@@ -2,50 +2,50 @@
 @section('content')
 
 <div class="container">
+    <a href="javascript:history.go(-1)" class="btn btn-primary back">Atpakaļ</a>
     <br>
-        <a href="javascript:history.go(-1)" class="btn btn-primary back">Back</a>
         <div class="row">
-            <div class="col-lg-offset-1 col-lg-11">
+            <div class="col-lg-offset-1 col-lg-11 center">
                 
                 <form action="{{ route('reservationedit',$reservation->id) }}" method="POST">
                     {{csrf_field()}}     
                         <fieldset>
-                        <legend>Manas rezervācijas</legend>
+                        <legend class="eventcreate smalltitle m-b-md ml-3-p">Manas rezervācijas</legend>
                         @if(session()->has('message'))
                         <div class="alert alert-dismissible alert-success">
                             <button type="button" class="close" data-dismiss="alert">&times;</button>
                             <p>{{ session()->get('message') }}</p>
                         </div>
                         @endif
-                            <div class="col-lg-5 eventcreate">
-                                <label>Title</label>
-                                <h4>{{ $myevent->Title }}</h4>
+                            <div class="col-lg-5 eventcreate ml-3-p">
+                                <label>Nosaukums</label>
+                                <h4><strong>{{ $myevent->Title }}</strong></h4>
                             </div>                   
                     
                             <div class="col-lg-3 eventcreate">
                                 <label>
                                     @if(geteventdate($myevent->Datefrom) != geteventdate($myevent->Dateto))
-                                    Date from
-                                    @else Date
+                                    Datums no
+                                    @else Datums
                                     @endif
                                 </label>
-                                <h5>{{ geteventdate($myevent->Datefrom) }}</h5>
+                                <h5><strong>{{ geteventdate($myevent->Datefrom) }}</strong></h5>
                             </div>
                             @if(geteventdate($myevent->Datefrom) != geteventdate($myevent->Dateto)) {{-- Datuma korektra izvade --}}
                             <div class="col-lg-3 eventcreate">
-                                <label>Date to</label>
-                                <h5>{{ geteventdate($myevent->Dateto) }}<h5>
+                                <label>Datums līdz</label>
+                                <h5><strong>{{ geteventdate($myevent->Dateto) }}</strong></h5>
                             </div>
                             @endif
 
 
-                            <div class="col-lg-11 eventcreate">
-                                <label>Address</label>
-                                <h6>{{ $myevent->Address }}</h6>
+                            <div class="col-lg-11 eventcreate ml-3-p">
+                                <label>Adrese</label>
+                                <h5><strong>{{ $myevent->Address }}</strong></h5>
                                  
                             </div>
-                            <hr>
-                            <div class="col-lg-2 eventcreate">
+                            <hr class="ml-3-p">
+                            <div class="col-lg-2 eventcreate ml-3-p">
                                     <label>Biļešu skaits</label> {{-- Cilvēka rezervētais biļešu skaits --}}
                                     <input type="number" min="1" name='tickets' class="count form-control {{ $errors->has('tickets') ? ' is-invalid' : '' }}" id="tickets" value="{{ $reservation->Tickets }}">
                                     @if ($errors->has('tickets'))
@@ -56,7 +56,7 @@
                             </div>
 
                             @if($checkedseats != 0) {{-- Ja pasākums neparedz sēdvietas nerāda lauku --}}
-                                
+                           
                                     <div class="radiocontainer eventcreate">
                                         <label class="seats">Sēdvietas</label>
                                         <div class="radio">
@@ -68,7 +68,7 @@
                                             @elseif(old('customRadio') == "Yes") {{-- ja vecā vērtība ir YES tad atzīmēt šo radio --}}
                                             checked="" 
                                             @endif>
-                                            <label class="custom-control-label" for="customRadio1">Yes</label>
+                                            <label class="custom-control-label" for="customRadio1">Jā</label>
                                           </div>
                                           <div class="custom-radio control-radio">
                                             <input type="radio" id="customRadio2" name="customRadio" class="custom-control-input" value="No"
@@ -78,7 +78,7 @@
                                             @elseif(old('customRadio') == "No") {{-- ja vecā vērtība ir YES tad atzīmēt šo radio --}}
                                             checked="" 
                                             @endif>
-                                            <label class="custom-control-label" for="customRadio2">No</label>
+                                            <label class="custom-control-label" for="customRadio2">Nē</label>
                                           </div>
                                         </div>
                                     </div>
@@ -116,7 +116,7 @@
                                                 @elseif(old('inlineDefaultRadiosExample') == "Yes") {{-- ja vecā vērtība ir YES tad atzīmēt šo radio --}}
                                                 checked="" 
                                                 @endif>
-                                                <label class="custom-control-label" for="defaultInline1">Yes</label>
+                                                <label class="custom-control-label" for="defaultInline1">Jā</label>
                                             </div>
                                             <div class="custom-control custom-radio custom-control-inline">
                                                 <input type="radio" class="custom-control-input" id="defaultInline2" name="inlineDefaultRadiosExample" value="No"
@@ -126,12 +126,12 @@
                                             @elseif(old('inlineDefaultRadiosExample') == "No") {{-- ja vecā vērtība ir YES tad atzīmēt šo radio --}}
                                             checked="" 
                                             @endif>
-                                                <label class="custom-control-label" for="defaultInline2">No</label>
+                                                <label class="custom-control-label" for="defaultInline2">Nē</label>
                                             </div>
                                             </div>
                                         </div>
     
-                                        <div class="col-lg-3 eventcreate">
+                                        <div class="col-lg-3 eventcreate" style="min-width: 167px;max-width:21%">
                                             <label>Sēdvietas pie galda - </label>
                                             <select name="tablenr" id="tablenr">
                                                 @for ($i = 1; $i <= $myevent->Tablenumber; $i++)
@@ -161,11 +161,16 @@
                                                 </span>
                                             @endif
                                         </div>
-                                        <div class="eventcreate ticketinfo question"><img class="questiontooltip" id="tabletooltip" src="{{ asset('questionmark.png') }}" width="35" height="35"></div>
+                                        <i class="far fa-question-circle" id="tabletooltip"></i>
+                                        <div class="questiontooltip table"></div>
+                                        <div class="righttooltip"></div>
                                         @else
                                         @endif
-                            
-                            <div class="radiocontainer eventcreate">
+                            @if($checkedtables != 0 && $checkedseats == 0)<div class="col-lg-12">
+                            @elseif($checkedtables == 0 && $checkedseats != 0) <div>
+                            @else <div class="col-lg-10">
+                            @endif
+                            <div class="radiocontainer eventcreate ml-3-p">
                                 <label class="ticketcount">Ieradīšos patstāvīgi</label>
                             <div class="radio">
                             <div class="custom-radio control-radio">
@@ -176,7 +181,7 @@
                                 @elseif(old('TransportRadio') == "Yes") {{-- ja vecā vērtība ir YES tad atzīmēt šo radio --}}
                                 checked="" 
                                 @endif>
-                                <label class="custom-control-label" for="Radio1">Yes</label>
+                                <label class="custom-control-label" for="Radio1">Jā</label>
                             </div>
                             <div class="custom-radio control-radio">
                                 <input type="radio" id="Radio2" name="TransportRadio" class="custom-control-input" value="No"
@@ -186,14 +191,17 @@
                                 @elseif(old('TransportRadio') == "No") {{-- ja vecā vērtība ir YES tad atzīmēt šo radio --}}
                                 checked="" 
                                 @endif>
-                                <label class="custom-control-label" for="Radio2">No</label>
+                                <label class="custom-control-label" for="Radio2">Nē</label>
                             </div>
                             </div>
                         </div>
 
-                        <div class="col-lg-4 eventcreate">
+                        <div class="col-lg-4 eventcreate" 
+                        @if(($checkedtables != 0 && $checkedseats == 0) || ($checkedtables == 0 && $checkedseats != 0)) style="width: 26%;" @endif>
                                 <label>Transports no reģiona</label>
-                            <select name="transport" class="form-control" id="transport" value="Daugavpils"
+                            <select 
+                            @if(($checkedtables != 0 && $checkedseats == 0) || ($checkedtables == 0 && $checkedseats != 0)) style="width: 88%;" @endif 
+                            name="transport" class="form-control" id="transport" value="Daugavpils"
                             @if(empty(old('TransportRadio')) && $reservation->Transport === 'Patstāvīgi') {{-- Ja vecās vērtības nav un bija atzīmēts patstāvīgi lauks --}}
                             disabled
                             @elseif(empty(old('TransportRadio')) && $reservation->Transport !== 'Patstāvīgi') {{-- Ja vecās vērtības nav un nebija atzīmēts patstāvīgi lauks --}}
@@ -208,30 +216,31 @@
                             </select>
                             
                         </div>
-                        <hr>
-                        <div class="col-lg-3 eventcreate">
+                    </div>
+                        <hr class="ml-3-p">
+                        <div class="col-lg-3 eventcreate ml-3-p">
                             <label>Vārds</label>
-                            <h6>{{ $user->First_name }}</h6>
+                            <h5><strong>{{ $user->First_name }}</strong></h5>
                         </div>
                         <div class="col-lg-3 eventcreate">
                             <label>Uzvārds</label>
-                            <h6>{{ $user->Last_name }}</h6>
+                            <h5><strong>{{ $user->Last_name }}</strong></h5>
                         </div>
                         <div class="col-lg-5 eventcreate">
                             <label>e-pasts</label>
-                            <h6>{{ $user->email }}</h6>
+                            <h5><strong>{{ $user->email }}</strong></h5>
                         </div>
-                        <div class="col-lg-11 eventcreate">
+                        <div class="col-lg-11 eventcreate ml-3-p">
                             @if (Auth::user()->hasRole('Admin'))
-                            <span class="eventcreatebutton"><button type="submit" class="btn btn-primary formbtn" name="action" value="edit">Saglabāt izmaiņas</button></span>
+                            <span class="eventcreatebutton editreserv"><button type="submit" class="btn btn-primary formbtn create" name="action" value="edit">Saglabāt izmaiņas</button></span>
                             </fieldset>
                         </form>
                             {!! Form::open(['method' => 'DELETE','route' => ['reservationdelete',$reservation->id]]) !!}
                             <span style="position: absolute; bottom: 6.3%;" class="deletebtn"><button onclick="return confirm('Vai esi pārliecināts?')" type="submit" 
-                                class="btn btn-danger formbtn" name="action" value="delete">Dzēst rezervāciju</button></span>
+                                class="btn btn-danger formbtn delete" name="action" value="delete">Dzēst rezervāciju</button></span>
                             {!! Form::close() !!}
                             @elseif (Auth::user()->hasRole('User'))
-                            <span class="eventcreatebutton"><button type="submit" class="btn btn-primary formbtn" name="action" value="edit">Saglabāt izmaiņas</button></span>
+                            <span class="eventcreatebutton editreserv"><button type="submit" class="btn btn-primary formbtn create" name="action" value="edit">Saglabāt izmaiņas</button></span>
                             </fieldset>
                         </form>
                             @endif

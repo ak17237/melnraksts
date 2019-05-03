@@ -9,7 +9,7 @@ jQuery('document').ready(function(){
     function getstandcount(){
         var standcount,ticketcount,seatcount,tablecount;
 
-        ticketcount = getdata(parseInt(jQuery('#ticketcount').val()),0);
+        ticketcount = getdata(parseInt(jQuery('#tickets').val()),0);
         seatcount = getdata(parseInt(jQuery('#seatcount').val()),0);
         tablecount = getdata(parseInt(jQuery('#tablecount').val()),0);
 

@@ -71,13 +71,13 @@ jQuery('document').ready(function(){
         VIPtooltip(i);
     }
 
-    $('.question #tabletooltip').tooltip({title: 'Lai izvēlēties galda numuru ir jāizvēlas galda numurs kuram ir brīvas vietas', placement: "bottom",trigger: 'hover'});
+    $('#tabletooltip').tooltip({title: 'Lai izvēlēties galda numuru ir jāizvēlas galda numurs kuram ir brīvas vietas', placement: "bottom",trigger: 'hover',container: '.questiontooltip'});
 
-    $('.question #tabletooltip').mouseover(function(){
-        $('#tablenr').tooltip({title: 'Izvēleties galdiņu',placement:'right',trigger: 'hover'});
+    $('#tabletooltip').mouseover(function(){
+        $('#tablenr').tooltip({title: 'Izvēleties galdiņu',placement:'right',trigger: 'hover',container: '.righttooltip'});
         $('#tablenr').tooltip('show');
     });
-    $('.question #tabletooltip').mouseout(function(){
+    $('#tabletooltip').mouseout(function(){
         $('#tablenr').tooltip('dispose');
     });
 

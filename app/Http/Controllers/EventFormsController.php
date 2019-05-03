@@ -41,7 +41,7 @@ class EventFormsController extends Controller
 
         $user = User::where('email', Auth::user()->email)->first();
 
-        $data = Events::where('Melnraksts',1)->where('email',$user->email)->SimplePaginate(5,['*'], 'page', $page)->sortByDesc(['updated_at']);
+        $data = Events::where('Melnraksts',1)->where('email',$user->email)->orderBy('updated_at','DESC')->SimplePaginate(5,['*'], 'page', $page);
         $count = Events::where('Melnraksts',1)->where('email',$user->email)->count();
         $number = 1;
         while($count > 5){ // precīza paginēšanas url izvade un pogas tai
@@ -181,10 +181,15 @@ class EventFormsController extends Controller
             $info = 0;
         }
 
-        if($request['file'] == NULL) $img = NULL;
-        else $img = $request['file']->getClientOriginalExtension();
+        if($request['file'] == NULL) { // ja jauna faila nav
 
-        $myevent->fill([    // ieraksta izmainīšana 
+            if($myevent->imgextension == NULL) $img = NULL; // pārbauda vai šim pasākumam nav jau ielādēts foto
+            else $img = $myevent->imgextension; // ja ir tad ievieto mainīgajā to pašu,ja nav un nebija tad ievieto NULL
+            
+        }
+        else $img = $request['file']->getClientOriginalExtension(); // ja fails ir saņem to paplašinājumu un ieivieto mainīgajā img
+
+        $myevent->fill([    // ieraksta izmainīšana. Visu pārbaudīto un saņemto mainīgo ievietošana/izmainīšana datu bāzē
             'Title' => $request['title'],
             'Datefrom' => $request['datefrom'],
             'Dateto' => $request['dateto'],

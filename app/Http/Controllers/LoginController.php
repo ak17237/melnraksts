@@ -17,10 +17,23 @@ class LoginController extends Controller
     }
     public function Login(Request $request){ 
 
-        $this->validate($request, [
+        $rules = [
             'email' => 'required|email|max:255',
             'password' => 'required|min:6|max:255',
-        ]);
+        ];
+        $messages = [
+            'max' => 'Māksimāls pieļaujamais garums ir :max',
+            'min' => 'Minimāli pieļaujamais garums ir :min',
+            'required' => ':attribute ir obligāts',
+            'password.required' => 'Parole ir obligāta',
+            'email.email' => 'E-pastam jābūt dērīgam',
+        ];
+        $attributes = [
+            'email' => 'E-pasts',
+            'password' => 'Parole',
+        ];
+        
+        $this->validate($request,$rules,$messages,$attributes);
     if(!empty($request['remember'])) $remember = true;
     else $remember = false;
 
@@ -45,7 +58,7 @@ class LoginController extends Controller
             if (Hash::check($request['password'],$password)){ // ja sakrīt ielogojam
 
                 Auth::attempt(['email' => $request['email'], 'password' => $request['password']],$remember);
-                return redirect('/')->cookie($cookie_email)->cookie($cookie_password);
+                return redirect('/')->cookie($cookie_email)->cookie($cookie_password)->cookie('login','logged in',60 * 24 * 30);
 
             }
             else return redirect()->back()->withInput($request->input())->withErrors(['password' => 'Wrong password']); // ja nē kļūda

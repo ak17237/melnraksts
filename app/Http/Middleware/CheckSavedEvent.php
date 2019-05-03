@@ -16,6 +16,14 @@ class CheckSavedEvent
     public function handle($request, Closure $next)
     {
         if(checkEvent($request->route('id'),1) ) return $next($request);
-        else return response("There is no such event",404);
+        else {
+
+            $message[0] = 'Pasākums nav atrasts!';
+            $message[1] = 'Jūs meiģinat piekļūt pie pasākuma,kurš tika dzēsts jeb neeksistēja vispār!';
+            $state = '4';
+
+            return response()->view('errors.specificerrors',compact('message','state'));
+
+        }
     }
 }

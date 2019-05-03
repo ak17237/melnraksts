@@ -77,6 +77,9 @@
 }
 #reservlink{
     margin-left: 12px;
+    margin-top: 18px;
+    border-radius: .25rem 0 0 .25rem;
+    padding-bottom: 7px;
 }
 .block{
     display: block;
@@ -145,8 +148,11 @@ hr{
 }
 .divdeletephoto{
     position: absolute;
-    top: 81.5%;
-    right: 15.4%;
+    top: 82%;
+    right: 6%;
+}
+.right{
+    float:right;
 }
 /* CSS animation */
 

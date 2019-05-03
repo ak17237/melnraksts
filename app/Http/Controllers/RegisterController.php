@@ -18,12 +18,27 @@ class RegisterController extends Controller
     }
     public function validation(Request $request){
 
-        return $this->validate($request, [
+        $rules = [
             'fname' => 'required|max:255',
             'lname' => 'required|max:255',
             'email' => 'required|email|unique:users|max:255',
             'password' => 'required|confirmed|min:6|max:255',
-        ]);
+        ];
+
+        $messages = [
+            'max' => 'Māksimāls pieļaujamais garums ir :max',
+            'min' => 'Minimāli pieļaujamais garums ir :min',
+            'required' => ':attribute ir obligāts',
+            'confirmed' => ':attribute ir jābūt vienādai',
+            'password.required' => 'Parole ir obligāta',
+        ];
+        $attributes = [
+            'fname' => 'Vārds',
+            'lname' => 'Uzvārds',
+            'email' => 'E-pasts',
+            'password' => 'Parolei',
+        ];
+        return $this->validate($request, $rules,$messages,$attributes);
 
     }
     public function Register(Request $request){

@@ -32,7 +32,7 @@ class ReservationController extends Controller
         $counter = 1;
 
         $user = User::where('email', Auth::user()->email)->first();
-        $reservations = Reservation::where('email',$user->email)->SimplePaginate($elements,['*'], 'page', $page)->sortByDesc(['updated_at']);
+        $reservations = Reservation::where('email',$user->email)->orderBy('updated_at','DESC')->SimplePaginate($elements,['*'], 'page', $page);
         $event = null;
 
         $count = Reservation::where('email',$user->email)->count();

@@ -1,33 +1,16 @@
 @extends('welcome')
 @section('content')
 
-@if (Route::has('login'))
-        <div class="top-right links">
-            @if (Auth::check()) 
-                <a href="{{ route('profile.index') }}">{{Auth::user()->First_name}} Profile</a>
-                <a href="/">Home</a>
-                <a href="/logout" {{-- izlogošanas iebūvēta funkcionalitāte --}}
-                    onclick="event.preventDefault();
-                    document.getElementById('logout-form').submit();">
-                    Logout
-                </a>
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                    {{ csrf_field() }}
-                </form>
-            @else
-            <a href="{{ route('showlogin') }}">Login</a>
-            <a href="{{ route('showregister') }}">Registser</a>
-            @endif
-        </div>
-        @endif
             <div class="content">
                 @if(session()->has('message'))
+                <br><br>
                   <div class="alert alert-dismissible alert-success">
                     <button type="button" class="close" data-dismiss="alert">&times;</button>
                     <p class="mb-0">{{ session()->get('message') }}</p>
                   </div>
                 @endif
                 @if(session()->get('info') === 'VIP')
+                <br>
                 <div class="alert alert-dismissible alert-primary">
                   <button type="button" class="close" data-dismiss="alert">&times;</button>
                   <strong>Tika izveidots VIP pasākums!</strong><p class="mb-0">Linku uz izveidoto VIP pasākumu var atrast slaiderī pie pasākuma,rediģēšanas formā un pie pasākuma apskata</p>
@@ -38,17 +21,7 @@
                     Pasākumi
                 </div>
                 
-            </div>
-            @if (Auth::check())
-            <div class="top-left links">
-            @if (Auth::user()->hasRole('Admin')) {{-- tikai admini var skatīti šo --}}
-            <a href="{{ route('showcreate') }}">Create event</a>
-            <a href="{{ route('showsavedevents',1) }}">Saved events</a>
-            @endif
-            <a href="{{ route('reservationusers',1) }}">My reservations</a>
-            </div>
-            @endif
-        
+            </div>      
         
         <div class="contain">
             <div class="slidercontainer color-green">
@@ -138,6 +111,7 @@
             </div>
             @endfor
         </div>
+        </div>
 
         <span id="countVIP" style="display:none">{{$count}}</span>
 
@@ -148,6 +122,6 @@
           </li>
           @endfor
         </ul>
-
+<br>
         
 @endsection

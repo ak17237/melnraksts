@@ -16,6 +16,14 @@ class CheckReserv
     public function handle($request, Closure $next)
     {
         if(checkReserv($request->route('id'))) return $next($request);
-        else return response("There is no such reservation",404);
+        else {
+            
+            $message[0] = 'Rezervācijas nav atrasta!';
+            $message[1] = 'Jūs meiģinat piekļūt pie rezervācija,kura tika dzēsta jeb neeksistēja vispār!';
+            $state = '4';
+
+            return response()->view('errors.specificerrors',compact('message','state'));
+
+        }
     }
 }
