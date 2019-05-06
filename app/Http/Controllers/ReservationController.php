@@ -58,6 +58,9 @@ class ReservationController extends Controller
         $checkedseats = $data[1]; // (0 = biļešu skaits,1 = sēdvietu skaits,2 = galdu skaits,3 = stāvvietu skaits)
         $checkedtables = $data[2];
 
+        $checkedseats += $reservation->Seats;
+        $checkedtables += $reservation->TableSeats;
+
         return view('Reservation.Reservationinfo',compact('reservation','myevent','user','checkedseats','checkedtables'));
 
     }
@@ -93,7 +96,7 @@ class ReservationController extends Controller
         
         $myevent = Events::find($id);
         $user = User::where('email', Auth::user()->email)->first();
-        
+
         eventvalidate($request);
         Reservation::create([  // ieraksta datus datubāzē 
             'email' => $user->email,
@@ -104,7 +107,9 @@ class ReservationController extends Controller
             'TableSeats' => $request['tablecount'],
             'Transport' => $request['transport'],
             ]);
-        return redirect()->back()->with('message','Pasākums rezervēts');
+
+            $reservid = Reservation::all()->sortByDesc(['updated_at'])->first()->id;
+        return redirect()->route('showreservation',$reservid)->with('message','Pasākums rezervēts');
         
     }
     public function reservationedit(createReservationRequest $request,$id){
@@ -112,6 +117,8 @@ class ReservationController extends Controller
         $reservation = Reservation::find($id);
 
         eventvalidate($request);
+        
+        if($reservation->TableNr != 0) $request['tablenr'] = $reservation->TableNr; // Ja jau ir rezervēts galds lai tas nepalitku par 0 pēc eventvalidate funkcijas
 
         $reservation->fill([    // ieraksta izmainīšana 
             'Tickets' => $request['tickets'],
@@ -125,7 +132,7 @@ class ReservationController extends Controller
         if(\Session::get('way') == 'users')
         return redirect()->route('showreservation',$id)->with('message','Rezervācija Izmainīta');
         else 
-        return redirect()->route('showreservationadmins',$reservation->EventID)->with('message','Rezervācija Izmainīta'); 
+        return redirect()->route('showreservation',$id)->with('message','Rezervācija Izmainīta');
         // kad back pogas strādās pareizi redirects būs uz apskates lapu tā pat kā augstaāk
 
     }

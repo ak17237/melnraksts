@@ -23,11 +23,12 @@ function eventvalidate($request){  // sēdvietu inicializēšana ja nav
 
         if($request['Radio'] == "No") $request['ticketcount'] = -999;
         if($request['customRadio'] == "No" || empty($request['seatnr'])) $request['seatnr'] = 0;
-        if($request['inlineDefaultRadiosExample'] == "No" || empty($request['tablenr'])) { 
+        if($request['inlineDefaultRadiosExample'] == "No" || empty($request['inlineDefaultRadiosExample'])) { 
             $request['tablenr'] = 0;
             $request['tablecount'] = 0; 
             $request['seatsontablenr'] = 0; 
         }
+        if(empty($request['tablenr'])) $request['tablenr'] = 0;
         if($request['TransportRadio'] == "Yes") $request['transport'] = 'Patstāvīgi';     
 }
 function getdata($data,$default = null){ // saņem datus ja ir tukšs izvada null,jeb ja ir otrais arguments tad izvada to,ja nav tukšs izvada datus
@@ -63,6 +64,32 @@ function reservinfo($id){
         else $array[3] = $standing = $ticketinfo - ($checkedseats + $checkedtables);
 
         return $array;
+}
+function resrvcount($id){
+
+    $myevent = Events::find($id); // atrod vajadzīgo pasākumu
+    $reservation = Reservation::where('EventID',$myevent->id)->get(); // atrod visas rezervācijas šim pasākumam
+    
+    $array = array();
+
+    $ticketnumber = $seatnumber = $tableseatnumber = $maxtableseats = 0; // biļešu skaits
+    if($reservation->isNotEmpty()){
+        foreach($reservation as $reservations){
+            $ticketnumber += $reservations->Tickets; // pievieno biļešu skaitu cik bija rezervēts no datubāzes
+            $seatnumber += $reservations->Seats;
+            $tableseatnumber += $reservations->TableSeats;
+            $tableseats[] = $reservations->TableSeats;
+        }
+        $maxtableseats = max($tableseats);
+    }
+    
+    $array[0] = $ticketnumber;
+    $array[1] = $seatnumber;
+    $array[2] = $tableseatnumber;
+    $array[3] = $maxtableseats;
+
+    return $array;
+
 }
 function linecount($string){
     

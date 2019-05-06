@@ -77,7 +77,7 @@ class EventFormsController extends Controller
         if(empty($request['editableswitch'])) $editable = 0;
         else $editable = 1;
 
-        if($vip == 1){
+        if($vip == 1 && $request['action'] == 'create'){
 
         $info = 'VIP';
         $linkcode = generateRandomString();
@@ -87,8 +87,9 @@ class EventFormsController extends Controller
             $linkcode = "show";
         }
 
-        if($request['file'] == NULL) $img = NULL;
-        else $img = $request['file']->getClientOriginalExtension();
+        if($request['file'] == NULL) $img = NULL; // pārbauda vai ir faila,nav tad img mainīgs ir NULL  
+        else $img = $request['file']->getClientOriginalName(); // ja fails ir saņem to pilnu nosaukumu un ieivieto mainīgajā img
+
 
         $user = User::where('email', Auth::user()->email)->first();     
         Events::create([  // ieraksta datus datubāzē 
@@ -110,12 +111,9 @@ class EventFormsController extends Controller
         'linkcode' => $linkcode,
         ]);
 
-        $id = Events::all()->sortByDesc(['updated_at'])->first()->id;
-
         $file = $request['file'];
         if($file){
-            $filename = str_replace(' ', '_', $request['title']) . '-' . $id . '.' . $request['file']->getClientOriginalExtension();
-            Storage::disk('public')->put($filename,File::get($file));
+            Storage::disk('public')->put($request['file']->getClientOriginalName(),File::get($file));
         }
 
         return redirect()->back()->with('message','Pasākums ir veiksmīgi ' . $message[$melnraksts])->with('info',$info);
@@ -124,7 +122,7 @@ class EventFormsController extends Controller
     public function deletefile($id,$filename){
 
         $event = Events::find($id);
-        $filename = str_replace(' ', '_', $event->Title) . '-' . $id . '.' . $event->imgextension;
+        $filename = $event->imgextension;
 
         Storage::disk('public')->delete($filename);
 
@@ -137,10 +135,7 @@ class EventFormsController extends Controller
     public function edit(createEventRequest $request,$id){
 
         $myevent = Events::find($id);
-        $route = array( // atgirež melnrakstos vai publicētajos atkarībā no action pogas
-            1 => '/saved-events-1',
-            0 => '/'
-        );
+        
         $message = array( // ziņas izvade
             2 => 'saglabāts!', // ja saglabāts
             1 => 'publicēts!', // ja publicēts(atnāca no melnrakstiem)
@@ -164,12 +159,12 @@ class EventFormsController extends Controller
         if($request['editableswitch'] == "off") $editable = 0;
         else $editable = 1;
 
-        if($vip == $myevent->VIP){
+        if($vip == $myevent->VIP && $myevent->Melnraksts === 0){
             
             $linkcode = $myevent->linkcode;
             $info = 0;
         }
-        elseif($vip == 1){
+        elseif($vip == 1 && $request['action'] == 'create'){
         
         $linkcode = generateRandomString();
         $info = "VIP";
@@ -187,7 +182,9 @@ class EventFormsController extends Controller
             else $img = $myevent->imgextension; // ja ir tad ievieto mainīgajā to pašu,ja nav un nebija tad ievieto NULL
             
         }
-        else $img = $request['file']->getClientOriginalExtension(); // ja fails ir saņem to paplašinājumu un ieivieto mainīgajā img
+        else $img = $request['file']->getClientOriginalName(); // ja fails ir saņem to pilnu nosaukumu un ieivieto mainīgajā img
+
+        $oldimg = $myevent->imgextension;
 
         $myevent->fill([    // ieraksta izmainīšana. Visu pārbaudīto un saņemto mainīgo ievietošana/izmainīšana datu bāzē
             'Title' => $request['title'],
@@ -211,14 +208,14 @@ class EventFormsController extends Controller
         $file = $request['file'];
 
         if($file){
-            $filename = str_replace(' ', '_', $request['title']) . '-' . $id . '.' . $request['file']->getClientOriginalExtension();
-            Storage::disk('public')->put($filename,File::get($file));
+            Storage::disk('public')->put($request['file']->getClientOriginalName(),File::get($file));
+            Storage::disk('public')->delete($oldimg);
         }
 
-        return redirect($route[$myevent->Melnraksts])->with('message','Pasākums ir veiksmīgi ' . $message[$status])->with('info',$info);
+        return redirect()->route('showevent',$id)->with('message','Pasākums ir veiksmīgi ' . $message[$status])->with('info',$info);
 
 }
-    public function delete($id){ // ieraksta dzēšana
+    public function delete($id){ // pasākuma dzēšana
 
         $myevent = Events::find($id);
         $reservations = Reservation::where('EventID',$id)->get();
@@ -228,7 +225,7 @@ class EventFormsController extends Controller
             $r->delete();
 
         }
-        $filename = str_replace(' ', '_', $myevent->Title) . '-' . $id . '.' . $myevent->imgextension;
+        $filename = $myevent->imgextension;
 
         Storage::disk('public')->delete($filename);
 
