@@ -1,0 +1,175 @@
+.custom-control-inline{
+    margin-right: auto;
+}
+.help-tip{
+    float: right;
+    text-align: center;
+    background-color: #BCDBEA;
+    border-radius: 50%;
+    width: 18px;
+    height: 20px;
+    font-size: 14px;
+    line-height: 20px;
+    cursor: default;
+    margin: 2px 0px 0px 5px ;
+}
+
+.help-tip:before{
+    content:'?';
+    font-weight: bold;
+    color:#fff;
+}
+
+.help-tip:hover p{
+    display:block;
+    transform-origin: 100% 0%;
+
+    -webkit-animation: fadeIn 0.3s ease-in-out;
+    animation: fadeIn 0.3s ease-in-out;
+
+}
+
+.help-tip p{    /* The tooltip */
+    display: none;
+    text-align: left;
+    background-color: #00000066;
+    padding: 14px;
+    position: absolute;
+    border-radius: 3px;
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+    right: 26.5%;
+    color: #FFF;
+    font-size: 13px;
+    line-height: 1.4;
+}
+.help-tip p.second{
+    right: 5%;
+}
+
+.help-tip p:before{ /* The pointer of the tooltip */
+    position: absolute;
+    content: '';
+    width:0;
+    height: 0;
+    border:6px solid transparent;
+    border-bottom-color:#00000066;
+    right:10px;
+    top:-12px;
+}
+
+.help-tip p:after{ /* Prevents the tooltip from being hidden */
+    width:100%;
+    content:'';
+    position: absolute;
+    top:-40px;
+    left:0;
+}
+.custom-checkbox{
+    padding-left: 41px;
+}
+.clippy{
+    background: #dadada;
+    padding-bottom: 4px;
+    padding-top: 4px;
+}
+.clippy:hover{
+    background:#a5a1a1;
+}
+#reservlink{
+    margin-left: 12px;
+    margin-top: 18px;
+    border-radius: .25rem 0 0 .25rem;
+    padding-bottom: 7px;
+}
+.block{
+    display: block;
+}
+#popoverclose{
+    position: absolute;
+    top: 0%;
+    right: 2%;
+}
+.linkcopy{
+        position: absolute;
+        opacity: .01;
+        height: 0;
+        overflow: hidden;   
+}
+#tablenr{
+    background-color: aliceblue;
+    border:0px;
+    -webkit-appearance: none;
+}
+.question{
+    padding-top: 30px;
+}
+hr{
+    background-color: #4c4e5040;
+    float: left;
+    width: 90%;
+    margin-left: 11px;
+}
+.deletebtn{
+    float: left;
+}
+.formbtn{
+    width: 200px;
+}
+.reservshow{
+    width: 193px;
+    position: absolute;
+    bottom: 0;
+    left: 10%
+}
+.showreserv{
+    position: relative;
+    text-align: center;
+    height: 73px;
+}
+.relative{
+    position: relative;
+}
+.sliderbutton{
+    padding-bottom: 45px;
+}
+.deletephoto{
+    color: #495057;
+    padding: 0;
+}
+.spandeletephoto{
+    padding-bottom: 4px;
+}
+.spandeletephoto:hover .deletephoto{
+    color: white;
+}
+.deleteform{
+    display: -webkit-box;
+    position: absolute;
+    top: 88.4%;
+}
+.divdeletephoto{
+    position: absolute;
+    top: 82%;
+    right: 6%;
+}
+.right{
+    float:right;
+}
+/* CSS animation */
+
+@-webkit-keyframes fadeIn {
+    0% { 
+        opacity:0; 
+        transform: scale(0.6);
+    }
+
+    100% {
+        opacity:100%;
+        transform: scale(1);
+    }
+}
+
+@keyframes fadeIn {
+    0% { opacity:0; }
+    100% { opacity:100%; }
+}
