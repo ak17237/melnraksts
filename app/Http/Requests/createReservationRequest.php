@@ -35,7 +35,7 @@ class createReservationRequest extends FormRequest
     public function messages()
     {
         return[
-            'max' => 'Māksimāls pieļaujamais skaits ir :max',
+            'max' => 'Māksimāls pieļaujamais garums ir :max',
             'required' => ':attribute ir obligāts',
             'gte' => ':attribute jābūt lielāks vai vienāds par :value',
             'lte' => ':attribute jābūt mazāks vai vienāds par :value',
@@ -49,15 +49,13 @@ class createReservationRequest extends FormRequest
             $myevent = Events::where('id',$reservation->EventID)->first();
             $data = reservinfo($reservation->EventID); // funkcija kura ir helpers.php failā un kura atgriež datus par atlikušajām vietām
             $useable = true;
-
             if($data[0] !== "Neierobežots"){
 
-            $data[0] += $reservation->Tickets; // mainot rezervāciju atgreižam šīs rezervācijas jau aizņemtās vietas.
+            $data[0] += $reservation->Tickets;
             $data[3] += ($reservation->Tickets - ($reservation->Seats + $reservation->TableSeats));
 
             }
-            $data[1] += $reservation->Seats;
-            $data[2] += $reservation->TableSeats; 
+            $data[1] += $reservation->Seats;  
 
         }
         else { 
@@ -87,6 +85,8 @@ class createReservationRequest extends FormRequest
         else $rules['tickets'] = ['required','lte: ' . $ticketinfo ,'gte: ' . (getdata($this->get('tablecount'),0) +  getdata($this->get('seatnr'),0)),new ValidReserv($standinginfo,$standing,1)];
         if(request('customRadio') == 'Yes') $rules['seatnr'] = 'required|max:2|lte: ' . $seatsinfo;
         if(request('inlineDefaultRadiosExample') == 'Yes') $rules['tablecount'] = ['required','lte: ' . $tablesinfo,new ValidReserv($maxtableseats,request('tablecount'),2)];
+        
+
         
 
         return $rules;

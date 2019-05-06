@@ -25,7 +25,7 @@
             @if($ticketinfo == 0 && $myevent->Tickets != -999)
                 <h3>Biļetes ir beigušās</h3>
             @elseif(checkResrvationCount($myevent->id,Auth::user()->email) >= 2) 
-                <h3 style="text-align: center;"><strong>Jūs pasūtījāt maksimāli pieļaujamo biļešu skaitu uz lietotāju šajā pasākumā</strong></h3>
+                <h3><strong>Jūs pasūtījāt maksimāli pieļaujamo biļešu skaitu uz lietotāju šajā pasākumā</strong></h3>
             @else
                 <form action="{{ route('reservationcreate',['id' => $myevent->id, 'extension' => $myevent->linkcode]) }}" method="POST">
                     {{csrf_field()}}    
@@ -192,7 +192,7 @@
 
 
                             <div class="col-lg-12 eventcreate reservationdiv">
-                                <button type="submit" class="btn btn-primary reserv reservationrecord" name="action" value="create">Rezervēt</button>
+                                <button type="submit" class="btn btn-primary reserv" name="action" value="create">Rezervēt</button>
                             </div>
                         </fieldset>
                 </form>

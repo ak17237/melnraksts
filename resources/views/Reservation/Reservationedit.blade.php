@@ -232,7 +232,7 @@
                         </div>
                         <div class="col-lg-11 eventcreate ml-3-p">
                             @if (Auth::user()->hasRole('Admin'))
-                            <span class="eventcreatebutton editreserv"><button type="submit" class="btn btn-primary formbtn create reservationrecord" name="action" value="edit">Saglabāt izmaiņas</button></span>
+                            <span class="eventcreatebutton editreserv"><button type="submit" class="btn btn-primary formbtn create" name="action" value="edit">Saglabāt izmaiņas</button></span>
                             </fieldset>
                         </form>
                             {!! Form::open(['method' => 'DELETE','route' => ['reservationdelete',$reservation->id]]) !!}
@@ -240,7 +240,7 @@
                                 class="btn btn-danger formbtn delete" name="action" value="delete">Dzēst rezervāciju</button></span>
                             {!! Form::close() !!}
                             @elseif (Auth::user()->hasRole('User'))
-                            <span class="eventcreatebutton editreserv"><button type="submit" class="btn btn-primary formbtn create reservationrecord" name="action" value="edit">Saglabāt izmaiņas</button></span>
+                            <span class="eventcreatebutton editreserv"><button type="submit" class="btn btn-primary formbtn create" name="action" value="edit">Saglabāt izmaiņas</button></span>
                             </fieldset>
                         </form>
                             @endif

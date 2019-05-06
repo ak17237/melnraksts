@@ -462,7 +462,6 @@ hr{
     transition: 0.4s;
 }
 .page-footer{
-    box-shadow: 0px 0px 10px black;
     position: relative; 
     background: #3377b5;
 }
@@ -494,7 +493,6 @@ hr{
     color: black;
 }
 .content-page{
-    box-shadow: 0px 4px 10px black;
     width: 75%;
     margin: auto;
     background-color: aliceblue;
@@ -518,16 +516,6 @@ hr{
 }
 #seatcount.eventseat{
     max-width: 60%;
-}
-#phooto{
-    word-wrap: break-word;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-}
-.event-image{
-    max-width: 100%;
-    height: auto;
 }
 @media (max-width: 1600px){
     .page-header-outter li{

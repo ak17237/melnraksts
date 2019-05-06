@@ -30,13 +30,13 @@
           @foreach ($data as $d){{-- līdzīgi kā slierī izvada pasākumus (home.blade.php) --}}
             <tbody>
               <tr>
-                <td class="top clickshow"><a class='divlink' href="{{ route('showevent',$d->id) }}"></a>
+                <td class="top">
                   <div class="eventdate">
                       <div class="eventday block h-center v-center"><span class="daystyle">{{ geteventday($d->Datefrom) }}</span></div>
                       <div class="eventmonth block h-center v-center"><span class="pagmonth{{ $counter }}">Mēnesis</span></div>
                     </div>
                 </td>
-                <td class="top space eventinfo clickshow"><a class='divlink' href="{{ route('showevent',$d->id) }}"></a>
+                <td class="top space eventinfo">
                   <h5>{{ $d->Title }}</h5>
                   <p>Kad: {{ geteventdate($d->Datefrom) }}</p><span id='eventdate{{ $counter++ }}'style="display:none">{{ $d->Datefrom }}</span>
                   <p>Kur: {{ $d->Address }}</p>

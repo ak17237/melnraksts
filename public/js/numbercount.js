@@ -6,7 +6,7 @@ jQuery('document').ready(function(){
         else return $data;
     
     }
-    function getstandcount($choose = null){
+    function getstandcount(){
         var standcount,ticketcount,seatcount,tablecount;
 
         ticketcount = getdata(parseInt(jQuery('#tickets').val()),0);
@@ -17,15 +17,10 @@ jQuery('document').ready(function(){
 
         if(standcount < 0) standcount = 0;
         jQuery('.stand-tickets').html(standcount);
-        if($choose = 1) return standcount;
     }
 
     jQuery('.count').on('click keyup',function(){
         getstandcount();
-    });
-    $('.reservationrecord').on('click',function(){
-        if (getstandcount(1) > 0)
-            return confirm('Jūsu izvēlētās stāvvietas ir: ' + getstandcount(1) + ". Vai turpināt?");
     });
     getstandcount();
 

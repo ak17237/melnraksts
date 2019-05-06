@@ -12,9 +12,9 @@
                         <fieldset>
                         <legend class="eventcreate smalltitle m-b-md">Izveidot pasākumu</legend><br><br><br>
                         @if(session()->has('message'))
-                        <div class="alert alert-dismissible alert-success" style="margin-top: 79px;margin-bottom: 20px;">
+                        <div class="alert alert-dismissible alert-success">
                             <button type="button" class="close" data-dismiss="alert">&times;</button>
-                            <p class="mb-0">{{ session()->get('message') }}</p>
+                            <p class="mb-0">Pasākums ir veiksmīgi saglabāts!</p>
                         </div>
                         @endif
                         @if(session()->get('info') === 'VIP')

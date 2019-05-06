@@ -193,12 +193,7 @@
                                         <span class="invalid-feedback alertseatnr" role="alert">
                                         <strong>{{ $errors->first('seatnr') }}</strong>
                                         </span>
-                                    @elseif($errors->has('customRadio'))
-                                        <span class="invalid-feedback alertradio" role="alert">
-                                        <strong>{{ $errors->first('customRadio') }}</strong>
-                                        </span>
                                     @endif
-                                    
                                 </div>
 
                                 <div class="radiocontainer eventcreate">
@@ -249,10 +244,6 @@
                                             <span class="invalid-feedback alerttablenr" role="alert">
                                             <strong>{{ $errors->first('tablenr') }}</strong>
                                             </span>
-                                        @elseif($errors->has('inlineDefaultRadiosExample'))
-                                            <span class="invalid-feedback alertinline" role="alert">
-                                            <strong>{{ $errors->first('inlineDefaultRadiosExample') }}</strong>
-                                            </span>
                                         @endif
                                     </div>
                                     <div class="col-lg-3 eventcreate">
@@ -274,10 +265,6 @@
                                         @if ($errors->has('seatsontablenr'))
                                             <span class="invalid-feedback alertseattable" role="alert">
                                             <strong>{{ $errors->first('seatsontablenr') }}</strong>
-                                            </span>
-                                        @elseif($errors->has('inlineDefaultRadiosExample'))
-                                            <span class="invalid-feedback alertinline" role="alert">
-                                            <strong></strong>
                                             </span>
                                         @endif
                                     </div>
@@ -340,7 +327,7 @@
                                 <div class="questiontooltip"></div>
                               </div>
 
-                              <div class="col-lg-5 eventcreate" id="phooto">
+                              <div class="col-lg-5 eventcreate">
                                     
                                     <input type="file" name="file" class="custom-file-input {{ $errors->has('file') ? ' is-invalid' : '' }}" id="inputGroupFile02">
                                     @if ($errors->has('file'))
@@ -348,8 +335,8 @@
                                     <strong>{{ $errors->first('file') }}</strong>
                                     </span>
                                     @endif
-                                    @if(Storage::disk('public')->has($myevent->imgextension))
-                                    <label class="custom-file-label {{ $errors->has('file') ? ' is-invalid' : '' }}" id="filename" for="inputGroupFile02">{{$myevent->imgextension}}</label>
+                                    @if(Storage::disk('public')->has(str_replace(' ', '_',$myevent->Title) . '-' . $myevent->id . '.' . $myevent->imgextension))
+                                    <label class="custom-file-label {{ $errors->has('file') ? ' is-invalid' : '' }}" id="filename" for="inputGroupFile02">{{str_replace(' ', '_',$myevent->Title) . '-' . $myevent->id . '.' . $myevent->imgextension}}</label>
                                     @else
                                     <label class="custom-file-label {{ $errors->has('file') ? ' is-invalid' : '' }}" id="filename" for="inputGroupFile02">Izvēlēties failu</label>
                                     @endif
@@ -366,11 +353,11 @@
                             </div>
                         </fieldset>
                 </form>
-                @if(Storage::disk('public')->has($myevent->imgextension))
+                @if(Storage::disk('public')->has(str_replace(' ', '_',$myevent->Title) . '-' . $myevent->id . '.' . $myevent->imgextension))
             <div class="input-group-append divdeletephoto">
                                     
                         <form action="{{ route('deletefile',['id' => $myevent->id,
-                        'filename' => $myevent->imgextension]) }}" 
+                        'filename' => str_replace(' ', '_',$myevent->Title) . '-' . $myevent->id . '.' . $myevent->imgextension]) }}" 
                         enctype="multipart/form-data" method="POST">
                             {{csrf_field()}}
                             <span class="spandeletephoto input-group-text deletebtn btn-danger"><button onclick="return confirm('Vai esi pārliecināts?')" type="submit" 

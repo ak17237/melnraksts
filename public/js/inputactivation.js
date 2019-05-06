@@ -8,7 +8,6 @@ jQuery('document').ready(function(){
             seatval = jQuery('.eventseat').val();
             jQuery('.eventseat').val('');
             jQuery('.alertseatnr').hide();
-            jQuery('.alertradio').show();
             jQuery('[name="seatnr"]').removeClass('is-invalid');
             
         }
@@ -23,7 +22,6 @@ jQuery('document').ready(function(){
             if($('.alertseatnr').text() != ''){
 
                 jQuery('.alertseatnr').show();
-                jQuery('.alertradio').show();
                 jQuery('[name="seatnr"]').addClass('is-invalid');
 
             }
@@ -41,7 +39,6 @@ jQuery('document').ready(function(){
             jQuery('.eventtable').val('');
             jQuery('#tablenr').prop('disabled',true);
             jQuery('#tablenr').val('');
-            jQuery('.alertinline').show();
             jQuery('.alerttablenr').hide();
             jQuery('.alertseattable').hide();
             jQuery('.alerttablecount').hide();
@@ -164,7 +161,7 @@ jQuery('document').ready(function(){
         if($('input[name="file"]').val() == '') $('#filename').html('Choose file'); 
         else $('#filename').html($('input[name="file"]').val().replace(/C:\\fakepath\\/i, ''));
     });
-     
+
         var ticketinfotext = 'Atlikušās biļetes no kurām ' + $('#chseat').text() + 
         ' ir sēdvietas un ' + $('#chtable').text() + 
         ' ir sēdvietas pie galdiem,pārējās ir stāvvietas(' + $('#chstand').text() + ')';
