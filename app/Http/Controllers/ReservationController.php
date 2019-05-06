@@ -95,11 +95,20 @@ class ReservationController extends Controller
     public function reservationcreate(createReservationRequest $request,$id){
         
         $myevent = Events::find($id);
-        $user = User::where('email', Auth::user()->email)->first();
 
         eventvalidate($request);
+
+        if($request['manualreserv'] == "on") $email = $request['email'];
+        else {
+
+            $user = User::where('email', Auth::user()->email)->first();
+
+            $email = $user->email;
+
+        }
+
         Reservation::create([  // ieraksta datus datubāzē 
-            'email' => $user->email,
+            'email' => $email,
             'EventID' => $myevent->id,
             'Tickets' => $request['tickets'],
             'Seats' => $request['seatnr'],

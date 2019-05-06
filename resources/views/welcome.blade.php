@@ -66,6 +66,7 @@
         <script src="{{ asset('js/slidercontrol.js') }}"></script>
         <script src="{{ asset('js/reservationslidercontrol.js') }}"></script>
         <script src="{{ asset('js/alertcontrol.js') }}"></script>
+        <script src="{{ asset('js/reservateinput.js') }}"></script>
         <script src="{{ asset('js/scroll.js') }}"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" 
         integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>

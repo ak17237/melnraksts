@@ -529,6 +529,10 @@ hr{
     max-width: 100%;
     height: auto;
 }
+.manualreserv{
+    margin-left: 11%;
+    margin-top: 3%;
+}
 @media (max-width: 1600px){
     .page-header-outter li{
         width: 180px;

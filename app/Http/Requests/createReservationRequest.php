@@ -6,6 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use App\Events;
 use App\Reservation;
 use App\Rules\ValidReserv;
+use App\Rules\CheckUser;
 
 class createReservationRequest extends FormRequest
 {
@@ -30,6 +31,9 @@ class createReservationRequest extends FormRequest
         'tickets' => 'Biļešu skaits',
         'seatnr' => 'Sēdvietu skaits',
         'tablecount' => 'Sēdvietu skaits pie galda',
+        'name' => 'Vārds',
+        'surname' => 'Uzvārds',
+        'email' => 'E-pasts',
        ];
     }
     public function messages()
@@ -83,6 +87,11 @@ class createReservationRequest extends FormRequest
         if($useable && request('tablenr') == $reservation->TableNr) $maxtableseats += $reservation->TableSeats;
 
         $rules = array();
+        if(request('manualreserv') == 'on'){
+
+            $rules['email'] = ['required',new CheckUser(request('email'))];
+
+        }
         if($myevent->Tickets == -999) $rules['tickets'] = ['required','lte: ' . $ticketinfo ,'gte: ' . (getdata($this->get('tablecount'),0) +  getdata($this->get('seatnr'),0)),new ValidReserv($standinginfo,$standing,1)];
         else $rules['tickets'] = ['required','lte: ' . $ticketinfo ,'gte: ' . (getdata($this->get('tablecount'),0) +  getdata($this->get('seatnr'),0)),new ValidReserv($standinginfo,$standing,1)];
         if(request('customRadio') == 'Yes') $rules['seatnr'] = 'required|max:2|lte: ' . $seatsinfo;

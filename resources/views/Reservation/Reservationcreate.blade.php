@@ -37,6 +37,22 @@
                                 <p>{{ session()->get('message') }}</p>
                             </div>
                         @endif
+                        @if(Auth::check() && Auth::user()->hasRole('Admin'))
+                            <div class="custom-control custom-switch col-lg-2 eventcreate manualreserv">
+                                <input type="hidden" name="manualreserv" value="off" />
+                                <input type="checkbox" class="custom-control-input" id="customSwitch1" name="manualreserv" {{ old('manualreserv') ? 'checked' : '' }}>
+                                <label class="custom-control-label" for="customSwitch1">Rezervēt lietotāju</label>
+                            </div>
+                        @endif
+                            <div class="col-lg-4 eventcreate manualreservdata" style="display: none;">
+                                <label>E-pasts</label>
+                                <input type="email" name='email' class="form-control {{ $errors->has('email') ? ' is-invalid' : '' }}" id="email" value="{{ old('email') }}">
+                                @if ($errors->has('email'))
+                                    <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $errors->first('email') }}</strong>
+                                     </span>
+                                 @endif
+                            </div>
                             
                         <div class="col-lg-8 eventcreate ml-7-p">
                             <label>Biļešu skaits (No tām stāvvietas - <span class="stand-tickets">0</span>) MAX 2</label> {{-- Cilvēka vēlamais biļešu skaits --}}
