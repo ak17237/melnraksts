@@ -2,7 +2,7 @@
 @section('content')
 
 <div class="container">
-        <a href="javascript:history.go(-1)" class="btn btn-primary back">Atpakaļ</a>
+        <a href="javascript:window.location=document.referrer;" class="btn btn-primary back">Atpakaļ</a>
     <br>
     @if($myevent->Melnraksts === 1) <i>Šīs pasākums ir redzams tikai administrātoriem,jo viņš vēl nav publicēts un ir melnrakstos</i> @endif
     <div class="row">

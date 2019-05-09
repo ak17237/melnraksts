@@ -58,7 +58,7 @@ class createEventRequest extends FormRequest
         if(request('action') == 'create') $rules['dateto'] = 'required';
         if(request('action') == "create") $rules['address'] = 'required|max:500';
         if(request('action') == "create") $rules['anotation'] = 'required|max:500';
-        if(request('action') == "create" && request('Radio') == 'Yes') $rules['ticketcount'] = 'required';
+        if(request('action') == "create" && request('Radio') == 'Yes') $rules['ticketcount'] = ['required'];
         if(request('action') == "create" && request('customRadio') == 'Yes') $rules['seatnr'] = ['required'];
         if(request('action') == "create" && request('inlineDefaultRadiosExample') == 'Yes') {
             $rules['tablenr'] = ['required'];
@@ -73,7 +73,7 @@ class createEventRequest extends FormRequest
             $rules['ticketcount'] = ['required','gte:' . getdata($this->get('seatnr'),0)];
         else if(request('action') == "create" && request('Radio') == 'Yes' && request('inlineDefaultRadiosExample') == 'Yes')
             $rules['ticketcount'] = ['required','gte:' . getdata($this->get('tablenr'),0) * getdata($this->get('seatsontablenr'),0)];
-        else $rules['ticketcount'] = array(); // lai strādātu metode array_push,ja nav galdu un sēdvietu,tad šis nebūs masīvs un nestrādāš array_push
+
         if($this->route()->getName() == 'edit'){
 
             $data = resrvcount($this->route('id'));

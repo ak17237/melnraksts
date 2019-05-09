@@ -2,7 +2,7 @@
 @section('content')
 
 <div class="container">
-    <a href="javascript:history.go(-1)" class="btn btn-primary back">Atpakaļ</a>
+    <a href="javascript:window.location=document.referrer;" class="btn btn-primary back">Atpakaļ</a>
     <br>
     <div class="row">
         <div class="col-lg-offset-3 col-lg-11 center">

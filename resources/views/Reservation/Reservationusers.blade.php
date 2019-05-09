@@ -1,7 +1,7 @@
 @extends('welcome')
 @section('content')
 <div class="container">
-    <a href="/" class="btn btn-primary back">Atpakaļ</a>
+    <a href="javascript:window.location=document.referrer;" class="btn btn-primary back">Atpakaļ</a>
     <br>
     @if(session()->has('message'))
     <div class="alert alert-dismissible alert-success">

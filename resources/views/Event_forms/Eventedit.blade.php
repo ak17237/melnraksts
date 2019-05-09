@@ -1,11 +1,7 @@
 @extends('welcome')
 @section('content')
 <div class="container">
-        <a @if ($myevent->Melnraksts == 0)
-                href="/"
-            @else
-                href="/saved-events-1"
-            @endif class="btn btn-primary back">Atpakaļ</a>
+        <a href="javascript:window.location=document.referrer;" class="btn btn-primary back">Atpakaļ</a>
             <br>
         <div class="row">
             <div class="col-lg-offset-3 col-lg-11 center">

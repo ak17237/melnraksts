@@ -17,7 +17,13 @@ jQuery('document').ready(function(){
              // When arrow is clicked
         $('body,html').animate({
             scrollTop : 0                       // Scroll to top of body
-        }, 500);
+        });
     });
-
+if($('input').hasClass('is-invalid')){
+    console.log($('.is-invalid').offset().top);
+    window.scrollTo({
+        top: $('.is-invalid').offset().top
+    
+    });// Scroll to top of body
+}
 });
