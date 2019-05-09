@@ -54,6 +54,18 @@ return [
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
         ],
+        'pdf' => [
+            'driver' => 'local',
+            'root' => public_path() . '/event-pdf',
+            'url' => env('APP_URL').'/storage',
+            'visibility' => 'public',
+        ],
+        'gallery' => [
+            'driver' => 'local',
+            'root' => public_path() . '/event-gallery',
+            'url' => env('APP_URL').'/storage',
+            'visibility' => 'public',
+        ],
 
         's3' => [
             'driver' => 's3',

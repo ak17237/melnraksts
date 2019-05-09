@@ -98,12 +98,19 @@ class ReservationController extends Controller
 
         eventvalidate($request);
 
-        if($request['manualreserv'] == "on") $email = $request['email'];
+        if($request['manualreserv'] == "on") {
+
+            $email = $request['email'];
+            session(['way' => 'admins']);
+
+        }
         else {
 
             $user = User::where('email', Auth::user()->email)->first();
 
             $email = $user->email;
+
+            session(['way' => 'users']);
 
         }
 

@@ -66,7 +66,9 @@ Route::get('/saved-events-{page}',[ // Melnrakstu lapa
     'roles' => ['Admin']
         ]);
 Route::get('/event/{id}/show','EventFormsController@showevent')->name('showevent')->middleware('saveevent')->middleware('existevent'); // Pasākuma apskates lapa
+Route::get('/download/{pdfname}','EventFormsController@downloadpdf')->name('downloadpdf');
 Route::post('event/{id}/edit/{filename}/delete','EventFormsController@deletefile')->name('deletefile');
+Route::post('event/{id}/pdfdelete','EventFormsController@pdfdelete')->name('pdfdelete');
 
 // Rezervāciju pārvalde
 Route::get('event/{id}/{extension}/reservation',[ // Rezervācijas izveides lapa
@@ -107,6 +109,9 @@ Route::delete('reservation/{id}/delete',[ // Rezervācijas dzēšanas lapa
     'middleware' =>  ['roles'],
     'roles' => ['Admin']
         ]);
+Route::fallback(function(){
+    return view('errors.404');
+});
 
 
 

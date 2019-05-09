@@ -132,10 +132,6 @@ hr{
 .sliderbutton{
     padding-bottom: 45px;
 }
-.deletephoto{
-    color: #495057;
-    padding: 0;
-}
 .spandeletephoto{
     padding-bottom: 4px;
 }
@@ -145,11 +141,11 @@ hr{
 .deleteform{
     display: -webkit-box;
     position: absolute;
-    top: 88.4%;
+    top: 89.9%;
 }
 .divdeletephoto{
     position: absolute;
-    top: 82%;
+    bottom: 10%;
     right: 6%;
 }
 .right{

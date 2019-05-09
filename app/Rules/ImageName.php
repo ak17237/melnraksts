@@ -18,11 +18,16 @@ class ImageName implements Rule
 
         $events = Events::all();
         $this->validation = true;
+        $this->namevalid = true; 
 
         foreach($events as $e){
 
             if($this->currentName === $e->imgextension) $this->validation = false; 
     
+        }
+        if(strlen($this->currentName) > 50) { 
+            $this->namevalid = false; 
+            $this->validation = false; 
         }
     }
 
@@ -45,6 +50,9 @@ class ImageName implements Rule
      */
     public function message()
     {
+        if($this->namevalid == true)
             return 'Attēls ar šādu nosaukumu jau eksistē';
+        else
+            return 'Attēla nosaukums pārsniedz 50 simbolus';
     }
 }

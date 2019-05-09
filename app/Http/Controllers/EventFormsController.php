@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\createEventRequest;
 
 use App\Events;
+use App\Pdf;
 use App\Reservation;
 use App\User;
 use Auth;
@@ -24,7 +25,7 @@ class EventFormsController extends Controller
     public function showedit($id){ // pasākumu rediģēšanas formas izvade
     // vajag pievienot pārbaudi vai ir tāds pasākums līdzīgi kā rezervācijā
         $myevent = Events::find($id);
-
+        $pdf = Pdf::where('Event_ID',$id)->get();
         if($myevent->Tickets == -999) $checkedtickets = false; // pārbaude vai deaktivēt inputus un saglabāt radio izvēles
         else $checkedtickets = true;
         if($myevent->Seatnumber == 0) $checkedseats = false;
@@ -33,7 +34,7 @@ class EventFormsController extends Controller
         else $checkedtables = true;
 
         return view('Event_forms.Eventedit',['myevent' => $myevent,'checkedseats' => $checkedseats,'checkedtables' => $checkedtables,
-        'checkedtickets' => $checkedtickets]);
+        'checkedtickets' => $checkedtickets,'pdf' => $pdf]);
     }
     public function showsavedevents($page){ // parāda saglabātos pasākumus sākumā nesen izmainītos,kuriem ir melnraksts 1
 
@@ -54,10 +55,11 @@ class EventFormsController extends Controller
     public function showevent($id){
 
         $myevent = Events::find($id);
+        $pdf = Pdf::where('Event_ID',$id)->get();
 
         $description = str_replace("\r\n",'<br>',$myevent->Description);
 
-        return view('Event_forms.Eventinfo',compact('myevent','description'));
+        return view('Event_forms.Eventinfo',compact('myevent','description','pdf'));
     }
     public function create(createEventRequest $request){ // pasākumu izveide un saglabāšana datu bāzē kļūdas pārbauda izveidotais request 
         
@@ -90,7 +92,6 @@ class EventFormsController extends Controller
         if($request['file'] == NULL) $img = NULL; // pārbauda vai ir faila,nav tad img mainīgs ir NULL  
         else $img = $request['file']->getClientOriginalName(); // ja fails ir saņem to pilnu nosaukumu un ieivieto mainīgajā img
 
-
         $user = User::where('email', Auth::user()->email)->first();     
         Events::create([  // ieraksta datus datubāzē 
         'Title' => $request['title'],
@@ -110,6 +111,23 @@ class EventFormsController extends Controller
         'email' => $user->email,
         'linkcode' => $linkcode,
         ]);
+
+        $id = Events::all()->sortByDesc(['updated_at'])->first()->id;
+
+        if($request->hasFile('pdffile')){
+
+            for($i = 0;$i < sizeof($request['pdffile']);$i++){
+
+                    $name = $request['pdffile.' . $i]->getClientOriginalName();
+                    Storage::disk('pdf')->put($name,File::get($request['pdffile.' . $i]));
+
+                    Pdf::create([
+                        'Event_ID' => $id,
+                        'Name' => $name,
+                    ]);
+            }
+            
+        }
 
         $file = $request['file'];
         if($file){
@@ -205,6 +223,21 @@ class EventFormsController extends Controller
             ]);
         $myevent->save();
 
+        if($request->hasFile('pdffile')){
+
+            for($i = 0;$i < sizeof($request['pdffile']);$i++){
+
+                    $name = $request['pdffile.' . $i]->getClientOriginalName();
+                    Storage::disk('pdf')->put($name,File::get($request['pdffile.' . $i]));
+
+                    Pdf::create([
+                        'Event_ID' => $id,
+                        'Name' => $name,
+                    ]);
+            }
+            
+        }
+
         $file = $request['file'];
 
         if($file){
@@ -225,6 +258,7 @@ class EventFormsController extends Controller
             $r->delete();
 
         }
+
         $filename = $myevent->imgextension;
 
         Storage::disk('public')->delete($filename);
@@ -242,6 +276,32 @@ class EventFormsController extends Controller
                 return redirect()->route('home')->with('message','Pasākums ir dzēsts.');
     
             }
+
+    }
+    public function downloadpdf($pdfname){
+
+        return response()->download(public_path() . '/event-pdf' . '/' . $pdfname);
+
+    }
+    public function pdfdelete(Request $request,$id){
+
+        $counter = 0; // lai uzzināt pdf failu skaitu lapā
+
+        while($request->has('pdfname' . $counter) == true) $counter++; // uzzinam pdf skaitu
+
+        for($i = 0;$i < $counter;$i++){ // ja checkbox ir atzīmēts,tad tieši šo nosaukumu izdzēšam no datubāzes un no servera
+
+            if($request['pdfcheckbox' . $i] == 'on'){
+
+                Pdf::where('Name',$request['pdfname' . $i])->delete();
+
+                Storage::disk('pdf')->delete($request['pdfname' . $i]);
+
+            }
+
+        }
+
+        return redirect()->route('showedit',$id)->with('message','Pasākuma pielikumi ir veiksmīgi dzēsti!');
 
     }
 

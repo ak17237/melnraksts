@@ -219,28 +219,43 @@
                                   <input type="checkbox" class="custom-control-input" id="customSwitch1" name="vipswitch" {{ old('vipswitch') ? 'checked' : '' }}>
                                   <label class="custom-control-label" for="customSwitch1">VIP pasākums</label>
                                 </div>
-                                <div class="col-lg-4 eventcreate">
+                                <div class="col-lg-3 eventcreate">
                                     <input type="checkbox" class="custom-control-input" id="customSwitch2" name="editableswitch" {{ old('editableswitch') ? 'checked' : '' }}>
                                     <label class="custom-control-label" for="customSwitch2">Rediģējamas rezervācijas</label> 
                                     <i class="far fa-question-circle" id="reserveditabletooltip"></i>
                                     <div class="questiontooltip"></div>
                                 </div>
-                                
-                                <div class="col-lg-5 eventcreate">
-                                    
-                                    <input type="file" name="file" class="custom-file-input {{ $errors->has('file') ? ' is-invalid' : '' }}" id="inputGroupFile02">
-                                    @if ($errors->has('file'))
-                                    <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $errors->first('file') }}</strong>
-                                    </span>
-                                    @endif
-                                    <label class="custom-file-label {{ $errors->has('file') ? ' is-invalid' : '' }}" id="filename" for="inputGroupFile02">Izvēlēties failu</label>
-                                        
-                                  </div>
+                                <div class="col-lg-6 addphoto">
+                                    <label class="addphotolabel">Pievienot attēlu</label>
+                                    <div class="col-lg-5 uploadphoto phooto">
+                                        <input type="file" name="file" class="custom-file-input {{ $errors->has('file') ? ' is-invalid' : '' }}" id="inputGroupFile02">
+                                        @if ($errors->has('file'))
+                                        <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $errors->first('file') }}</strong>
+                                        </span>
+                                        @endif
+                                        <label class="custom-file-label {{ $errors->has('file') ? ' is-invalid' : '' }}" id="filename" for="inputGroupFile02">Izvēlēties failu</label>
+                                            
+                                    </div>
+                                </div>
+                                <div class="col-lg-7 eventcreate">
+                                        <label class="addphotolabel long-label">Pievienot pdf pielikumu</label>
+                                        <label class="addphotolabel short-label">Pievienot pdf</label>
+                                        <div class="col-lg-5 uploadpdf phooto">
+                                            <input type="file" name="pdffile[]" multiple class="custom-file-input {{ $errors->has('pdffile.*') ? ' is-invalid' : '' }}" id="inputGroupFile01">
+                                            @if ($errors->has('pdffile.*'))
+                                            <span class="invalid-feedback" role="alert" style="white-space: normal;">
+                                            <strong>{{ $errors->first('pdffile.*') }}</strong>
+                                            </span>
+                                            @endif
+                                            <label class="custom-file-label {{ $errors->has('pdffile') ? ' is-invalid' : '' }}" id="pdffilename" for="inputGroupFile01">Izvēlēties failu</label>
+                                                
+                                        </div>
+                                    </div>
 
                             <div class="col-lg-12 eventcreate">
-                                        <span class="eventcreatebutton"><button type="submit" class="btn btn-primary create" name="action" value="create">Izveidot</button></span>
-                                        <span class="eventcreatebutton"><button type="submit" class="btn btn-primary save" name="action" value="save">Saglabāt</button></span>
+                                        <div class="eventcreatebutton right ecb"><button type="submit" class="btn btn-primary create right" name="action" value="create">Izveidot</button></div>
+                                        <div class="eventcreatebutton mr-7-p ecb"><button type="submit" class="btn btn-primary save right" name="action" value="save">Saglabāt</button></div>
                             </div>
                         </fieldset>
                 </form>

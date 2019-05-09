@@ -69,9 +69,8 @@ html, body {
 }
 .eventcreatebutton{
     float:right;
-    padding-left: 70px;
+    padding: 0;
     padding-bottom: 20px;
-    padding-right: 61px;
 }
 .eventcreateradio{
     float:left;
@@ -280,15 +279,16 @@ td.top{
 #tickettooltip{
     color: black;
 }
+.ecb .create,.ecb .save{
+    width: 150px;
+}
 .eventcreatebutton .create{
     background-color:  #3377b5;
     border-color: #3377b5;
-    width: 200.28%;
 }
 .eventcreate .save{
     background-color: #a2d164;
     border-color: #a2d164;
-    width: 215%;
 }
 .eventcreate .create:hover{
     background-color:  #0156a3;
@@ -309,17 +309,26 @@ td.top{
     box-shadow: inset 0 0 10px gray;
 }
 .edit{
-    padding-left: 50px;
-    padding-right: 53px;
+    padding: 0;
+    width: 25%;
+    margin-bottom: 3%;
 }
-.edit .save{
-    width: 167.65%
+.centered{
+    width: 50%;
+    text-align: center;
 }
-.edit .create{
-    width: 183.25%;
+.edit button{
+    width: 150px;
+}
+.edit.left{
+    float:left;
 }
 .editreserv .create{
     width: 138%;
+}
+.buttons{
+    padding-left: 0;
+    padding-right: 0;
 }
 .custom-control-input:checked~.custom-control-label::before {
     color: #fff;
@@ -338,7 +347,6 @@ td.top{
 .eventcreate .delete,.deletebtn .delete{
     background-color: #ec8a5b;
     border-color: #ec8a5b;
-    width: 223.21%;
 }
 .deletebtn .delete{
     width: 138%;
@@ -513,13 +521,16 @@ hr{
 .ml-3-p{
     margin-left: 3%;
 }
+.mr-7-p{
+    margin-right: 7%;
+}
 #tablecount.eventtable{
     max-width: 70%;
 }
 #seatcount.eventseat{
     max-width: 60%;
 }
-#phooto{
+.phooto{
     word-wrap: break-word;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -533,9 +544,130 @@ hr{
     margin-left: 11%;
     margin-top: 3%;
 }
+.addphoto{
+    float: right;
+    padding: 0;
+    padding-bottom: 20px;
+    max-width: 52%;
+}
+.uploadphoto{
+    float: right;
+    max-width: 74%;
+}
+.uploadpdf{
+    float: right;
+    max-width: 70%;
+}
+.addphotolabel{
+    padding-top: 1%;
+}
+.short-label{
+    display:none;
+}
+.pdfdownload{
+    max-width: 20%;
+    text-align: center;
+    float: left;
+    padding-bottom: 30px;
+}
+.pdfdownload p{
+    word-break: break-all;
+}
+.btn.btn-outline-primary.download{
+    color:  #3377b5;
+    border-color:  #3377b5;
+}
+.btn.btn-outline-primary.download:hover{
+    color: #FFFFFF;
+    background-color: #0156a3;
+    border-color:  #013d7d;
+}
+.btn.btn-outline-primary.download:active{
+    background-color: #013d7d;
+    border-color: #013d7d;
+    box-shadow: inset 0 0 10px gray;
+}
+.left{
+    float: left;
+}
+.pdfcheckbox ul{
+    list-style-type: none;
+  }
+  
+.pdfcheckbox li {
+    display: inline-block;
+  }
+  
+  input[type="checkbox"][id^="pdfcb"] {
+    display: none;
+  }
+  
+  .pdfcheckbox label {
+    border: 1px solid #fff;
+    padding: 10px;
+    display: block;
+    position: relative;
+    margin: 10px;
+    cursor: pointer;
+    text-align: center;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  
+  .pdfcheckbox label::before {
+    background-color: white;
+    color: white;
+    content: " ";
+    display: block;
+    border-radius: 50%;
+    border: 1px solid #8bc63e;
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    width: 25px;
+    height: 25px;
+    text-align: center;
+    line-height: 28px;
+    transition-duration: 0.4s;
+    transform: scale(0);
+  }
+  
+  .pdfcheckbox label img {
+    transition-duration: 0.2s;
+    transform-origin: 50% 50%;
+  }
+  
+  .pdfcheckbox :checked+label {
+    border-color: #ddd;
+  }
+  
+  .pdfcheckbox :checked+label::before {
+    content: "\2713";
+    background-color: #8bc63e;
+    transform: scale(1);
+  }
+  
+  .pdfcheckbox :checked+label img {
+    transform: scale(0.9);
+    box-shadow: 0 0 5px #333;
+    z-index: -1;
+  }
 @media (max-width: 1600px){
     .page-header-outter li{
         width: 180px;
+    }
+}
+@media(max-width: 1460px){
+    .short-label{
+        display: inline-block;
+        padding-left: 6%;
+    }
+    .long-label{
+        display: none;
     }
 }
 @media (max-width: 1366px){
@@ -554,9 +686,18 @@ hr{
         max-width: 70%;
     }
 }
+@media(max-width: 1200px){
+    .addphotolabel{
+        width: min-content;
+        padding: 0;
+    }
+}
 @media (max-width: 1250px){
     #tablecount.eventtable{
         max-width: 90%;
+    }
+    .deleteform.photo{
+        left: 32%;
     }
 }
 @media (max-width: 1100px){

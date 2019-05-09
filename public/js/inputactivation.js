@@ -161,9 +161,38 @@ jQuery('document').ready(function(){
         $(this).val($(this).val().trim());
     });
     $('input[name="file"]').change(function(){ // lai parādītos faila izvēles laukā izvēlētā faila nosaukums
-        if($('input[name="file"]').val() == '') $('#filename').html('Choose file'); 
+        if($('input[name="file"]').val() == '') $('#filename').html('Izvēlieties failu'); 
         else $('#filename').html($('input[name="file"]').val().replace(/C:\\fakepath\\/i, ''));
     });
+    $('#inputGroupFile01').change(function(){ // lai parādītos faila izvēles laukā izvēlēto failu skaits
+        var files = $(this)[0].files;
+        if($('#inputGroupFile01').val() == '') $('#pdffilename').html('Izvēlieties failu'); 
+        else $('#pdffilename').html('Izvēlēti faili: ' + files.length);
+    });
+    $('.pdfcb').click(function(){ // Pasākuma rediģēšanas lapā,ja pdf dzēšanai nav izvēlēts atsēgt pogu,ja ir ieslēgt un atslēgt pārējās
+
+        if($(".pdfcb").is(':checked')) {
+            
+            $('.deletepdf').prop('disabled', false);
+            $('.edit button.create').prop('disabled', true);
+            $('.edit button.save').prop('disabled', true);
+            $('.deleteevent').prop('disabled', true);
+            $('.deletephoto').prop('disabled', true);
+
+        }
+        else{
+
+            $('.deletepdf').prop('disabled', true);
+            $('.edit button.create').prop('disabled', false);
+            $('.edit button.save').prop('disabled', false);
+            $('.deleteevent').prop('disabled', false);
+            $('.deletephoto').prop('disabled', false);
+
+        } 
+
+    });
+    if(!$(".pdfcb").is(':checked')) $('.deletepdf').prop('disabled', true);
+   
      
         var ticketinfotext = 'Atlikušās biļetes no kurām ' + $('#chseat').text() + 
         ' ir sēdvietas un ' + $('#chtable').text() + 

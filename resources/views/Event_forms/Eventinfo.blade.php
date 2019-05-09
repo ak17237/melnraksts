@@ -41,8 +41,18 @@
                     <img src="{{ asset('event-images/' . $myevent->imgextension) }}" width="1000" height="500" class="event-image img-responsive">
                 @endif
                 <p class="content">{!! $description !!}</p>
+
+                @foreach ($pdf as $p)
+
+                <div class="col-lg-1 pdfdownload clickdownload"> <a href="/event-pdf/{{ $p->Name }}"></a>
+                    <img src="{{ asset('png-icon.jpg') }}" alt="png" width="40" height="40">
+                    <p class="small" style="height: 32px;">{{ $p->Name }}</p>
+                    <a href="{{ route('downloadpdf',['pdfname' => $p->Name]) }}" class="download btn btn-outline-primary">Lejuplādēt</a>
+                </div>
+                
+                @endforeach
                 @if(Auth::check() && $myevent->VIP != 1 && $myevent->Melnraksts === 0)
-                    <a href="{{ route('showreservationcreate',['id' => $myevent->id, 'extension' => $myevent->linkcode]) }}" class="btn btn-primary reserv btn-block">Rezervēt</a>
+                    <a style="float:left;" href="{{ route('showreservationcreate',['id' => $myevent->id, 'extension' => $myevent->linkcode]) }}" class="btn btn-primary reserv btn-block">Rezervēt</a>
                 @endif
             </div>
         </div>

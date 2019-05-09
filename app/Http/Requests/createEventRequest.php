@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Rules\ImageName;
 use App\Rules\ValidReserv;
+use App\Rules\MultipleFileName;
 use App\Events;
 
 class createEventRequest extends FormRequest
@@ -30,7 +31,7 @@ class createEventRequest extends FormRequest
         'title' => 'Nosaukums',
         'datefrom' => 'Datums',
         'dateto' => 'Datums',
-        'address' => 'Adrese',
+        'address' => 'Adreses lauks',
         'anotation' => 'Anotācijas lauks',
         'ticketcount' => 'Biļešu skaits',
         'seatnr' => 'Sēdvietu skaits',
@@ -46,6 +47,7 @@ class createEventRequest extends FormRequest
             'required' => ':attribute ir obligāts',
             'image' => ':attribute jābūt bildes formātā(png,jpg,gif utt.)',
             'gte' => ':attribute jābūt lielāks vai vienāds par :value',
+            'mimes' => 'Pielikumiem jābūt :values tipa failam.'
         ];
     }
     public function rules() // pasākumu saglabāšanas noteikumi ja tika nospiesta poga create
@@ -62,11 +64,8 @@ class createEventRequest extends FormRequest
             $rules['tablenr'] = ['required'];
             $rules['seatsontablenr'] = ['required'];
         }
-
         if(request('file') != NULL)
             $rules['file'] = ['image',new ImageName(request('file')->getClientOriginalName())];
-        else
-            $rules['file'] = 'image';
 
         if(request('action') == "create" && request('Radio') == 'Yes' && request('customRadio') == 'Yes' && request('inlineDefaultRadiosExample') == 'Yes')
             $rules['ticketcount'] = ['required','gte:' . (getdata($this->get('tablenr'),0) * getdata($this->get('seatsontablenr'),0) + getdata($this->get('seatnr'),0))];
@@ -91,7 +90,27 @@ class createEventRequest extends FormRequest
 
             }
 
+            if(request()->hasFile('pdffile')){
+
+                for($i = 0;$i < sizeof(request('pdffile'));$i++){ // MultipleFileName ir klase,kurā tiek pārbaudītas validācijas,kuras laravels nevar pārbaudīt
+
+                    $rules['pdffile.' . $i] = ['mimes:pdf',new MultipleFileName(request('pdffile.' . $i)->getClientOriginalName(),1,sizeof(request('pdffile')),$this->route('id'))];
+// pirmais arguments ir vārds kuru pārbaudīt uz dublikātu,otrais ir režīms(1 = pdf faili,2 = attēli),trešais ir izvēleto pdf skaits,ceturtais ir pasākuma id kuram ir jāpārbauda, skaits
+                } 
+            }
     
+        }
+        else {
+
+            if(request()->hasFile('pdffile')){
+
+                for($i = 0;$i < sizeof(request('pdffile'));$i++){ // MultipleFileName ir klase,kurā tiek pārbaudītas validācijas,kuras laravels nevar pārbaudīt
+
+                    $rules['pdffile.' . $i] = ['mimes:pdf',new MultipleFileName(request('pdffile.' . $i)->getClientOriginalName(),1,sizeof(request('pdffile')))];
+// pirmais arguments ir vārds kuru pārbaudīt uz dublikātu,otrais ir režīms(1 = pdf faili,2 = attēli),trešais ir izvēleto pdf skaits,ceturtais ir pasākuma id kuram ir jāpārbauda, skaits
+                } 
+            }
+
         }
         return $rules;
     }

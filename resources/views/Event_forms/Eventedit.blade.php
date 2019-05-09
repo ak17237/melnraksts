@@ -325,7 +325,7 @@
                               <label class="custom-control-label" for="customSwitch1">VIP pasākums</label>
                             </div>
 
-                            <div class="col-lg-4 eventcreate">
+                            <div class="col-lg-3 eventcreate">
                                 <input type="hidden" name="editableswitch" value="off" />
                                 <input type="checkbox" class="custom-control-input" id="customSwitch2" name="editableswitch" 
                                 @if(old('editableswitch') == "on") checked=""
@@ -340,50 +340,101 @@
                                 <div class="questiontooltip"></div>
                               </div>
 
-                              <div class="col-lg-5 eventcreate" id="phooto">
+                              <div class="col-lg-6 addphoto">
+                                    <label class="addphotolabel">Pievienot attēlu</label>
+                                    <div class="col-lg-5 uploadphoto phooto">
+                                        <input type="file" name="file" class="custom-file-input {{ $errors->has('file') ? ' is-invalid' : '' }}" id="inputGroupFile02">
+                                        @if ($errors->has('file'))
+                                        <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $errors->first('file') }}</strong>
+                                        </span>
+                                        @endif
+                                        @if(Storage::disk('public')->has($myevent->imgextension))
+                                        <label class="custom-file-label {{ $errors->has('file') ? ' is-invalid' : '' }}" id="filename" for="inputGroupFile02">{{$myevent->imgextension}}</label>
+                                        @else
+                                        <label class="custom-file-label {{ $errors->has('file') ? ' is-invalid' : '' }}" id="filename" for="inputGroupFile02">Izvēlēties failu</label>
+                                        @endif  
+                                    </div>
+                              </div>
+                              <div class="col-lg-12 eventcreate buttons">
+                                    <ul class="pdfcheckbox">
+                               @for ($i = 0;$i < sizeof($pdf);$i++)
                                     
-                                    <input type="file" name="file" class="custom-file-input {{ $errors->has('file') ? ' is-invalid' : '' }}" id="inputGroupFile02">
-                                    @if ($errors->has('file'))
-                                    <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $errors->first('file') }}</strong>
-                                    </span>
-                                    @endif
-                                    @if(Storage::disk('public')->has($myevent->imgextension))
-                                    <label class="custom-file-label {{ $errors->has('file') ? ' is-invalid' : '' }}" id="filename" for="inputGroupFile02">{{$myevent->imgextension}}</label>
-                                    @else
-                                    <label class="custom-file-label {{ $errors->has('file') ? ' is-invalid' : '' }}" id="filename" for="inputGroupFile02">Izvēlēties failu</label>
-                                    @endif
-                                  </div>
+                                    <li class="pdfdownload" style="@if(sizeof($pdf) <= 2) max-width: 18%; @endif padding: 0;">
+                                        <input type="hidden" name="pdfname{{$i}}" value="{{ $pdf[$i]->Name  }}" form="deletepdf">
+                                        <input type="checkbox" class="pdfcb" name="pdfcheckbox{{$i}}" id="pdfcb{{$i}}" form="deletepdf"/>
+                                        <label for="pdfcb{{$i}}">
+                                            <img src="{{ asset('png-icon.jpg') }}" alt="png" width="40" height="40">
+                                            <p class="small">{{ $pdf[$i]->Name }}</p>
+                                        </label>
+                                    </li>     
 
-                            <div class="col-lg-12 eventcreate">
-                                        <span class="eventcreatebutton edit"><button type="submit" class="btn btn-primary create" name="action" value="create">
+                                @endfor
+                                    </ul>
+                                
+                              @if(sizeof($pdf) > 2)</div>@endif
+                              <div class="col-lg-7 eventcreate" @if(sizeof($pdf) <= 2) style="margin-top: 3%;" @endif>
+                                    <label class="addphotolabel long-label">Pievienot pdf pielikumu</label>
+                                    <label class="addphotolabel short-label">Pievienot pdf</label>
+                                    <div class="col-lg-5 uploadpdf phooto">
+                                        <input type="file" name="pdffile[]" multiple class="custom-file-input {{ $errors->has('pdffile.*') ? ' is-invalid' : '' }}" id="inputGroupFile01">
+                                        @if ($errors->has('pdffile.*'))
+                                        <span class="invalid-feedback" role="alert" style="white-space: normal;">
+                                        <strong>{{ $errors->first('pdffile.*') }}</strong>
+                                        </span>
+                                        @endif
+                                        <label class="custom-file-label {{ $errors->has('pdffile') ? ' is-invalid' : '' }}" id="pdffilename" for="inputGroupFile01">Izvēlēties failu</label>
+                                            
+                                    </div>
+                                </div>
+                                @if(sizeof($pdf) <= 2)</div>@endif
+                            <div class="col-lg-12 eventcreate buttons">
+                                        <div class="eventcreatebutton edit right"><button type="submit" class="btn btn-primary create right" name="action" value="create">
                                             @if ($myevent->Melnraksts == 0)
                                                 Rediģēt
                                             @else
                                                 Publicēt
-                                            @endif</button></span>
-                                        <span class="eventcreatebutton edit"><button type="submit" class="btn btn-primary save" name="action" value="save">Saglabāt</button></span>
+                                            @endif</button></div>
+                                        <div class="eventcreatebutton edit centered"><button type="submit" class="btn btn-primary save" name="action" value="save">Saglabāt</button></div>
+
+                                        <div class="eventcreatebutton edit left"><button onclick="return confirm('Vai esi pārliecināts?')" type="submit" 
+                                            class="btn btn-primary delete deleteevent" name="action" value="delete" form="deleteevent">Dzēst Pasākumu</button></div>
+                                        @if(sizeof($pdf) !== 0)
+                                        <div class="eventcreatebutton edit centered" @if(!Storage::disk('public')->has($myevent->imgextension)) style="width:100%;" @endif>
+                                            <button onclick="return confirm('Vai esi pārliecināts?')" type="submit" 
+                                            class="btn btn-primary delete deletepdf" name="action" value="delete" form="deletepdf">Dzēst pdf</button></div>
+                                        @endif
+                                        @if(Storage::disk('public')->has($myevent->imgextension))
+                                        <div class="eventcreatebutton edit centered" @if(sizeof($pdf) === 0) style="width: 100%;" @endif>
+                                            <button onclick="return confirm('Vai esi pārliecināts?')" type="submit" 
+                                            class="btn btn-primary delete deletephoto" name="action" value="deletephoto" form="deletephoto">Dzēst foto</button></div>
+                                        @endif
                             </div>
                         </fieldset>
                 </form>
                 @if(Storage::disk('public')->has($myevent->imgextension))
-            <div class="input-group-append divdeletephoto">
+            <div class="col-lg-1 eventcreate deleteform photo">
                                     
-                        <form action="{{ route('deletefile',['id' => $myevent->id,
+                        <form id="deletephoto" action="{{ route('deletefile',['id' => $myevent->id,
                         'filename' => $myevent->imgextension]) }}" 
                         enctype="multipart/form-data" method="POST">
+
                             {{csrf_field()}}
-                            <span class="spandeletephoto input-group-text deletebtn btn-danger"><button onclick="return confirm('Vai esi pārliecināts?')" type="submit" 
-                            class="btn deletephoto" name="action" value="deletephoto">Dzēst foto</button></span>
+                            
                         </form>
                      </div>
                 @endif
                 <div class="col-lg-1 eventcreate deleteform"> {{-- Dzēst funkcionalitāte --}}
-                {!! Form::open(['method' => 'DELETE','route' => ['delete',$myevent->id]]) !!}
-                    <span class=""><button onclick="return confirm('Vai esi pārliecināts?')" 
-                        type="submit" class="btn btn-primary delete" name="action" value="delete">Dzēst</button></span>
+                {!! Form::open(['method' => 'DELETE','route' => ['delete',$myevent->id],'id' => 'deleteevent']) !!}
+                    
                 {!! Form::close() !!}
             </div>
+            <form id="deletepdf" action="{{ route('pdfdelete',['id' => $myevent->id]) }}" 
+                    enctype="multipart/form-data" method="POST">
+
+                        {{csrf_field()}}
+                        
+            </form>
         </div>
     </div>
 </div>

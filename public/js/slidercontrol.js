@@ -64,13 +64,30 @@ $(document).ready(function(){
         }
         $(".vip").mouseover(function(){
             $(this).data('clicked', true);
+            console.log($('.vip').data('clicked'));
         });
         $(".vip").mouseout(function(){
             $(this).data('clicked', false);
+            console.log($('.vip').data('clicked'));
         });/* $(e.target).closest('td').find('popover') */
         $("td.clickshow").click(function(e) {
             if($('.vip').data('clicked') != true && $(e.target).is('.close') == false && !$(e.target).closest('tr').find('div.popover').hasClass('popover')) 
             window.location = $(this).find("a").attr("href");
+         });
+         $(".download").mouseover(function(){
+            $(".download").data('hover', true);
+        });
+        $(".download").mouseout(function(){
+            $(".download").data('hover', false);
+        });
+        $(".pdfdownload > div").click(function(e){
+            e.stopPropagation(); 
+         });
+         $('.clickdownload').click(function(){
+
+            if($('.download').data('hover') != true)
+                window.open($(this).find("a").attr("href"),'_blank');
+                
          });
          $('.bx-viewport').height($('.bx-viewport').height() + 20); 
     
