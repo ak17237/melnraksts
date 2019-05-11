@@ -44,9 +44,11 @@
                         <p>Kur: {{ $event->Address }}</p>
                         <i>Biļešu skaits: {{ $r->Tickets }}</i>
                     </td>
-                    <td class="space" @if($event->Editable == 0) colspan="2" style="text-align: center" @endif><a href="{{ route('showreservation',$r->id) }}" class="button">Apskatīt</a></td>
-                    @if($event->Editable == 1)
+                    <td class="space" @if($event->Editable == 0 && Auth::user()->hasRole('User')) colspan="2" style="text-align: center" @elseif(checkExpired($r->EventID)) colspan="2" style="text-align: center" @endif><a href="{{ route('showreservation',$r->id) }}" class="button">Apskatīt</a></td>
+                    @if($event->Editable == 1 || Auth::user()->hasRole('Admin'))
+                      @if(!checkExpired($r->EventID))
                     <td class="space"><a href="{{ route('showreservationedit',$r->id) }}" class="button">Rediģēt</a></td>
+                      @endif
                     @endif
                   </tr>
                 </tbody>

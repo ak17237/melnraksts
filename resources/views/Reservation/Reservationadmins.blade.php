@@ -41,8 +41,10 @@
                       <h5>{{ getuserbyemail($reservation[$i+$j]->email)->First_name }} {{ getuserbyemail($reservation[$i+$j]->email)->Last_name }}</h5>
                       <i>Biļešu skaits: {{ $reservation[$i+$j]->Tickets }}</i>
                     </td>
-                    <td class="space"><a href="{{ route('showreservation',$reservation[$i+$j]->id) }}" class="button reservsmall">Apskatīt</a>
+                    <td class="space" @if(checkExpired($myevent->id)) colspan="2" style="text-align: center" @endif><a href="{{ route('showreservation',$reservation[$i+$j]->id) }}" class="button reservsmall">Apskatīt</a>
+                      @if(!checkExpired($myevent->id))
                     <td class="space"><a href="{{ route('showreservationedit',$reservation[$i+$j]->id) }}" class="button reservsmall">Rediģēt</a>
+                      @endif
                   </tr>
                 </tbody>
               @endfor

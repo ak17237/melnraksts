@@ -1,3 +1,4 @@
+var mainslider;
 $(document).ready(function(){
 
     var months = [] // Masīvs mēneša korektai izvadei vārdos
@@ -18,14 +19,14 @@ $(document).ready(function(){
     var todaymonth = today.getMonth(); // saņem šodienas mēnesi
     jQuery('.month').html(months[todaymonth]); // ievieto šodienas mēnesi slaidera galvenē
 
-    $('.slider').bxSlider({ // bxSlider plugina iestatījumi
+    mainslider = $('.slider').bxSlider({ // bxSlider plugina iestatījumi
         mode: 'fade',
         keyboardEnabled: true,
         controls: true,
         nextSelector: 'a.next',
         prevSelector: 'a.prev',
-        nextText: "<img src='css/images/RightArrow.png'>", // slaidu pārslēgšanas pogas
-        prevText: "<img src='css/images/LeftArrow.png'>",
+        nextText: "<img class='main' src='css/images/RightArrow.png'>", // slaidu pārslēgšanas pogas
+        prevText: "<img class='main' src='css/images/LeftArrow.png'>",
         infiniteLoop: false,
         hideControlOnEnd: true,
         startSlide: 0,
@@ -37,14 +38,14 @@ $(document).ready(function(){
             else if(monthindex < 0) monthindex = monthindex + 12;
             
             jQuery('.month').hide().fadeOut('fast').html(months[monthindex]).fadeIn('slow');
+            jQuery('#mainslidermonth').html(monthindex); // kad pārslēdz no gaidāmā uz pagājušiem pasākumiem lai pārslēdzas slaidera headera mēnesis
         },
-        onSlideAfter: function(){ $('.bx-viewport').height($('.bx-viewport').height() + 20) },
-        onSliderResize: function(){ $('.bx-viewport').height($('.bx-viewport').height() + 20) },
         pagerCustom: '.slider-months',
         adaptiveHeight: true,
-        touchEnabled: false
+        touchEnabled: false,
+        wrapperClass: 'main-bx bx-wrapper'
     });
-
+    
     for(var i = 1;i <= $('#counter').text(); i++){
 
     var eventdate = new Date($('#eventdate' + i).text());
@@ -64,14 +65,15 @@ $(document).ready(function(){
         }
         $(".vip").mouseover(function(){
             $(this).data('clicked', true);
-            console.log($('.vip').data('clicked'));
+            
         });
         $(".vip").mouseout(function(){
             $(this).data('clicked', false);
-            console.log($('.vip').data('clicked'));
+            
         });/* $(e.target).closest('td').find('popover') */
         $("td.clickshow").click(function(e) {
-            if($('.vip').data('clicked') != true && $(e.target).is('.close') == false && !$(e.target).closest('tr').find('div.popover').hasClass('popover')) 
+            if($('.vip').data('clicked') != true && $(e.target).is('.close') == false && !$(e.target).closest('tr').find('div.popover').hasClass('popover'))
+                if(!$(this).closest('tr').hasClass('expiredevent'))
             window.location = $(this).find("a").attr("href");
          });
          $(".download").mouseover(function(){
@@ -89,6 +91,10 @@ $(document).ready(function(){
                 window.open($(this).find("a").attr("href"),'_blank');
                 
          });
-         $('.bx-viewport').height($('.bx-viewport').height() + 20); 
+         $('.bx-viewport').height($('.bx-viewport').height() + 20);
+         
+         $('tr.expiredevent').find('button').prop('disabled','disabled');
+         $('tr.expiredevent').find('a:not(.today)').removeClass('button').addClass('inactive');
+
     
 });

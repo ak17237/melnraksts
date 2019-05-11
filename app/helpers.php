@@ -212,4 +212,16 @@ function checkEditable($reservid){
     if($event->Editable == 1) return true;
     else false;
 }
+function checkExpired($id,$route = NULL){ // pārbauda vai pasākums jau beidzās,ja beidzās tad true,ja nē tad false
+    if($route === 'showreservationedit') {
+
+        $reservation = Reservation::find($id);
+        $event = Events::find($reservation->EventID);
+    }
+    else $event = Events::find($id);
+
+    if(date('Y-m-d') > $event->Datefrom) return true;
+    else return false;
+
+}
 ?>

@@ -1,13 +1,9 @@
-@extends('welcome')
 
-@if ($errors->has('validate'))
-            <div class="container">
-                <div class="col-md-10 col-md-offset-1">
-                    <div class="alert alert-danger">
-                        <ul>
-                                <li>{{ $errors->first('validate') }}</li>    
-                        </ul>
-                    </div>
-                </div>
-            </div>
+    @if (($errors->has('gallery.*')))
+    <div class="alert alert-dismissible alert-warning" style="padding-top: 20px;">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <p class="mb-0">{{ $errors->first('gallery.*') }}</p><br>
+    </div>
         @endif 
+
+        

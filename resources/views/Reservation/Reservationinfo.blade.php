@@ -100,7 +100,9 @@
                         <div class="col-lg-11 eventcreate ml-3-p">
                         
                         @if($myevent->Editable == 1 || Auth::user()->hasRole('Admin'))
+                            @if(!checkExpired($reservation->EventID))
                         <a href="{{ route('showreservationedit',$reservation->id) }}" class="btn btn-primary reserv btn-block">Rediģēt rezervāciju</a>
+                            @endif
                         @endif 
                         </div>
             </div>

@@ -49,7 +49,7 @@ Route::post('/create-event/results','EventFormsController@create')->name('create
 Route::get('/event/{id}/edit',[ // Pasākuma rediģēšanas lapa
     'uses' => 'EventFormsController@showedit',
     'as' => 'showedit',
-    'middleware' =>  ['roles','author','existevent'],
+    'middleware' =>  ['roles','author','existevent','expired'],
     'roles' => ['Admin']
         ]);
 Route::post('/event/{id}/edit/record','EventFormsController@edit')->name('edit')->middleware('existevent');
@@ -67,14 +67,19 @@ Route::get('/saved-events-{page}',[ // Melnrakstu lapa
         ]);
 Route::get('/event/{id}/show','EventFormsController@showevent')->name('showevent')->middleware('saveevent')->middleware('existevent'); // Pasākuma apskates lapa
 Route::get('/download/{pdfname}','EventFormsController@downloadpdf')->name('downloadpdf');
-Route::post('event/{id}/edit/{filename}/delete','EventFormsController@deletefile')->name('deletefile');
-Route::post('event/{id}/pdfdelete','EventFormsController@pdfdelete')->name('pdfdelete');
+
+// Failu pārvalde
+Route::post('event/{id}/edit/{filename}/delete','FileController@deletefile')->name('deletefile'); // Pasākumu attēls
+Route::post('event/{id}/pdfdelete','FileController@pdfdelete')->name('pdfdelete'); // PDF pielikumi pasākumiem
+Route::get('event/{id}/gallery','FileController@showgallery')->name('showgallery'); // Galerijas lapa pasākumam
+Route::post('event/{id}/gallery/upload','FileController@uploadgallery')->name('uploadgallery'); // Galerijas foto ielāde
+Route::post('/event/{id}/gallery/delete','FileController@deletegallery')->name('deletegallery'); // Galerijas foto dzēšana
 
 // Rezervāciju pārvalde
 Route::get('event/{id}/{extension}/reservation',[ // Rezervācijas izveides lapa
     'uses' => 'ReservationController@showreservationcreate',
     'as' => 'showreservationcreate',
-    'middleware' =>  ['roles','vipevent'],
+    'middleware' =>  ['roles','vipevent','expired'],
     'roles' => ['User','Admin']
         ]);
 Route::post('event/{id}/{extension}/reservation/result','ReservationController@reservationcreate')->name('reservationcreate')->middleware('vipevent');
@@ -93,7 +98,7 @@ Route::get('reservation/{id}/show',[ // Rezervācijas apskates lapa
 Route::get('reservation/{id}/edit',[ // Rezervācijas rediģēšanas lapa
     'uses' => 'ReservationController@showreservationedit',
     'as' => 'showreservationedit',
-    'middleware' =>  ['roles','creator','existreserv','editable'],
+    'middleware' =>  ['roles','creator','existreserv','editable','expired'],
     'roles' => ['User','Admin']
         ]);
 Route::get('event/{id}/reservations',[ // Visas rezervācijas noteiktam pasākumam lapa adminiem

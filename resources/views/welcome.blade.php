@@ -4,6 +4,7 @@
 <!--[if !IE]><!--> <html lang="{{ str_replace('_', '-', app()->getLocale()) }}"> <!--<![endif]-->
 
     <head>
+            
         <meta charset="utf-8"/>
 
         <title>Pasākumu sistēma</title>
@@ -33,11 +34,15 @@
         
         <link rel="shortcut icon" href="favicon.ico"/>
 
-        <link href="{{ asset('css/style.css') }}" rel="stylesheet" type="text/css">
+        
         <link href="{{ asset('css/bootstrapoverstyle.css') }}" rel="stylesheet" type="text/css">
         <link rel="stylesheet" href="{{ asset('css/jquery.bxslider.css') }}">
+        <link href="{{ asset('css/style.css') }}" rel="stylesheet" type="text/css">
         <link href="{{ asset('css/hover-min.css') }}" rel="stylesheet" type="text/css">
         <link href="{{ asset('css/page-404.css') }}" rel="stylesheet" type="text/css">
+        <link href="{{ asset('css/loader.css') }}" rel="stylesheet" type="text/css">
+            <script src="{{ asset('metronic/global/plugins/jquery.min.js') }}" type="text/javascript"></script>
+            <script src="{{ asset('js/loader.js') }}"></script> {{-- lai pirms lapas sastāvs ielādējas,loader jau varētu strādāt --}}
 
         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -50,12 +55,13 @@
     </head>
     <body>
         @include('header')
-    <div class="content-page">
-        @yield('content')
+        <div class="content-page">   
+            @yield('content')
+        </div>
     </div>
+    
         @include('footer')
 
-        <script src="{{ asset('metronic/global/plugins/jquery.min.js') }}" type="text/javascript"></script>
         <script src="{{ asset('js/jquery.visible.js') }}" type="text/javascript"></script>
         <script src="{{ asset('metronic/global/plugins/jquery-migrate.min.js')}}" type="text/javascript"></script>
         <!-- IMPORTANT! Load jquery-ui.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
@@ -68,6 +74,9 @@
         <script src="{{ asset('js/alertcontrol.js') }}"></script>
         <script src="{{ asset('js/reservateinput.js') }}"></script>
         <script src="{{ asset('js/scroll.js') }}"></script>
+        <script src="{{ asset('js/historyslidercontrol.js') }}"></script>
+        <script src="{{ asset('js/jquery.form.js') }}"></script>
+        <script src="{{ asset('js/gallery.js') }}"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" 
         integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/js/bootstrap.min.js" 

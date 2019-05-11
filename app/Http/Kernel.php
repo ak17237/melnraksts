@@ -68,6 +68,7 @@ class Kernel extends HttpKernel
         'existreserv' => \App\Http\Middleware\CheckReserv::class,
         'creator' => \App\Http\Middleware\CheckCreator::class,
         'editable' => \App\Http\Middleware\CheckReservEditable::class,
+        'expired' => \App\Http\Middleware\CheckExpiredEvent::class,
     ];
 
     /**

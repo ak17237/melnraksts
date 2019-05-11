@@ -137,19 +137,6 @@ class EventFormsController extends Controller
         return redirect()->back()->with('message','Pasākums ir veiksmīgi ' . $message[$melnraksts])->with('info',$info);
         
     }
-    public function deletefile($id,$filename){
-
-        $event = Events::find($id);
-        $filename = $event->imgextension;
-
-        Storage::disk('public')->delete($filename);
-
-        $event->fill(['imgextension' => NULL]);
-        $event->save();
-
-        return redirect()->route('showedit',$id)->with('message','Pasākuma foto ir veiksmīgi dzēsts!');
-
-    }     
     public function edit(createEventRequest $request,$id){
 
         $myevent = Events::find($id);
@@ -276,32 +263,6 @@ class EventFormsController extends Controller
                 return redirect()->route('home')->with('message','Pasākums ir dzēsts.');
     
             }
-
-    }
-    public function downloadpdf($pdfname){
-
-        return response()->download(public_path() . '/event-pdf' . '/' . $pdfname);
-
-    }
-    public function pdfdelete(Request $request,$id){
-
-        $counter = 0; // lai uzzināt pdf failu skaitu lapā
-
-        while($request->has('pdfname' . $counter) == true) $counter++; // uzzinam pdf skaitu
-
-        for($i = 0;$i < $counter;$i++){ // ja checkbox ir atzīmēts,tad tieši šo nosaukumu izdzēšam no datubāzes un no servera
-
-            if($request['pdfcheckbox' . $i] == 'on'){
-
-                Pdf::where('Name',$request['pdfname' . $i])->delete();
-
-                Storage::disk('pdf')->delete($request['pdfname' . $i]);
-
-            }
-
-        }
-
-        return redirect()->route('showedit',$id)->with('message','Pasākuma pielikumi ir veiksmīgi dzēsti!');
 
     }
 

@@ -360,7 +360,7 @@
                                         <input type="hidden" name="pdfname{{$i}}" value="{{ $pdf[$i]->Name  }}" form="deletepdf">
                                         <input type="checkbox" class="pdfcb" name="pdfcheckbox{{$i}}" id="pdfcb{{$i}}" form="deletepdf"/>
                                         <label for="pdfcb{{$i}}">
-                                            <img src="{{ asset('png-icon.jpg') }}" alt="png" width="40" height="40">
+                                            <img src="{{ asset('pdf.svg') }}" alt="png" width="40" height="40">
                                             <p class="small">{{ $pdf[$i]->Name }}</p>
                                         </label>
                                     </li>     

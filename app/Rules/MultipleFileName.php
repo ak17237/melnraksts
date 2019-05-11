@@ -2,6 +2,7 @@
 
 namespace App\Rules;
 use App\Pdf;
+use App\Gallery;
 
 use Illuminate\Contracts\Validation\Rule;
 
@@ -12,7 +13,7 @@ class MultipleFileName implements Rule
      *
      * @return void
      */
-    public function __construct($name,$type,$selectedpdf,$id = NULL)
+    public function __construct($name,$type,$selectedpdf = NULL,$id = NULL)
     {
         $this->name = $name;
         $this->type = $type;
@@ -52,9 +53,24 @@ class MultipleFileName implements Rule
 
             if($this->pdfcount > 5) $this->validation = false;
 
-            if($this->validation) return true;
+        }
+        elseif($this->type == 2){
+            
+
+            $gallery = Gallery::all();
+
+            foreach($gallery as $g){
+
+                if($g->Name === $this->name) {
+
+                    $this->validation = false;
+
+                }
+        }
 
         }
+        if($this->validation) return true;
+
     }
 
     /**
@@ -68,6 +84,11 @@ class MultipleFileName implements Rule
 
             if($this->pdfcount > 5) 
                 return 'Maksimālais pdf pielikumu skaits vienam pasākumam(5) ir pārsniegts'; 
+            return 'Fails ' . $this->name . ' jau eksistē,nomainiet lūdzu nosaukumu';
+
+        }
+        if($this->type == 2){
+
             return 'Fails ' . $this->name . ' jau eksistē,nomainiet lūdzu nosaukumu';
 
         }
