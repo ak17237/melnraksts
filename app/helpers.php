@@ -72,13 +72,22 @@ function resrvcount($id){
     
     $array = array();
 
-    $ticketnumber = $seatnumber = $tableseatnumber = $maxtableseats = 0; // biļešu skaits
+    $ticketnumber = $seatnumber = $tableseatnumber = $maxtableseats = $tables =  0; // biļešu skaits
+    $same = array();
     if($reservation->isNotEmpty()){
         foreach($reservation as $reservations){
             $ticketnumber += $reservations->Tickets; // pievieno biļešu skaitu cik bija rezervēts no datubāzes
             $seatnumber += $reservations->Seats;
             $tableseatnumber += $reservations->TableSeats;
             $tableseats[] = $reservations->TableSeats;
+            
+            if($reservations->TableNr != 0){
+
+            if(!in_array($reservations->TableNr,$same)) $tables++;
+
+            }
+
+            $same[] = $reservations->TableNr;
         }
         $maxtableseats = max($tableseats);
     }
@@ -87,6 +96,7 @@ function resrvcount($id){
     $array[1] = $seatnumber;
     $array[2] = $tableseatnumber;
     $array[3] = $maxtableseats;
+    $array[4] = $tables;
 
     return $array;
 

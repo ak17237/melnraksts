@@ -7,8 +7,17 @@ $(window).load(function(){
 
 	$('#gallery').change(function(){
 
-        if($(this)[0].files.length > 0) $('#addphotosgallery').submit();
+        if($(this)[0].files.length > 0) {
 
+            if($(this)[0].files.length > 15){
+
+                $('.text-warn').html('Attēlu skaits vienā ielādes reizē navar būt lielāks par 15');
+                $('.alert-warning').fadeIn();
+
+            }
+            else $('#addphotosgallery').submit();
+            
+        }
         console.log($(this)[0].files[0]); // piekļuve pie visiem failiem: $(this)[0].files. Pie konkrētā: $(this)[0].files[0]. Pie faila skaita: $(this)[0].files.length
         // Pie konkrētā faila vārda: $(this)[0].files[0].name
         
@@ -30,8 +39,12 @@ $(window).load(function(){
 
         galleryPhoto.eq(0).css({"margin-top" : "0"}); // lai saņemtu vērtības
         galleryPhoto.eq(0).css({"margin-left" : "0"}); // pirmais elements ja viņš ir vienmēr būs 0
-        
-        
+
+        if(galleryPhoto.length > 1){
+
+        var left = galleryPhoto[1].offsetLeft; // saņem otrā elementa vērtību
+        var top = galleryPhoto[0].offsetTop;
+        }
 
         for(var i = 0;i < galleryPhoto.length;i++){ // cikls,kas noņem margin left ja div attēls ir jaunajā rindā
     // lai ja elements ir jaunajā rindā un viņs ir pirmais rindas elements,ne bīdītos no malas
@@ -58,9 +71,6 @@ $(window).load(function(){
     
         }console.log(galleryPhoto.length)
         if(galleryPhoto.length > 1){
-
-            var left = galleryPhoto[1].offsetLeft; // saņem otrā elementa vērtību
-            var top = galleryPhoto[0].offsetTop;
 
             if(addGallery[0].offsetLeft  >= left){ // ja viņš ir vienāds jeb lielāks par otro elementu viņš nav pirmais rindā
     

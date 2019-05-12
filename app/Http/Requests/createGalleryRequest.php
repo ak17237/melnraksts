@@ -40,9 +40,8 @@ class createGalleryRequest extends FormRequest
 
                 $rules['gallery.' . $i] = ['image',new MultipleFileName(request('gallery.' . $i)->getClientOriginalName(),2)];
 // pirmais arguments ir vārds kuru pārbaudīt uz dublikātu,otrais ir režīms(1 = pdf faili,2 = attēli),trešais ir izvēleto pdf skaits,ceturtais ir pasākuma id kuram ir jāpārbauda, skaits
-            } 
+            }
         }
-
     return $rules;
     }
 }

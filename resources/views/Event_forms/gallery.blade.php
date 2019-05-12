@@ -26,13 +26,17 @@
             Galerija
         </div>
         @include('errors')
+        <div class="alert alert-dismissible alert-warning" style="display: none;padding-top: 20px;">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <p class="mb-0 text-warn"></p><br>
+        </div>
         @if(session()->has('message'))
                 <div class="alert alert-dismissible alert-success" style="margin-top: 79px;margin-bottom: 20px;">
                     <button type="button" class="close" data-dismiss="alert">&times;</button>
                     <p class="mb-0">{{ session()->get('message') }}</p>
                 </div>
             @endif
-            @if(Auth::check() && Auth::user()->hasRole('User') && sizeof($gallery) > 0)
+            @if(Auth::check() && Auth::user()->hasRole('User') && sizeof($gallery) == 0)
             <h3>Galerija ir tukša</h3>
             @else
         <div class="gallery-content">

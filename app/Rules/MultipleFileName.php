@@ -13,13 +13,13 @@ class MultipleFileName implements Rule
      *
      * @return void
      */
-    public function __construct($name,$type,$selectedpdf = NULL,$id = NULL)
+    public function __construct($name,$type,$selectedfiles = NULL,$id = NULL)
     {
         $this->name = $name;
         $this->type = $type;
         $this->validation = true;
         $this->eventid = $id;
-        $this->selectedpdf = $selectedpdf;
+        $this->selectedfiles = $selectedfiles;
     }
 
     /**
@@ -47,9 +47,9 @@ class MultipleFileName implements Rule
 
             $pdf = Pdf::where('Event_ID',$this->eventid)->get();
             
-            $this->pdfcount = sizeof($pdf) + $this->selectedpdf;
+            $this->pdfcount = sizeof($pdf) + $this->selectedfiles;
             }
-            else $this->pdfcount = $this->selectedpdf;
+            else $this->pdfcount = $this->selectedfiles;
 
             if($this->pdfcount > 5) $this->validation = false;
 
@@ -67,7 +67,6 @@ class MultipleFileName implements Rule
 
                 }
         }
-
         }
         if($this->validation) return true;
 
@@ -88,6 +87,7 @@ class MultipleFileName implements Rule
 
         }
         if($this->type == 2){
+            
 
             return 'Fails ' . $this->name . ' jau eksistē,nomainiet lūdzu nosaukumu';
 

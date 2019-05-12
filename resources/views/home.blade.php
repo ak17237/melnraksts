@@ -170,7 +170,7 @@
                           @else
                           <a href="{{ route('showevent',$d->id) }}" class="button ">Apskatīt</a>
                           </td>
-                          <td class="sliderbutton space"><a href="#" class="button">Atskaite</a></td>
+                          <td class="sliderbutton space"><a href="{{ route('downloadreport',$d->id) }}" class="button">Atskaite</a></td>
                           @endif
                           @endif
                         </tr>

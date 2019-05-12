@@ -66,14 +66,16 @@ Route::get('/saved-events-{page}',[ // Melnrakstu lapa
     'roles' => ['Admin']
         ]);
 Route::get('/event/{id}/show','EventFormsController@showevent')->name('showevent')->middleware('saveevent')->middleware('existevent'); // Pasākuma apskates lapa
-Route::get('/download/{pdfname}','EventFormsController@downloadpdf')->name('downloadpdf');
+
 
 // Failu pārvalde
+Route::get('/download/{pdfname}','EventFormsController@downloadpdf')->name('downloadpdf'); // PDF lejuplāde
 Route::post('event/{id}/edit/{filename}/delete','FileController@deletefile')->name('deletefile'); // Pasākumu attēls
 Route::post('event/{id}/pdfdelete','FileController@pdfdelete')->name('pdfdelete'); // PDF pielikumi pasākumiem
 Route::get('event/{id}/gallery','FileController@showgallery')->name('showgallery'); // Galerijas lapa pasākumam
 Route::post('event/{id}/gallery/upload','FileController@uploadgallery')->name('uploadgallery'); // Galerijas foto ielāde
 Route::post('/event/{id}/gallery/delete','FileController@deletegallery')->name('deletegallery'); // Galerijas foto dzēšana
+Route::get('/download/{id}/eventreport','FileController@downloadreport')->name('downloadreport'); // Atskaites lejuplāde docx formātā
 
 // Rezervāciju pārvalde
 Route::get('event/{id}/{extension}/reservation',[ // Rezervācijas izveides lapa
