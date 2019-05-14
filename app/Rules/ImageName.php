@@ -4,6 +4,7 @@ namespace App\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
 use App\Events;
+use App\User;
 
 class ImageName implements Rule
 {
@@ -12,22 +13,35 @@ class ImageName implements Rule
      *
      * @return void
      */
-    public function __construct($currentName)
+    public function __construct($currentName,$type = NULL)
     {
         $this->currentName = $currentName;
 
         $events = Events::all();
+        $users = User::all();
         $this->validation = true;
         $this->namevalid = true; 
+        $this->type = $type;
+        if($this->type == NULL){
 
-        foreach($events as $e){
+            foreach($events as $e){
 
-            if($this->currentName === $e->imgextension) $this->validation = false; 
-    
+                if($this->currentName === $e->imgextension) $this->validation = false; 
+        
+            }
         }
         if(strlen($this->currentName) > 50) { 
             $this->namevalid = false; 
             $this->validation = false; 
+        }
+        if($this->type == 1){
+
+            foreach($users as $u){
+
+                if($this->currentName === $u->Avatar) $this->validation = false; 
+        
+            }
+
         }
     }
 

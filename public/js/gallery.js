@@ -1,5 +1,7 @@
 $(document).ready(function(){
     $('#editAlert').hide();
+    $('.innerImage').hide();
+    $('.outerImage').show();
     
 });
 $(window).load(function(){
@@ -18,7 +20,7 @@ $(window).load(function(){
             else $('#addphotosgallery').submit();
             
         }
-        console.log($(this)[0].files[0]); // piekļuve pie visiem failiem: $(this)[0].files. Pie konkrētā: $(this)[0].files[0]. Pie faila skaita: $(this)[0].files.length
+        // piekļuve pie visiem failiem: $(this)[0].files. Pie konkrētā: $(this)[0].files[0]. Pie faila skaita: $(this)[0].files.length
         // Pie konkrētā faila vārda: $(this)[0].files[0].name
         
 
@@ -69,7 +71,7 @@ $(window).load(function(){
 
             } 
     
-        }console.log(galleryPhoto.length)
+        }
         if(galleryPhoto.length > 1){
 
             if(addGallery[0].offsetLeft  >= left){ // ja viņš ir vienāds jeb lielāks par otro elementu viņš nav pirmais rindā
@@ -83,7 +85,7 @@ $(window).load(function(){
 
             }
 
-            addGallery.eq(0).css({"margin-top" : "0"});// ja viņs nav vienāds ar pirmo elementu tad,viņs nav pirmajā rindā
+            addGallery.eq(0).css({"margin-top" : 0});// ja viņs nav vienāds ar pirmo elementu tad,viņs nav pirmajā rindā
 
             if(addGallery[0].offsetTop != top){
     
@@ -133,8 +135,6 @@ $(window).load(function(){
         else $('.submitGallery').prop('disabled', true); 
 
     });
-    $('.innerImage').hide();
-    $('.outerImage').show();
 
     // Saņemam modalu
     var modal = $('.modal');

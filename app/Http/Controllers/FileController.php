@@ -118,42 +118,46 @@ class FileController extends Controller
         $report->setValue('autors',$user->First_name . ' ' . $user->Last_name); // ievietojam dokumentā
         $report->setValue('adrese',$event->Address);
 
-        if($event->Tablenumber === 0) $galduteksts = 'nebija paredzēti galdi'; // ja galdu nebija
-    
-        else {
+        if($event->Tickets === -999) $bilesuskaits = 'neierobežots';
+        else { 
+
+            $bilesuskaits = $event->Tickets;
+            $data[$count] = array('Veids' => 'Biļešu skaits','Paredzēti' => $event->Tickets,'Rezervēti' => $reservate[0]);
+            $count++;
             
-            $galduteksts = 'bija paredzēti ' . $event->Tablenumber . ' galdi';
-            $count++; // pievienojam rindu,būs ko ielikt atskaites kolonā jo ir info par galdiem jo tie bija paredzēti un drizāk arī rezervēti
-            $data[2] = array('Veids' => 'Galdu skaits','Paredzēti' => $event->Tablenumber,'Rezervēti' => $reservate[4]); // dati par pasākumu
         }
+
+        $report->setValue('bilesuskaits',$bilesuskaits);
 
         if($event->Seatnumber === 0) $sedvietuteksts = 'nebija paredzētas sēdvietas'; // ja sēdvietu nebija
         else {
             
             $sedvietuteksts = 'bija paredzētas ' . $event->Seatnumber . ' sēdvietas';
+            $data[$count] = array('Veids' => 'Sēdvietu skaits','Paredzēti' => $event->Seatnumber,'Rezervēti' => $reservate[1]);
             $count++;
-            $data[1] = array('Veids' => 'Sēdvietu skaits','Paredzēti' => $event->Seatnumber,'Rezervēti' => $reservate[1]);
+            
+        }
+
+        if($event->Tablenumber === 0) $galduteksts = 'nebija paredzēti galdi'; // ja galdu nebija
+    
+        else {
+            
+            $galduteksts = 'bija paredzēti ' . $event->Tablenumber . ' galdi';
+            $data[$count] = array('Veids' => 'Galdu skaits','Paredzēti' => $event->Tablenumber,'Rezervēti' => $reservate[4]); // dati par pasākumu
+            $count++; // pievienojam rindu,būs ko ielikt atskaites kolonā jo ir info par galdiem jo tie bija paredzēti un drizāk arī rezervēti
+           
         }
 
         $report->setValue('galduteksts',$galduteksts);
         $report->setValue('sedvietuteksts',$sedvietuteksts);
 
-        if($event->Tickets === -999) $bilesuskaits = 'neierobežots';
-        else { 
-
-            $bilesuskaits = $event->Tickets;
-            $count++;
-            $data[0] = array('Veids' => 'Biļešu skaits','Paredzēti' => $event->Tickets,'Rezervēti' => $reservate[0]);
-        }
-
-        $report->setValue('bilesuskaits',$bilesuskaits);
-
         $standcount = $event->Tickets - ($event->Seatnumber + ($event->Tablenumber * $event->Seatsontablenumber)); // reiķinam stāvvietu skaitu
 
         if($standcount > 0) {
             
+            $data[$count] = array('Veids' => 'Stāvvietu skaits','Paredzēti' => $standcount,'Rezervēti' => $reservate[0] - ($reservate[1] + $reservate[2]));
             $count++; // ja bija stāvvietas tad pieliekam vēl kolonnu
-            $data[3] = array('Veids' => 'Stāvvietu skaits','Paredzēti' => $standcount,'Rezervēti' => $reservate[0] - ($reservate[1] + $reservate[2]));
+            
         }
 
         $report->cloneRow('veids',$count); // izveidojam tik kolonnas cik vajadzīgas

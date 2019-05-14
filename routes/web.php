@@ -27,15 +27,10 @@ Route::get('/profile',[ // Profila lapa
     'middleware' =>  'roles',
     'roles' => ['User','Admin']
         ]);
+Route::post('/profile/changeavatar','ProfileController@changeavatar')->name('changeavatar');
 Route::post('/profile/changename','ProfileController@changename')->name('profile.changename');
 Route::post('/profile/changesurname','ProfileController@changesurname')->name('profile.changesurname');
 Route::post('/profile/changeemail','ProfileController@changeemail')->name('profile.changeemail');
-Route::get('/profile/changepass',[ // Paroles maiņas lapa
-    'uses' => 'ProfileController@changepass',
-    'as' => 'profile.changepass',
-    'middleware' =>  'roles',
-    'roles' => ['User','Admin']
-        ]);
 Route::post('/profile/changepassword','ProfileController@changepassword')->name('profile.changepassword');
 
 // Pasākumu pārvaldes formas
