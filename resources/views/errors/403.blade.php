@@ -2,14 +2,18 @@
 @section('content')
 
 <div id="notfound">
-	<div class="notfound">
-		<div class="notfound-404">
-			<h3>Oops! Nepietiek tiesību</h3>
-			<h1><span>4</span><span>0</span><span>3</span></h1>
-        </div>
-        <h2>Jums nav jābūt šeit.</h2>
-        <h3>Atgriezties uz galveno lapu <a href="/">Home</a></h3>
+		<div class="notfound">
+			<div class="notfound-404">
+				<h1>403</h1>
+			</div>
+			<h2>Oops! Nepietiek tiesību</h2>
+			<h3>Jums nav jābūt šeit.</h3>
+			<form class="notfound-search">
+				<input type="text" placeholder="Meklēt...">
+				<button type="button">Meklēt</button>
+			</form>
+			<a href="/"><span class="arrow"></span>Atgriezties uz galveno lapu</a>
+		</div>
 	</div>
-</div>
 
 @endsection

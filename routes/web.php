@@ -15,10 +15,8 @@
 Route::get('/','HomeController@index')->name('home'); // Galvenā lapa
 Auth::routes();
 // Autorizācija
-Route::get('/register','RegisterController@showRegister')->name('showregister')->middleware('guest'); // Reģistrācijas lapa
 Route::get('/login','LoginController@showLogin')->name('showlogin')->middleware('guest'); // Logina lapa
 Route::post('/login/check','LoginController@Login')->name('login');
-Route::post('/register','RegisterController@Register')->name('register');
 Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout'); // Logout funkcija
 // Profila maiņa
 Route::get('/profile',[ // Profila lapa
