@@ -132,31 +132,38 @@
                   <label for="Inputname" class="col-lg-4 control-label passtitle">Parole</label>
                   <div class="col-lg-12 passinputdiv" style="text-align:-webkit-center;">
                   <p class="left passtext" style="width:50%;">********</p>
-                  <input style="width: 50%;margin-top: 3%;" type="password" class="form-control pass {{ $errors->has('oldpassword') ? ' is-invalid' : '' }}" 
-                  id="exampleInputPassword1" name="oldpassword" placeholder="Parole" >
+                  <input style="width: 50%;margin-top: 3%;margin-left: 25%;margin-right: 25%;" type="password" class="form-control pass {{ $errors->has('oldpassword') ? ' is-invalid' : '' }}" 
+                  name="oldpassword" placeholder="Parole" >
                   @if ($errors->has('oldpassword'))
                     <span class="invalid-feedback" id="oldpass" role="alert">
                     <strong>{{ $errors->first('oldpassword') }}</strong>
                     </span>
                    @endif
-                   <input style="width: 50%;margin-top: 3%;" type="password" class="form-control pass {{ $errors->has('password') ? ' is-invalid' : '' }}" 
-                   id="exampleInputPassword1" name="password" placeholder="Jauna parole" >
+                   <input style="width: 50%;margin-top: 3%;margin-left: 25%;margin-right: 25%;" type="password" class="form-control pass {{ $errors->has('password') ? ' is-invalid' : '' }}" 
+                  name="password" placeholder="Jauna parole" >
                     @if ($errors->has('password'))
                       <span class="invalid-feedback" id="pass" role="alert">
                       <strong>{{ $errors->first('password') }}</strong>
                       </span>
+
                     @endif
-                  <input style="width: 50%;margin-top: 3%;margin-bottom: 3%;" type="password" class="form-control pass" 
-                  id="exampleInputPassword1" name="password_confirmation" placeholder="Apstiprināt paroli" >
+                  <input style="width: 50%;margin-top: 3%;margin-bottom: 3%;margin-left: 25%;margin-right: 25%;" type="password" class="form-control pass" 
+                  name="password_confirmation" placeholder="Apstiprināt paroli" >
                   <button type="button" class="changepass btn btn-primary profile left ml-7-p">Izmainīt</button>
-                  <button type="submit" class="savepass btn btn-primary profile right" style="margin-left: 31%;margin-right: 25%;" name="action" value="pass">Saglabāt</button>
+                  <button type="submit" class="savepass btn btn-primary profile right" style="margin-left: 7%;margin-right: 25%;" name="action" value="pass">Saglabāt</button>
+                  <i class="far fa-question-circle right" id="resetpasstooltip" style="padding-left: 1%;padding-top: 1%;"></i>
+                                <div class="questiontooltip"></div>
+                  <button type="submit" class="resetpass btn btn-primary profile right" style="margin-left: 10%;" name="action" value="reset" form="reserpassword">Atjaunot</button>
                   <button type="button" class="cancelpass btn btn-primary profile right">Atcelt</button>
                   
                   </div>
                 </div>
                 </form>
+                {!! Form::open(['method' => 'POST','route' => ['reset'],'id' => 'reserpassword']) !!}
+                    
+                {!! Form::close() !!}
         </div>
     </div>
 </div>
-<div>
+</div>
 @endsection

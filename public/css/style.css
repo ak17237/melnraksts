@@ -746,7 +746,6 @@ input#gallery,input#avatar {
     width: 26.279%;
     height: 168.75px;
     float: left;
-    margin-top: 30px;
     padding-left: 10px;
     padding-right: 10px;
 }
@@ -808,6 +807,7 @@ input#gallery,input#avatar {
 }
 .con-ov{
     overflow: hidden;
+    transition: 0.4s;
 }
   
 

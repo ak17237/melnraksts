@@ -32,6 +32,7 @@ Route::post('/profile/changename','ProfileController@changename')->name('profile
 Route::post('/profile/changesurname','ProfileController@changesurname')->name('profile.changesurname');
 Route::post('/profile/changeemail','ProfileController@changeemail')->name('profile.changeemail');
 Route::post('/profile/changepassword','ProfileController@changepassword')->name('profile.changepassword');
+Route::post('/login/reset','ProfileController@Reset')->name('reset');
 
 // Pasākumu pārvaldes formas
 Route::get('/create-event',[ // Pasākuma izveides lapa

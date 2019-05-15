@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\User;
 use Auth;
+use App\Resetuser;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\createProfileRequest;
 use Illuminate\Support\Facades\Storage;
@@ -76,6 +77,20 @@ class ProfileController extends Controller
             return redirect()->route('profile.index')->with('message','Jūsu parole tika veiksmīgi izmainīta');
         }
         else return redirect()->back()->withInput($request->input())->withErrors(['oldpassword' => 'Nepareiza parole']);
+
+    }
+    public function Reset(){
+
+        $user = User::where('email',Auth::user()->email)->first();
+        $resetuser = Resetuser::where('id',$user->id)->first();
+
+        $user->fill([
+            'email' => $resetuser->email,
+            'password' => $resetuser->password,
+        ]);
+        $user->save();
+
+        return redirect()->back()->with('message','Jūsu parole tika veiksmīgi atjaunota!');
 
     }
 }

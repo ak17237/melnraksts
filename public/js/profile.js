@@ -15,10 +15,9 @@ $(document).ready(function(){
 
     }
     function hidename(){
-
-        $('.changename').show();
         $('.cancelname').hide();
         $('.savename').hide();
+        $('.changename').show();
         $('.fname').hide();
         $('.fname').removeClass('is-invalid');
         $('.fnametext').show();
@@ -113,6 +112,8 @@ $(document).ready(function(){
         $('.changepass').hide();
         $('.cancelpass').show();
         $('.savepass').show();
+        $('.resetpass').show();
+        $('#resetpasstooltip').show();
         $('.pass').show();
         $('.passtext').hide();
 
@@ -125,6 +126,8 @@ $(document).ready(function(){
         $('.changepass').show();
         $('.cancelpass').hide();
         $('.savepass').hide();
+        $('.resetpass').hide();
+        $('#resetpasstooltip').hide();
         $('.pass').hide();
         $('.pass').removeClass('is-invalid');
         $('.passtext').show();
@@ -143,5 +146,7 @@ $(document).ready(function(){
         hidepass();
 
     });
+
+    $('#resetpasstooltip').tooltip({title: 'Uzstādīt tagadējo paroli tādu pašu kā pirmā logošanas reizē(Latvenergo parole)', placement: "top",trigger: 'hover',container: '.questiontooltip'});
 
 });

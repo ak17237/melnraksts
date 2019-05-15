@@ -14,7 +14,7 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'web',
+        'guard' => 'user',
         'passwords' => 'users',
     ],
 
@@ -36,9 +36,13 @@ return [
     */
 
     'guards' => [
-        'web' => [
+        'user' => [
             'driver' => 'session',
             'provider' => 'users',
+        ],
+        'resetuser' => [
+            'driver' => 'session',
+            'provider' => 'resetusers',
         ],
 
         'api' => [
@@ -70,10 +74,10 @@ return [
             'model' => App\User::class,
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        'resetusers' => [
+            'driver' => 'eloquent',
+            'model' => App\Resetuser::class,
+        ],
     ],
 
     /*
