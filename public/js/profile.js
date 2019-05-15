@@ -86,6 +86,7 @@ $(document).ready(function(){
         $('.saveemail').hide();
         $('.email').hide();
         $('.email').removeClass('is-invalid');
+        $('#email').removeClass('display');
         $('.emailtext').show();
 
     }

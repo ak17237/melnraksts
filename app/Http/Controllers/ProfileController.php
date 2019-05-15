@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\User;
 use Auth;
+use App\VerifyEmail;
 use App\Resetuser;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\createProfileRequest;
@@ -90,7 +91,7 @@ class ProfileController extends Controller
         ]);
         $user->save();
 
-        return redirect()->back()->with('message','Jūsu parole tika veiksmīgi atjaunota!');
+        return redirect()->back()->with('message','Jūsu e-pasts un parole tika veiksmīgi atjaunoti!');
 
     }
 }
