@@ -10,6 +10,8 @@ use App\Pdf;
 use App\Reservation;
 use App\User;
 use Auth;
+use Mail;
+use App\Mail\EventChange;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 
@@ -191,6 +193,11 @@ class EventFormsController extends Controller
 
         $oldimg = $myevent->imgextension;
 
+        if($myevent->Datefrom != $request['datefrom']) $eventchange[0] = true; 
+        else $eventchange[0] = false; 
+        if($myevent->Address != $request['address']) $eventchange[1] = true;
+        else $eventchange[1] = false;
+
         $myevent->fill([    // ieraksta izmainīšana. Visu pārbaudīto un saņemto mainīgo ievietošana/izmainīšana datu bāzē
             'Title' => $request['title'],
             'Datefrom' => $request['datefrom'],
@@ -224,13 +231,26 @@ class EventFormsController extends Controller
             }
             
         }
-
+        
         $file = $request['file'];
 
         if($file){
             Storage::disk('public')->put($request['file']->getClientOriginalName(),File::get($file));
             Storage::disk('public')->delete($oldimg);
         }
+        
+        $reservedusers = Reservation::where('EventID',$id)->get();
+
+        if($eventchange[0] || $eventchange[1]) {
+            
+            foreach($reservedusers as $reserveduser){
+
+            Mail::send(new EventChange($reserveduser,$myevent,$eventchange));
+
+            }
+
+        }
+
 
         return redirect()->route('showevent',$id)->with('message','Pasākums ir veiksmīgi ' . $message[$status])->with('info',$info);
 

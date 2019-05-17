@@ -1,5 +1,20 @@
 $(document).ready(function(){
 
+    $('.reciever-js-search').select2({ // select2 plugina izveidošana klasei un parametru uzstādīšana
+        placeholder: 'Izvēlieties saņēmēju',
+        allowClear: true,
+        closeOnSelect: false,
+        tags: true
+      });
+      $('.transport-js-search').select2({
+        placeholder: 'Izvēlieties pasākumu',
+        allowClear: true,
+        tags: true
+      });
+
+      $('.reciever').next().addClass('reciever-select'); // Pievienot klasi select2 pluginam lai varētu tos paslēpt uzspiežot uz checkbox
+      $('.transport').next().addClass('transport-select');
+
     $('#avatar').change(function(){
 
         $('#addavatar').submit();
@@ -149,5 +164,74 @@ $(document).ready(function(){
     });
 
     $('#resetpasstooltip').tooltip({title: 'Uzstādīt tagadējo paroli tādu pašu kā pirmā logošanas reizē(Latvenergo parole)', placement: "top",trigger: 'hover',container: '.questiontooltip'});
+
+    if(localStorage.getItem('profiletab') == null || localStorage.getItem('profiletab') == 'profile'){
+
+        $('button#profilename').addClass('active');
+        $('.emailinfo').hide();
+
+    }
+    else{
+
+        $('button#emailsend').addClass('active');
+        $('.profileinfo').hide();
+
+    }
+    $('button#profilename').click(function(){
+
+        $('button#profilename').addClass('active');
+        $('button#emailsend').removeClass('active');
+
+        $('.emailinfo').fadeOut(200,function(){
+            $('.profileinfo').fadeIn(200);
+            });
+
+        localStorage.setItem("profiletab","profile");
+
+    });
+    $('button#emailsend').click(function(){
+
+        $('button#profilename').removeClass('active');
+        $('button#emailsend').addClass('active');
+
+        $('.profileinfo').fadeOut(200,function(){
+        $('.emailinfo').fadeIn(200);
+        });
+
+        localStorage.setItem("profiletab","email");
+
+    });
+
+    if($("input[name='transportcb']").is(':checked')){
+
+        $('.reciever-select').css({'display' : 'none'});
+        $('.transport-select').css({'display' : 'block'});
+
+    }
+    else{
+
+        $('.reciever-select').css({'display' : 'block'});
+        $('.transport-select').css({'display' : 'none'});
+
+    }
+    $('input[name="transportcb"]').click(function(){
+
+        if($("input[name='transportcb']").is(':checked')){
+
+            $('.reciever-select').css({'display' : 'none'});
+            $('.transport-select').css({'display' : 'block'});
+    
+        }
+        else{
+
+            $('.reciever-select').css({'display' : 'block'});
+            $('.transport-select').css({'display' : 'none'});
+
+        }
+
+    }); 
+
+    $('#transportemail').tooltip({title: 'Sūtīt ziņu lietotājiem kuri ir rezervēti noteiktam pasākumam un izvēlējās tranportu. Iekavās ir cilvēku skaits. Ja saraksts tukšs,tad pasākumu kuri vēl nav pagājuši kuros ir cilvēki kuri negrib braukt patstāvīgi nav.',
+     placement: "top",trigger: 'hover',container: '.questiontooltip'});
 
 });

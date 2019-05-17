@@ -14,8 +14,10 @@
     <a href="javascript:window.location=document.referrer;" class="btn btn-primary back">Atpakaļ</a>
         <div class="row">
             <div class="col-lg-offset-3 col-lg-8 center profilediv">
-                    <div><legend class="col-lg-6 control-legend">{{Auth::user()->First_name}} Profils</legend></div><br><br><br>
-
+                    <div class="profiletab"><button id="profilename"><legend class="profilelegend">{{Auth::user()->First_name}} Profils</legend></button></div>
+                    <div class="profiletab"><button style="float:right;" id="emailsend"><legend class="profilelegend">E-pastu sūtīšana</legend></button></div>
+                    <br><br><br>
+                    <div class="profileinfo">
                     @if(session()->has('message'))
                         <div class="alert alert-dismissible alert-success">
                             <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -171,15 +173,133 @@
                   <button type="submit" class="savepass btn btn-primary profile right" style="margin-left: 7%;margin-right: 25%;" name="action" value="pass">Saglabāt</button>
                   <i class="far fa-question-circle right" id="resetpasstooltip" style="padding-left: 1%;padding-top: 1%;"></i>
                                 <div class="questiontooltip"></div>
-                  <button type="submit" class="resetpass btn btn-primary profile right" style="margin-left: 10%;" name="action" value="reset" form="reserpassword">Atjaunot</button>
+                  <button type="submit" class="resetpass btn btn-primary profile right" style="margin-left: 10%;" name="action" value="reset" form="resetpassword">Atjaunot</button>
                   <button type="button" class="cancelpass btn btn-primary profile right">Atcelt</button>
                   
                   </div>
                 </div>
                 </form>
-                {!! Form::open(['method' => 'POST','route' => ['reset'],'id' => 'reserpassword']) !!}
+                {!! Form::open(['method' => 'POST','route' => ['reset'],'id' => 'resetpassword']) !!}
                     
                 {!! Form::close() !!}
+              </div>
+              <div class="emailinfo">
+                  @if(session()->has('emailmessage'))
+                  <div class="alert alert-dismissible alert-success">
+                      <button type="button" class="close" data-dismiss="alert">&times;</button>
+                      <p>{{ session()->get('emailmessage') }}</p>
+                  </div>
+                  <br>
+                  @endif
+                  {!! Form::open(['method' => 'POST','route' => ['sendemail']]) !!}
+                  <div class="custom-control custom-switch" style="text-align: -webkit-center;">
+                      <input type="hidden" name="vipswitch" value="off" />
+                      <input type="checkbox" class="custom-control-input" id="customSwitch1" name="transportcb"
+                      @if(old('transportcb') == "on") 
+                      checked="" 
+                      @endif>
+                      <label class="custom-control-label" for="customSwitch1">Transporta e-pasts</label>
+                      <i class="far fa-question-circle" id="transportemail"></i>
+                                <div class="questiontooltip"></div>
+                    </div>
+                    
+                 
+                  <div class="col-lg-12 eventcreate">
+                    <label for="reciever">Saņēmēji</label>
+                      <select multiple class="reciever-js-search form-control reciever {{ $errors->has('reciever') ? ' is-invalid' : '' }}" name="reciever[]" id="reciever">
+                        @for ($i = 0;$i < sizeof($user);$i++)
+                            <option value="{{ $user[$i]->email }}"
+                              @if(old('reciever') != null) {{-- Lai saglabātu old vērtību pārbaudam vai tā ir --}}
+                              @for($j = 0;$j < sizeof(old('reciever'));$j++) {{-- cikls lai pāriet caur visām old vērtībām jo ir multiple select --}}
+                               @if($user[$i]->email == old('reciever.' . $j)) selected @endif {{-- ja kāda no old vērtībām ir tāda paša kā ši option vērtība tad atzīmēt select --}}
+                               @endfor @endif>
+                               {{ $user[$i]->email }}</option>
+                        @endfor
+                      </select>
+                      <select class="transport-js-search form-control transport {{ $errors->has('transport') ? ' is-invalid' : '' }}" name="transport" id="selectemailtransport">
+                          @for ($i = 0;$i < sizeof($transport);$i++)
+                              <option @if($eventid[$i] == old('transport')) selected @endif value="{{ $eventid[$i] }}">{{ $transport[$i] }}</option>
+                          @endfor
+                      </select>
+                      @if ($errors->has('reciever'))
+                        <span class="invalid-feedback" role="alert">
+                        <strong>{{ $errors->first('reciever') }}</strong>
+                        </span>
+                      @endif
+                      @if ($errors->has('transport'))
+                        <span class="invalid-feedback" role="alert">
+                        <strong>{{ $errors->first('transport') }}</strong>
+                        </span>
+                      @endif
+                  </div>
+
+                  <div class="col-lg-12 eventcreate">
+                      <label>Virsraksts</label>
+                      <input type="text" name='emailtitle' class="form-control {{ $errors->has('emailtitle') ? ' is-invalid' : '' }}" value="{{ old('emailtitle') }}">
+                      @if ($errors->has('emailtitle'))
+                        <span class="invalid-feedback" role="alert">
+                        <strong>{{ $errors->first('emailtitle') }}</strong>
+                        </span>
+                      @endif
+                  </div>
+
+                  <div class=" col-lg-12 eventcreate">
+                      <label>Sūtījuma ziņa</label>
+                      <textarea class="form-control {{ $errors->has('emailtext') ? ' is-invalid' : '' }}" name='emailtext' id="eventdescription" rows="10">{{ old('emailtext') }}</textarea>
+                      @if ($errors->has('emailtext'))
+                        <span class="invalid-feedback" role="alert">
+                        <strong>{{ $errors->first('emailtext') }}</strong>
+                        </span>
+                      @endif
+                  </div>
+                  <div class="col-lg-12 eventcreate">
+                  <div class="radiocontainer eventcreate">
+                    <label class="seats" style="width:100%">Linka poga</label>
+                      <div class="radio">
+                        <div class="custom-control custom-radio custom-control-inline">
+                          <input type="radio" class="custom-control-input" id="defaultInline1" name="inlineDefaultRadiosExample" value="Yes" 
+                          @if(old('inlineDefaultRadiosExample') == "Yes" || empty(old('inlineDefaultRadiosExample'))) 
+                            checked="" 
+                          @endif>
+                          <label class="custom-control-label" for="defaultInline1">Jā</label>
+                        </div>
+                        <div class="custom-control custom-radio custom-control-inline">
+                          <input type="radio" class="custom-control-input" id="defaultInline2" name="inlineDefaultRadiosExample" value="No"
+                          @if(old('inlineDefaultRadiosExample') == "No") 
+                          checked="" 
+                          @endif>
+                          <label class="custom-control-label" for="defaultInline2">Nē</label>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-lg-4 eventcreate" style="margin-left: 3.9%">
+                      <label>Pogas uzraksts</label>
+                      <input type="text" name='buttontitle' id="eventtable" class="form-control eventtable {{ $errors->has('buttontitle') ? ' is-invalid' : '' }}" value="{{ old('buttontitle') }}">
+                      @if ($errors->has('buttontitle'))
+                        <span class="invalid-feedback alertbuttontitle" role="alert">
+                        <strong>{{ $errors->first('buttontitle') }}</strong>
+                        </span>
+                      @endif
+                    </div>
+                    <div class="col-lg-4 eventcreate">
+                      <label>Pogas links</label>
+                      <input type="text" name='buttonlink' id="seatsontable" class="form-control eventtable {{ $errors->has('buttonlink') ? ' is-invalid' : '' }}" value="{{ old('buttonlink') }}">
+                      @if ($errors->has('buttonlink'))
+                        <span class="invalid-feedback alertbuttonlink" role="alert">
+                        <strong>{{ $errors->first('buttonlink') }}</strong>
+                        </span>
+                      @endif
+                    </div>
+                  </div>
+                    <div class="col-lg-12 eventcreate">
+                      <button type="submit" class="btn btn-primary profile right send"name="action" value="send">Sūtīt</button>
+                      <button type="submit" class="btn btn-primary profile right mr-12-p preview" name="action" value="preview">Skatīt</button>
+                    </div>
+                    {!! Form::close() !!}
+                </div>
+              </div>
+              <br><br><br>
         </div>
     </div>
 </div>

@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 use App\User;
 use Auth;
+use Mail;
+use App\Events;
+use App\Reservation;
 use App\VerifyEmail;
 use App\Resetuser;
+use App\Mail\CustomEmail;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\createProfileRequest;
 use Illuminate\Support\Facades\Storage;
@@ -19,8 +23,31 @@ class ProfileController extends Controller
         $First_name = User::getFirstname();
         $Last_name = User::getLastname();
         $Email = User::getEmail();
+        $user = User::all();
+        $events = Events::whereDate('Datefrom', '>', date("Y-m-d"))->get();
+        $count = 0;
+        $transport = array();
+        $eventid = array();
 
-        return view('Profile.Profile',compact('First_name','Last_name','Email'));
+        foreach($events as $e){
+
+            $reservation = Reservation::where('EventID',$e->id)->get();
+            
+            foreach ($reservation as $r){
+
+                if($r->Transport != "Patstāvīgi") $count++; 
+
+            }
+            if($count > 0) {
+
+                $transport[] = $e->Title . '(' . $count . ')';
+                $eventid[] = $e->id;
+            }
+            $count = 0;
+
+        }
+
+        return view('Profile.Profile',compact('First_name','Last_name','Email','user','transport','eventid'));
 
     }
     public function changeavatar(createProfileRequest $request){
@@ -62,6 +89,28 @@ class ProfileController extends Controller
     public function changeemail(createProfileRequest $request){
 
          $email = User::where('email', Auth::user()->email)->first();
+
+        if(Auth::user()->hasRole('Admin')){
+
+            $events = Events::where('email',$email->email)->get();
+
+            foreach($events as $e){
+
+                $e->email = $request->get('email');
+                $e->save();
+            }
+
+        }
+
+        $reservations = Reservation::where('email',$email->email)->get();
+
+        foreach($reservations as $r){
+
+            $r->email = $request->get('email');
+            $r->save();
+
+        }
+
          $email->email = $request->get('email');
          $email->save();
          return redirect()->back()->with('message','Jūsu e-pasts tika veiksmīgi izmainīts');
@@ -85,6 +134,28 @@ class ProfileController extends Controller
         $user = User::where('email',Auth::user()->email)->first();
         $resetuser = Resetuser::where('id',$user->id)->first();
 
+        if(Auth::user()->hasRole('Admin')){
+
+            $events = Events::where('email',$user->email)->get();
+
+            foreach($events as $e){
+
+                $e->email = $resetuser->email;
+                $e->save();
+            }
+
+        }
+
+        $reservations = Reservation::where('email',$user->email)->get();
+
+        foreach($reservations as $r){
+
+            $r->email =$resetuser->email;
+            $r->save();
+
+        }
+
+
         $user->fill([
             'email' => $resetuser->email,
             'password' => $resetuser->password,
@@ -93,5 +164,46 @@ class ProfileController extends Controller
 
         return redirect()->back()->with('message','Jūsu e-pasts un parole tika veiksmīgi atjaunoti!');
 
+    }
+    public function sendemail(createProfileRequest $request){
+
+        if($request['inlineDefaultRadiosExample'] == 'Yes'){
+
+            $button[] = $request['buttontitle'];
+            $button[] = $request['buttonlink'];
+
+        }
+        else $button = NULL;
+
+        $text = str_replace("\r\n",'<br>',$request['emailtext']);
+
+        if($request['action'] == 'preview'){
+
+            $title = $request['emailtitle'];
+            $preview = true;
+
+            return view('Emails.Customemail',compact('title','text','button','preview'));
+
+        }
+        else{
+        
+            if($request['transportcb'] == 'on') {
+
+                $transportemails = array();
+                $reservations = Reservation::where('EventID',$request['transport'])->get();
+
+                foreach($reservations as $r){
+
+                    if($r->Transport != "Patstāvīgi") $transportemails[] = $r->email;
+
+                }
+                Mail::send(new CustomEmail($transportemails,$request['emailtitle'],$text,$button));
+
+            }
+            else Mail::send(new CustomEmail($request['reciever'],$request['emailtitle'],$text,$button));
+
+            return redirect()->back()->with('emailmessage','E-pasts tika aizsūtīts');
+
+        }
     }
 }

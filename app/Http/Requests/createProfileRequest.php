@@ -30,6 +30,12 @@ class createProfileRequest extends FormRequest
         'email' => 'E-pasts',
         'oldpassword' => 'Paroles lauks',
         'password' => 'Jaunas paroles lauks',
+        'buttontitle' => 'Pogas virsraksts',
+        'buttonlink' => 'Pogas links',
+        'reciever' => 'Saņēmēju lauks',
+        'emailtitle' => 'Ziņas virsrsksts',
+        'emailtext' => 'Ziņas teksts',
+        'transport' => 'Pasākumu lauks'
        ];
     }
     public function messages()
@@ -58,6 +64,24 @@ class createProfileRequest extends FormRequest
         }
         if(request('avatar') != NULL)
             $rules['avatar'] = 'image';
+
+        if(request('action') == 'send' || request('action') == 'preview'){
+
+            if(request('inlineDefaultRadiosExample') == 'Yes') {
+
+                $rules['buttontitle'] = ['required'];
+                $rules['buttonlink'] = ['required'];
+
+            }
+           
+            $rules['emailtitle'] = ['required'];
+            $rules['emailtext'] = ['required'];
+            
+            if(request('transportcb') == "on") $rules['transport'] = ['required'];
+            else  $rules['reciever'] = ['required'];
+
+        }
+        
 
 
         return $rules;   

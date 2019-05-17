@@ -47,7 +47,11 @@
                             <hr class="ml-3-p">
                             <div class="col-lg-2 eventcreate ml-3-p">
                                     <label>Biļešu skaits</label> {{-- Cilvēka rezervētais biļešu skaits --}}
-                                    <input type="number" min="1" name='tickets' class="count form-control {{ $errors->has('tickets') ? ' is-invalid' : '' }}" id="tickets" value="{{ $reservation->Tickets }}">
+                                    <input type="number" min="1" name='tickets' class="count form-control {{ $errors->has('tickets') ? ' is-invalid' : '' }}" id="tickets" 
+                                    @if(empty(old('tickets')))
+                                        value="{{ $reservation->Tickets }}"
+                                    @else value="{{old('tickets')}}"
+                                    @endif>
                                     @if ($errors->has('tickets'))
                                         <span class="invalid-feedback" role="alert">
                                         <strong>{{ $errors->first('tickets') }}</strong>
@@ -214,7 +218,6 @@
                                 <option value="Liepaja" @if(empty(old('TransportRadio')) && $reservation->Transport === 'Liepaja') selected @elseif("Liepaja" == old('transport')) selected @endif>Liepaja</option>
                                 <option value="Daugavpils" @if(empty(old('TransportRadio')) && $reservation->Transport === 'Daugavpils') selected @elseif("Daugavpils" == old('transport')) selected @endif>Daugavpils</option>
                             </select>
-                            
                         </div>
                     </div>
                         <hr class="ml-3-p">

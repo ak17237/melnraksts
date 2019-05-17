@@ -7,6 +7,8 @@ use App\Events;
 use App\Reservation;
 use App\User;
 use Auth;
+use Mail;
+use App\Mail\ReservationChange;
 use App\Http\Requests\createReservationRequest;
 
 class ReservationController extends Controller
@@ -133,8 +135,6 @@ class ReservationController extends Controller
         $reservation = Reservation::find($id);
 
         eventvalidate($request);
-        
-        if($reservation->TableNr != 0) $request['tablenr'] = $reservation->TableNr; // Ja jau ir rezervēts galds lai tas nepalitku par 0 pēc eventvalidate funkcijas
 
         $reservation->fill([    // ieraksta izmainīšana 
             'Tickets' => $request['tickets'],
@@ -144,6 +144,10 @@ class ReservationController extends Controller
             'Transport' => $request['transport'],
             ]);
         $reservation->save();
+
+        $event = Events::find($reservation->EventID);
+
+        if(sizeof($reservation->getChanges()) > 0) Mail::send(new ReservationChange($reservation,$reservation->getChanges(),$event));
 
         if(\Session::get('way') == 'users')
         return redirect()->route('showreservation',$id)->with('message','Rezervācija Izmainīta');
