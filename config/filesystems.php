@@ -47,6 +47,12 @@ return [
             'driver' => 'local',
             'root' => storage_path('app'),
         ],
+        'main' => [
+            'driver' => 'local',
+            'root' => public_path(),
+            'url' => env('APP_URL').'/storage',
+            'visibility' => 'public',
+        ],
 
         'public' => [
             'driver' => 'local',
@@ -69,6 +75,12 @@ return [
         'avatar' => [
             'driver' => 'local',
             'root' => public_path() . '/profile-avatar',
+            'url' => env('APP_URL').'/storage',
+            'visibility' => 'public',
+        ],
+        'ticket' => [
+            'driver' => 'local',
+            'root' => public_path() . '/event-ticket',
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
         ],
