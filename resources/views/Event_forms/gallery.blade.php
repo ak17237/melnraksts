@@ -18,7 +18,7 @@
         </div>
     <div class="content" id="gallery-content">
             <a href="javascript:window.location=document.referrer;" class="btn btn-primary back left ml-7-p">Atpakaļ</a>
-            @if(sizeof($gallery) > 0)
+            @if(sizeof($gallery) > 0 && Auth::check() && Auth::user()->hasRole('Admin'))
             <button type="button" id="editGallery" class="btn btn-primary back right mr-7-p">Rediģēt</button>
             @endif
             <br><br>

@@ -20,7 +20,6 @@ jQuery('document').ready(function(){
         });
     });
 if($('input').hasClass('is-invalid')){
-    console.log($('.is-invalid').offset().top);
     window.scrollTo({
         top: $('.is-invalid').offset().top
     

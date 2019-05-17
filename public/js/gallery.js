@@ -1,5 +1,7 @@
 $(document).ready(function(){
     $('#editAlert').hide();
+    $('.innerImage').hide();
+    $('.outerImage').show();
     
 });
 $(window).load(function(){
@@ -18,7 +20,7 @@ $(window).load(function(){
             else $('#addphotosgallery').submit();
             
         }
-        console.log($(this)[0].files[0]); // piekļuve pie visiem failiem: $(this)[0].files. Pie konkrētā: $(this)[0].files[0]. Pie faila skaita: $(this)[0].files.length
+        // piekļuve pie visiem failiem: $(this)[0].files. Pie konkrētā: $(this)[0].files[0]. Pie faila skaita: $(this)[0].files.length
         // Pie konkrētā faila vārda: $(this)[0].files[0].name
         
 
@@ -45,7 +47,12 @@ $(window).load(function(){
         var left = galleryPhoto[1].offsetLeft; // saņem otrā elementa vērtību
         var top = galleryPhoto[0].offsetTop;
         }
+        else if(galleryPhoto.length > 0){
 
+        var left = galleryPhoto[0].offsetLeft;
+        var top = galleryPhoto[0].offsetTop;
+
+        }
         for(var i = 0;i < galleryPhoto.length;i++){ // cikls,kas noņem margin left ja div attēls ir jaunajā rindā
     // lai ja elements ir jaunajā rindā un viņs ir pirmais rindas elements,ne bīdītos no malas
     // lai pārbaudīt arī elementus kuri jau saņēmas margin bet nobīdījas uz jaunu
@@ -61,16 +68,14 @@ $(window).load(function(){
 
             }
 
-            galleryPhoto.eq(i).css({"margin-top" : "0"});
-
             if(galleryPhoto[i].offsetTop != top){
     
                 galleryPhoto.eq(i).css({"margin-top" : "30px"});
 
             } 
     
-        }console.log(galleryPhoto.length)
-        if(galleryPhoto.length > 1){
+        }
+        if(galleryPhoto.length > 1 && $('div').find('.add-gallery').length > 0){
 
             if(addGallery[0].offsetLeft  >= left){ // ja viņš ir vienāds jeb lielāks par otro elementu viņš nav pirmais rindā
     
@@ -83,7 +88,7 @@ $(window).load(function(){
 
             }
 
-            addGallery.eq(0).css({"margin-top" : "0"});// ja viņs nav vienāds ar pirmo elementu tad,viņs nav pirmajā rindā
+            addGallery.eq(0).css({"margin-top" : 0});// ja viņs nav vienāds ar pirmo elementu tad,viņs nav pirmajā rindā
 
             if(addGallery[0].offsetTop != top){
     
@@ -92,7 +97,7 @@ $(window).load(function(){
             }
             
         }
-        else if(galleryPhoto.length == 0){
+        else if(galleryPhoto.length == 0 && $('div').find('.add-gallery').length > 0){
 
             addGallery.eq(0).css({"margin-left" : "0"}); 
             addGallery.eq(0).css({"margin-top" : "0"});
@@ -133,8 +138,6 @@ $(window).load(function(){
         else $('.submitGallery').prop('disabled', true); 
 
     });
-    $('.innerImage').hide();
-    $('.outerImage').show();
 
     // Saņemam modalu
     var modal = $('.modal');

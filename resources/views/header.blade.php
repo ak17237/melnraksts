@@ -37,9 +37,6 @@
                     <li>
                         <a href="{{ route('showlogin') }}">Ielogoties</a>
                     </li>
-                    <li>
-                        <a href="{{ route('showregister') }}">Reģistrēties</a>
-                    </li>
                     @endif
                 @endif
                 </ul>

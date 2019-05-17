@@ -7,6 +7,7 @@ use Auth;
 use Validator;
 use Illuminate\Support\Facades\Hash;
 use App\User;
+use App\Resetuser;
 
 class LoginController extends Controller
 {
@@ -37,6 +38,9 @@ class LoginController extends Controller
     if(!empty($request['remember'])) $remember = true;
     else $remember = false;
 
+    if(!empty($request['resetuser'])) $resetuser = true;
+    else $resetuser = false;
+
     if($remember) {
 
         $cookie_email = cookie('email', $request['email'], 60 * 24 * 30);
@@ -49,20 +53,31 @@ class LoginController extends Controller
         $cookie_password = cookie('password','',-1); 
 
     }
-        $email = User::where('email', $request['email'])->first(); // Pieprasītā epasta paņemšana no datubāzes
+        
+    if($resetuser) {
+        
+        $email = Resetuser::where('email', $request['email'])->first();
+        $guard = 'resetuser';
 
+    }
+    else{
+        
+        $email = User::where('email', $request['email'])->first(); // Pieprasītā epasta paņemšana no datubāzes
+        $guard = 'user';
+
+    }
         if($email){ 
 
-            $password = User::where('email', $request['email'])->first()->password; // Ja tāds eksistē pārbaudam to paroli ar ievadīto
+            $password = $email->password; // Ja tāds eksistē pārbaudam to paroli ar ievadīto
 
             if (Hash::check($request['password'],$password)){ // ja sakrīt ielogojam
-
-                Auth::attempt(['email' => $request['email'], 'password' => $request['password']],$remember);
+                
+                Auth::login(User::where('id', $email->id)->first()); 
                 return redirect('/')->cookie($cookie_email)->cookie($cookie_password)->cookie('login','logged in',60 * 24 * 30);
 
             }
-            else return redirect()->back()->withInput($request->input())->withErrors(['password' => 'Wrong password']); // ja nē kļūda
+            else return redirect()->back()->withInput($request->input())->withErrors(['password' => 'Nepareiza parole']); // ja nē kļūda
         }
-        else return redirect()->back()->withInput($request->input())->withErrors(['email' => 'Wrong email']); // ja epasts $email ir tukšs objekts tad tāds epasts nav reģistrēts
+        else return redirect()->back()->withInput($request->input())->withErrors(['email' => 'Nepareizs e-pasts']); // ja epasts $email ir tukšs objekts tad tāds epasts nav reģistrēts
     }
 }

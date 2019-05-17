@@ -34,7 +34,15 @@
                 <tbody>
                   <tr>
                     <td class="top clickshow">
-                      <img src="{{ asset('Empty-Avatar.png') }}">
+                      @if(Storage::disk('avatar')->has($reservation[$i+$j]->email . '-avatar') )
+                      <a href="/profile-avatar/{{$reservation[$i+$j]->email . '-avatar'}}">
+                        <img src="/profile-avatar/{{$reservation[$i+$j]->email . '-avatar'}}">
+                      </a>
+                      @else
+                      <a href="/Empty-Avatar.png">
+                        <img src="/Empty-Avatar.png">
+                      </a>
+                      @endif
                     </td>
                     <td class="top space eventinfo clickshow">
                       <a class='divlink' href="{{ route('showreservation',$reservation[$i+$j]->id) }}"></a>

@@ -37,10 +37,12 @@
         
         <link href="{{ asset('css/bootstrapoverstyle.css') }}" rel="stylesheet" type="text/css">
         <link rel="stylesheet" href="{{ asset('css/jquery.bxslider.css') }}">
+        <link href="{{ asset('css/select2.css') }}" rel="stylesheet" type="text/css">
         <link href="{{ asset('css/style.css') }}" rel="stylesheet" type="text/css">
         <link href="{{ asset('css/hover-min.css') }}" rel="stylesheet" type="text/css">
         <link href="{{ asset('css/page-404.css') }}" rel="stylesheet" type="text/css">
         <link href="{{ asset('css/loader.css') }}" rel="stylesheet" type="text/css">
+        
             <script src="{{ asset('metronic/global/plugins/jquery.min.js') }}" type="text/javascript"></script>
             <script src="{{ asset('js/loader.js') }}"></script> {{-- lai pirms lapas sastāvs ielādējas,loader jau varētu strādāt --}}
 
@@ -77,6 +79,8 @@
         <script src="{{ asset('js/historyslidercontrol.js') }}"></script>
         <script src="{{ asset('js/jquery.form.js') }}"></script>
         <script src="{{ asset('js/gallery.js') }}"></script>
+        <script src="{{ asset('js/profile.js') }}"></script>
+        <script src="{{ asset('js/select2.js') }}"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" 
         integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/js/bootstrap.min.js" 

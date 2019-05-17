@@ -94,19 +94,17 @@
         
                               <td class="sliderbutton" @if(Auth::user()->hasRole('Admin') && !checkAuthor(Auth::user()->email,$d->id)) colspan="2" {{-- ja nav piekļuves pogai lai būtu centrēts --}}
                                 style="text-align: center" @endif class="space">
-                              @if(Auth::user()->hasRole('Admin'))
-      
-                              @endif
                               @if((reservinfo($d->id)[0] == 0 && $d->Tickets != -999) || $d->VIP == 1)
-                             <a href="{{ route('showevent',$d->id) }}" class="button" @if(Auth::user()->hasRole('User')) style="width: 124px;font-size: 17px;"@endif>
+                             <a href="{{ route('showevent',$d->id) }}" class="button" @if(Auth::user()->hasRole('User')) style="width: 124px;font-size: 17px;"@endif 
+                              @if(!checkAuthor(Auth::user()->email,$d->id)) style="margin: 0 60px 0 60px;" @endif>
                               Apskatīt </a>
                               @else
-                             <a href="{{ route('showreservationcreate',['id' => $d->id, 'extension' => $d->linkcode]) }}" class="button" @if(Auth::user()->hasRole('User')) style="width: 124px;font-size: 17px;" @endif>
+                             <a href="{{ route('showreservationcreate',['id' => $d->id, 'extension' => $d->linkcode]) }}" class="button" @if(Auth::user()->hasRole('User')) style="width: 124px;font-size: 17px;" @endif
+                              @if(!checkAuthor(Auth::user()->email,$d->id)) style="margin: 0 60px 0 60px;" @endif>
                               Rezervēt
                               @endif</a></td>
                               @if (Auth::user()->hasRole('Admin') && checkAuthor(Auth::user()->email,$d->id)) {{-- Tikai administrācijas piekļuve un tikai pasākuma autoram--}}
                               <td class="sliderbutton space"><a href="{{ route('showedit',$d->id) }}" class="button ">Rediģēt</a></td>
-                              @else <td></td>
                               @endif
                               @else <td class="sliderbutton space"><a href="{{ route('showevent',$d->id) }}" class="button" style="width: 124px;font-size: 17px;">Apskatīt</a>
                               @endif

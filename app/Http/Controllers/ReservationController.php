@@ -7,7 +7,15 @@ use App\Events;
 use App\Reservation;
 use App\User;
 use Auth;
+use Mail;
+use App\Mail\ReservationChange;
+use App\Mail\Ticket;
 use App\Http\Requests\createReservationRequest;
+use PhpOffice\PhpWord\TemplateProcessor;
+use PhpOffice\PhpWord\IOFactory;
+use PhpOffice\PhpWord\Settings;
+use Endroid\QrCode\QrCode;
+use Illuminate\Support\Facades\Storage;
 
 class ReservationController extends Controller
 {
@@ -113,7 +121,7 @@ class ReservationController extends Controller
             session(['way' => 'users']);
 
         }
-
+        
         Reservation::create([  // ieraksta datus datubāzē 
             'email' => $email,
             'EventID' => $myevent->id,
@@ -124,8 +132,62 @@ class ReservationController extends Controller
             'Transport' => $request['transport'],
             ]);
 
-            $reservid = Reservation::all()->sortByDesc(['updated_at'])->first()->id;
-        return redirect()->route('showreservation',$reservid)->with('message','Pasākums rezervēts');
+            $reserv = Reservation::all()->sortByDesc(['updated_at'])->first(); // saņemam tikko ievietoto rezervāciju
+
+            $QRcode = generateRandomString(); // ģenerējas skaitļū un vārdu virkne
+            $idarray = str_split($reserv->id); // sadalam id masīvā,lai izslēgt gadijumu,kad nejauši ģenerēta virkne var ar mazu varbūtību atkārtoties
+
+            for($i = 0;$i < strlen($reserv->id);$i++){ // ievietojam virknē id vietās pēc katra burta(id  pirmais numurs,virknes simbols,id otrais numurs,vēl viens virknes simbols utt.)
+
+            $QRcode = substr_replace($QRcode,$idarray[$i],$i*2,0);
+
+            }
+
+            $reserv->fill(['QRcode' => $QRcode]);
+            $reserv->save();
+
+            $ticket = new TemplateProcessor('Ticket-Template.docx');
+
+        $ticket->setValue('title',$myevent->Title);
+        $ticket->setValue('address',$myevent->Address);
+
+        if(geteventdate($myevent->Datefrom) == geteventdate($myevent->Dateto))
+            $date=  geteventdate($myevent->Datefrom);
+        else
+         $date= geteventdate($myevent->Datefrom) . '-' . geteventdate($myevent->Dateto);
+
+        $ticket->setValue('date',$date);
+        $ticket->setValue('tickets',$request['tickets']);
+
+        if($request['seatnr'] > 0)
+            $info = $request['seatnr'] . ' sēdvietas.';
+        if($request['tablenr'] != 0){
+
+            if(isset($info)){
+                $info = $info . $request['tablecount'] . ' sēdvietas pie ' . $request['tablenr'] . ' galda.';
+            }
+            else $info = $request['tablecount'] . ' sēdvietas pie ' . $request['tablenr'] . ' galda.';
+        }
+        if($request['seatnr'] == 0 && $request['tablenr'] == 0) $info = $request['tickets'] . ' stāvvietas.';
+
+
+        $ticket->setValue('info',$info);
+
+        $qrCode = new QrCode($QRcode);
+        header('Content-Type: '.$qrCode->getContentType());
+        $qrCode->writeFile(public_path() .'/qrcode.png');
+
+        $ticket->setImageValue('image',array('path' => public_path() .'/qrcode.png', 'width' => 200, 'height' => 200));
+
+        $path = 'event-ticket/' . str_replace(' ', '_', $myevent->Title) . '_' . $reserv->id . '_ticket.docx';
+        $ticket->saveAs($path);
+
+        Mail::send(new Ticket($reserv,$myevent,$path));
+
+        Storage::disk('ticket')->delete(str_replace(' ', '_', $myevent->Title) . '_' . $reserv->id . '_ticket.docx');
+        Storage::disk('main')->delete('qrcode.png');
+
+        return redirect()->route('showreservation',$reserv->id)->with('message','Pasākums rezervēts');
         
     }
     public function reservationedit(createReservationRequest $request,$id){
@@ -133,8 +195,6 @@ class ReservationController extends Controller
         $reservation = Reservation::find($id);
 
         eventvalidate($request);
-        
-        if($reservation->TableNr != 0) $request['tablenr'] = $reservation->TableNr; // Ja jau ir rezervēts galds lai tas nepalitku par 0 pēc eventvalidate funkcijas
 
         $reservation->fill([    // ieraksta izmainīšana 
             'Tickets' => $request['tickets'],
@@ -144,6 +204,10 @@ class ReservationController extends Controller
             'Transport' => $request['transport'],
             ]);
         $reservation->save();
+
+        $event = Events::find($reservation->EventID);
+
+        if(sizeof($reservation->getChanges()) > 0) Mail::send(new ReservationChange($reservation,$reservation->getChanges(),$event));
 
         if(\Session::get('way') == 'users')
         return redirect()->route('showreservation',$id)->with('message','Rezervācija Izmainīta');

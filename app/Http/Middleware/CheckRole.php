@@ -18,7 +18,7 @@ class CheckRole
         if($request->user() == null){
              // ja lietotājs nav ielogojies nav piekļuves
             $message[0] = 'Nepietiekamas tiesības!';
-            $message[1] = 'Jums ir jāautorizējas jeb jāreģistrējas lai piekļūtu šai lapai!';
+            $message[1] = 'Jums ir jāautorizējas, lai piekļūtu šai lapai!';
             $state = '1';
 
             return response()->view('errors.specificerrors',compact('message','state'));

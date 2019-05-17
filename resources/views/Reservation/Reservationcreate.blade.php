@@ -6,7 +6,7 @@
     <br>
     <div class="row">
         <div class="col-lg-offset-3 col-lg-11 center">
-            <div>
+            <div class="content">
                 <h2 class="content">{{ $myevent->Title }}</h2>
                 @if(geteventdate($myevent->Datefrom) == geteventdate($myevent->Dateto)) {{-- Datuma korektra izvade --}}
                     <p class="content">{{ geteventdate($myevent->Datefrom) }}</p>
@@ -23,7 +23,7 @@
                 @endif
             </div>
             @if($ticketinfo == 0 && $myevent->Tickets != -999)
-                <h3>Biļetes ir beigušās</h3>
+                <h3 style="text-align: -webkit-center;">Biļetes ir beigušās</h3>
             @elseif(checkResrvationCount($myevent->id,Auth::user()->email) >= 2) 
                 <h3 style="text-align: center;"><strong>Jūs pasūtījāt maksimāli pieļaujamo biļešu skaitu uz lietotāju šajā pasākumā</strong></h3>
             @else
@@ -40,7 +40,10 @@
                         @if(Auth::check() && Auth::user()->hasRole('Admin'))
                             <div class="custom-control custom-switch col-lg-2 eventcreate manualreserv">
                                 <input type="hidden" name="manualreserv" value="off" />
-                                <input type="checkbox" class="custom-control-input" id="customSwitch1" name="manualreserv" {{ old('manualreserv') ? 'checked' : '' }}>
+                                <input type="checkbox" class="custom-control-input" id="customSwitch1" name="manualreserv" 
+                                @if(old('manualreserv') == "on")
+                                checked 
+                                @endif>
                                 <label class="custom-control-label" for="customSwitch1">Rezervēt lietotāju</label>
                             </div>
                         @endif

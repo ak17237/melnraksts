@@ -46,6 +46,8 @@ jQuery('document').ready(function(){
             jQuery('.alertseattable').hide();
             jQuery('.alerttablecount').hide();
             jQuery('[name="tablenr"]').removeClass('is-invalid');
+            jQuery('[name="buttontitle"]').removeClass('is-invalid');
+            jQuery('[name="buttonlink"]').removeClass('is-invalid');
             jQuery('[name="seatsontablenr"]').removeClass('is-invalid');
             jQuery('[name="tablecount"]').removeClass('is-invalid');
 
@@ -65,7 +67,7 @@ jQuery('document').ready(function(){
             if($('.alerttablenr').text() != ''){
 
                 jQuery('.alerttablenr').show();
-                jQuery('[name="tablenr"]').addClass('is-invalid');
+                jQuery('[name="tablenr"]','[name="buttontitle"]','[name="buttonlink"]').addClass('is-invalid');
 
             }
             if($('.alertseattable').text() != ''){
@@ -79,6 +81,17 @@ jQuery('document').ready(function(){
                 jQuery('.alerttablecount').show();
                 jQuery('[name="tablecount"]').addClass('is-invalid');
 
+            }
+            if($('.alertbuttontitle').text() != ''){
+                
+                jQuery('.alertbuttontitle').show();
+                jQuery('[name="buttontitle"]').addClass('is-invalid');
+
+            }
+            if($('.alertbuttonlink').text() != ''){
+                
+                jQuery('.alertbuttonlink').show();
+                jQuery('[name="buttonlink"]').addClass('is-invalid');
             }
 
         }
@@ -123,7 +136,7 @@ jQuery('document').ready(function(){
             jQuery('#transport').prop('disabled',false);
             jQuery('#transport').val(transportval);
             $("#transport option[value='Empty']").remove();
-            /* jQuery('#transport').val('Riga'); */
+            jQuery('#transport').val('Riga');
         }
     };
     $('input[name="inlineDefaultRadiosExample"]').click(function(){ 
