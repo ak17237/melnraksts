@@ -8,6 +8,7 @@ use App\Reservation;
 use App\User;
 use Auth;
 use Mail;
+use PDF;
 use App\Mail\ReservationChange;
 use App\Mail\Ticket;
 use App\Http\Requests\createReservationRequest;
@@ -19,6 +20,7 @@ use Illuminate\Support\Facades\Storage;
 
 class ReservationController extends Controller
 {
+
     public function showreservationcreate($id,$extension){
         $myevent = Events::find($id);
         
@@ -102,6 +104,8 @@ class ReservationController extends Controller
     }
     public function reservationcreate(createReservationRequest $request,$id){
         
+        define("DOMPDF_UNICODE_ENABLED", true);
+
         $myevent = Events::find($id);
 
         eventvalidate($request);
@@ -146,46 +150,20 @@ class ReservationController extends Controller
             $reserv->fill(['QRcode' => $QRcode]);
             $reserv->save();
 
-            $ticket = new TemplateProcessor('Ticket-Template.docx');
-
-        $ticket->setValue('title',$myevent->Title);
-        $ticket->setValue('address',$myevent->Address);
-
-        if(geteventdate($myevent->Datefrom) == geteventdate($myevent->Dateto))
-            $date=  geteventdate($myevent->Datefrom);
-        else
-         $date= geteventdate($myevent->Datefrom) . '-' . geteventdate($myevent->Dateto);
-
-        $ticket->setValue('date',$date);
-        $ticket->setValue('tickets',$request['tickets']);
-
-        if($request['seatnr'] > 0)
-            $info = $request['seatnr'] . ' sēdvietas.';
-        if($request['tablenr'] != 0){
-
-            if(isset($info)){
-                $info = $info . $request['tablecount'] . ' sēdvietas pie ' . $request['tablenr'] . ' galda.';
-            }
-            else $info = $request['tablecount'] . ' sēdvietas pie ' . $request['tablenr'] . ' galda.';
-        }
-        if($request['seatnr'] == 0 && $request['tablenr'] == 0) $info = $request['tickets'] . ' stāvvietas.';
-
-
-        $ticket->setValue('info',$info);
-
         $qrCode = new QrCode($QRcode);
         header('Content-Type: '.$qrCode->getContentType());
         $qrCode->writeFile(public_path() .'/qrcode.png');
+        
+        $data = get_ticket_data($myevent->id,$reserv->id,$reserv->email);
 
-        $ticket->setImageValue('image',array('path' => public_path() .'/qrcode.png', 'width' => 200, 'height' => 200));
-
-        $path = 'event-ticket/' . str_replace(' ', '_', $myevent->Title) . '_' . $reserv->id . '_ticket.docx';
-        $ticket->saveAs($path);
-
+        $pdf = PDF::loadView('ticket', $data);
+        $path = 'event-ticket/' . str_replace(' ', '_', $myevent->Title) . '_' . $reserv->id .'_ticket.pdf';
+        $pdf->save($path);
         Mail::send(new Ticket($reserv,$myevent,$path));
 
-        Storage::disk('ticket')->delete(str_replace(' ', '_', $myevent->Title) . '_' . $reserv->id . '_ticket.docx');
+        Storage::disk('ticket')->delete(str_replace(' ', '_', $myevent->Title) . '_' . $reserv->id .'_ticket.pdf');
         Storage::disk('main')->delete('qrcode.png');
+        
 
         return redirect()->route('showreservation',$reserv->id)->with('message','Pasākums rezervēts');
         

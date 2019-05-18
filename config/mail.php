@@ -56,8 +56,8 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'artjoms.korotkevics@latvenergo.lv'),
-        'name' => env('MAIL_FROM_NAME', 'Pasākumu organizācijas sistēma'),
+        'address' => env('MAIL_FROM_ADDRESS', 'tt2examacc@gmail.com'),
+        'name' => env('MAIL_FROM_NAME', 'Latvenergo pasākumi'),
     ],
 
     /*
@@ -119,6 +119,13 @@ return [
             resource_path('views/vendor/mail'),
         ],
     ],
+    'stream' => [
+        'ssl' => [
+           'allow_self_signed' => true,
+           'verify_peer' => false,
+           'verify_peer_name' => false,
+        ],
+     ],
 
     /*
     |--------------------------------------------------------------------------
