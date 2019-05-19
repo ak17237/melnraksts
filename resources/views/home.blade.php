@@ -91,7 +91,11 @@
                           </tr>
                             <tr @if(date("Y-m-d") >= $d->Datefrom) class="expiredevent" @endif>
                               @if(Auth::check())
-        
+                                @if(Auth::user()->hasRole('Admin') && date('Y-m-d') >= $d->Datefrom && date('Y-m-d') <= $d->Dateto)
+                                <td style="text-align:center;" colspan="2" class="showreserv">
+                                  <a href="{{ route('showqrcode',$d->id) }}" class="sliderscan button reservshow today">Noskanēt biļetes</a>
+                                </td>
+                                @else
                               <td class="sliderbutton" @if(Auth::user()->hasRole('Admin') && !checkAuthor(Auth::user()->email,$d->id)) colspan="2" {{-- ja nav piekļuves pogai lai būtu centrēts --}}
                                 style="text-align: center" @endif class="space">
                               @if((reservinfo($d->id)[0] == 0 && $d->Tickets != -999) || $d->VIP == 1)
@@ -105,6 +109,7 @@
                               @endif</a></td>
                               @if (Auth::user()->hasRole('Admin') && checkAuthor(Auth::user()->email,$d->id)) {{-- Tikai administrācijas piekļuve un tikai pasākuma autoram--}}
                               <td class="sliderbutton space"><a href="{{ route('showedit',$d->id) }}" class="button ">Rediģēt</a></td>
+                              @endif
                               @endif
                               @else <td class="sliderbutton space"><a href="{{ route('showevent',$d->id) }}" class="button" style="width: 124px;font-size: 17px;">Apskatīt</a>
                               @endif
@@ -155,20 +160,24 @@
                           <p>Kur: {{ $d->Address }}</p>
                           <i>{{ $d->Anotation }}</i>
                         </td>
+                        @if(Auth::check() && checkAttendance(Auth::user()->id,$d->id) || Auth::user()->hasRole('Admin'))
                         <td style="text-align:center;" colspan="2" class="showreserv">
                           <a href="{{ route('showgallery',$d->id) }}" class="button reservshow" @if(Auth::check() && Auth::user()->hasRole('User')) style="position:unset;" @endif>Apskatīt galeriju</a>
                         </td>
+                        @endif
                         <tr>
                           @if(Auth::check())
                           <td class="sliderbutton" @if(Auth::user()->hasRole('User')) colspan="2" {{-- ja nav piekļuves pogai lai būtu centrēts --}}
                             style="text-align: center" @endif class="space">
                           @if(Auth::user()->hasRole('User'))
-                            <a href="{{ route('showevent',$d->id) }}" class="button" style="width: -webkit-fill-available;">Apskatīt Pasākumu</a>
+                            <a href="{{ route('showevent',$d->id) }}" class="button" style="width: max-content;"
+                          @if(Auth::check() && Auth::user()->hasRole('User') && !checkAttendance(Auth::user()->id,$d->id)) rowspan="2" @endif>Apskatīt Pasākumu</a>
                           </td>
                           @else
                           <a href="{{ route('showevent',$d->id) }}" class="button ">Apskatīt</a>
                           </td>
-                          <td class="sliderbutton space"><a href="{{ route('downloadreport',$d->id) }}" class="button">Atskaite</a></td>
+                          <td class="sliderbutton space @if(date("Y-m-d") <= $d->Datefrom) notactivereport @endif" ><a href="{{ route('downloadreport',$d->id) }}" class="button @if(date("Y-m-d") <= $d->Datefrom) reporttooltip @endif">Atskaite</a></td>
+                                <div class="questiontooltip"></div>
                           @endif
                           @endif
                         </tr>

@@ -90,6 +90,22 @@ class ProfileController extends Controller
 
          $email = User::where('email', Auth::user()->email)->first();
 
+         $user = User::all();
+         $resetuser = Resetuser::all();
+
+         foreach($user as $u){
+
+            if($u->email == $request['email'] && $u->email != $email->email)
+                return redirect()->back()->with('oldemail',$request['email'])->withErrors(['email' => 'Tāds e-pasts jau eksistē']);
+
+         }
+         foreach($resetuser as $r){
+
+            if($r->email == $request['email'] && $r->email != $email->email)
+                return redirect()->back()->with('oldemail',$request['email'])->withErrors(['email' => 'Tāds e-pasts jau eksistē']);
+
+         }
+
         if(Auth::user()->hasRole('Admin')){
 
             $events = Events::where('email',$email->email)->get();

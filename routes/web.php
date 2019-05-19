@@ -61,16 +61,33 @@ Route::get('/saved-events-{page}',[ // Melnrakstu lapa
     'roles' => ['Admin']
         ]);
 Route::get('/event/{id}/show','EventFormsController@showevent')->name('showevent')->middleware('saveevent')->middleware('existevent'); // Pasākuma apskates lapa
+Route::get('event/{id}/qrcode',[ // Biļešu skanēšanas lapa
+    'uses' => 'EventFormsController@showqrcode',
+    'as' => 'showqrcode',
+    'middleware' =>  ['roles','expired'],
+    'roles' => ['Admin']
+        ]);
+Route::post('event/{id}/qrcode/scan','EventFormsController@qrcode')->name('qrcode');
 
 
 // Failu pārvalde
 Route::get('/download/{pdfname}','FileController@downloadpdf')->name('downloadpdf'); // PDF lejuplāde
 Route::post('event/{id}/edit/{filename}/delete','FileController@deletefile')->name('deletefile'); // Pasākumu attēlu dzēšana
 Route::post('event/{id}/pdfdelete','FileController@pdfdelete')->name('pdfdelete'); // PDF pielikumu dzēšana pasākumiem
-Route::get('event/{id}/gallery','FileController@showgallery')->name('showgallery'); // Galerijas lapa pasākumam
+Route::get('event/{id}/gallery',[ // Galerijas lapa pasākumam
+    'uses' => 'FileController@showgallery',
+    'as' => 'showgallery',
+    'middleware' =>  ['roles','attendance'],
+    'roles' => ['User','Admin']
+        ]);
 Route::post('event/{id}/gallery/upload','FileController@uploadgallery')->name('uploadgallery'); // Galerijas foto ielāde
 Route::post('/event/{id}/gallery/delete','FileController@deletegallery')->name('deletegallery'); // Galerijas foto dzēšana
-Route::get('/download/{id}/eventreport','FileController@downloadreport')->name('downloadreport'); // Atskaites lejuplāde docx formātā
+Route::get('/download/{id}/eventreport',[ // Atskaites lejuplāde docx formātā
+    'uses' => 'FileController@downloadreport',
+    'as' => 'downloadreport',
+    'middleware' =>  ['roles','expired'],
+    'roles' => ['Admin']
+        ]); 
 
 // Rezervāciju pārvalde
 Route::get('event/{id}/{extension}/reservation',[ // Rezervācijas izveides lapa

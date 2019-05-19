@@ -557,9 +557,6 @@ Page Header
 
 @media (max-width: 767px) {
   /* 767px */
-  .page-header.navbar {
-    height: 136px;
-    /* Top menu */ }
     .page-header.navbar .top-menu .navbar-nav {
       margin-right: 0; }
       .page-header.navbar .top-menu .navbar-nav > li.dropdown .dropdown-toggle {

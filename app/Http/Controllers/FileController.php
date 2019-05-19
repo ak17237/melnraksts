@@ -106,6 +106,7 @@ class FileController extends Controller
         $data = array(); // dokumenta kolonnas dati
 
         $reservate = resrvcount($id); // funckija kas atdod masīvu ar datiem par rezervāiju 0 - Biļešu skaits,1 - Sēdvietu skaits,2 - Galdu sēdvietu skaits,4 - Galdu skaits
+        $attendance = attendance($id);
 
         $report = new TemplateProcessor('Report-Template.docx'); // izveidojam klasi no template
 
@@ -122,7 +123,7 @@ class FileController extends Controller
         else { 
 
             $bilesuskaits = $event->Tickets;
-            $data[$count] = array('Veids' => 'Biļešu skaits','Paredzēti' => $event->Tickets,'Rezervēti' => $reservate[0]);
+            $data[$count] = array('Veids' => 'Biļešu skaits','Paredzēti' => $event->Tickets,'Rezervēti' => $reservate[0],'Apmeklējums' => $attendance[0]);
             $count++;
             
         }
@@ -133,7 +134,7 @@ class FileController extends Controller
         else {
             
             $sedvietuteksts = 'bija paredzētas ' . $event->Seatnumber . ' sēdvietas';
-            $data[$count] = array('Veids' => 'Sēdvietu skaits','Paredzēti' => $event->Seatnumber,'Rezervēti' => $reservate[1]);
+            $data[$count] = array('Veids' => 'Sēdvietu skaits','Paredzēti' => $event->Seatnumber,'Rezervēti' => $reservate[1],'Apmeklējums' => $attendance[1]);
             $count++;
             
         }
@@ -143,7 +144,7 @@ class FileController extends Controller
         else {
             
             $galduteksts = 'bija paredzēti ' . $event->Tablenumber . ' galdi';
-            $data[$count] = array('Veids' => 'Galdu skaits','Paredzēti' => $event->Tablenumber,'Rezervēti' => $reservate[4]); // dati par pasākumu
+            $data[$count] = array('Veids' => 'Galdu skaits','Paredzēti' => $event->Tablenumber,'Rezervēti' => $reservate[4],'Apmeklējums' => $attendance[2]); // dati par pasākumu
             $count++; // pievienojam rindu,būs ko ielikt atskaites kolonā jo ir info par galdiem jo tie bija paredzēti un drizāk arī rezervēti
            
         }
@@ -155,7 +156,7 @@ class FileController extends Controller
 
         if($standcount > 0) {
             
-            $data[$count] = array('Veids' => 'Stāvvietu skaits','Paredzēti' => $standcount,'Rezervēti' => $reservate[0] - ($reservate[1] + $reservate[2]));
+            $data[$count] = array('Veids' => 'Stāvvietu skaits','Paredzēti' => $standcount,'Rezervēti' => $reservate[0] - ($reservate[1] + $reservate[2]),'Apmeklējums' => $attendance[3]);
             $count++; // ja bija stāvvietas tad pieliekam vēl kolonnu
             
         }
@@ -169,9 +170,12 @@ class FileController extends Controller
             $report->setValue('veids#' . $j,$data[$i]['Veids']);
             $report->setValue('paredzetas#' . $j,$data[$i]['Paredzēti']);
             $report->setValue('rezervetas#' . $j,$data[$i]['Rezervēti']);
+            $report->setValue('atnaca#' . $j,$data[$i]['Apmeklējums']);
 
         }
         $report->setValue('apraksts',$event->Description);
+        $report->setValue('atnaca',$attendance[0]);
+        $report->setValue('rezervetas',$reservate[0]);
 
         if($event->VIP === 0) $report->setValue('vip','');
         else $report->setValue('vip','Šis bija vip pasākums');

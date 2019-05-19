@@ -50,7 +50,7 @@
     </div>
     
     <div class="form-group">
-        <div class="custom-control custom-checkbox col-lg-5 left">
+        <div class="custom-control custom-checkbox col-lg-5 left rememberusers">
           <input type="checkbox" class="custom-control-input" id="customCheck1" name="remember" {{ old('remember') ? 'checked' : '' }}>
           <label class="custom-control-label" for="customCheck1">Atceries mani</label>
         </div>

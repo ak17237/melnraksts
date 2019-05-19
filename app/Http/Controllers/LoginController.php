@@ -72,6 +72,7 @@ class LoginController extends Controller
 
             if (Hash::check($request['password'],$password)){ // ja sakrīt ielogojam
                 
+                Auth::guard($guard)->attempt(['email' => $request['email'], 'password' => $request['password']],$remember);
                 Auth::login(User::where('id', $email->id)->first()); 
                 return redirect('/')->cookie($cookie_email)->cookie($cookie_password)->cookie('login','logged in',60 * 24 * 30);
 

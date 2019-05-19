@@ -1053,11 +1053,13 @@ input#gallery,input#avatar {
 .mr-12-p{
     margin-right: 12%;
 }
+#qrcode-success,#qrcode-error{
+    font-weight: 400;
+}
 @font-face {
     font-family: Titlefont;
     src: url("/leaguespartan-bold.woff");
   }
-
 .profiletab button {
     background-color: inherit;
     float: left;
@@ -1101,6 +1103,61 @@ input#gallery,input#avatar {
 }
 .select2-search__field{
     width: 100% !important;
+}
+.sliderscan.button{
+    margin-bottom: 20%;
+    background-color: maroon;
+}
+.sliderscan.button:hover{
+    background-color: darkred;
+}
+.qrcode{
+    height: 700px;
+}
+.qrcode * {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+  }
+input#qrcode{
+    display: none;
+}
+.qrcode-text{
+    top: 20%;
+}
+.qrcode-arrow{
+    top: 30%;
+}
+.qr-warning{
+    top: 15%;
+    display: none;
+    width: 58%;
+}
+.close.qr-close{
+    left: 98%;
+    top: 10%;
+}
+.qrcoderesult{
+    display: none;
+}
+.qr-success{
+    top: 5%;
+    width: 58%;
+    height: 45px;
+}
+.notactivereport a.button{
+    pointer-events: none;
+    cursor: default;
+    background-color: #76a5cf;
+    color: #e5e5e5;
+    padding: 14px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 20px;
 }
   /* 100% Image Width on Smaller Screens */
 @media only screen and (max-width: 700px){
@@ -1164,4 +1221,44 @@ input#gallery,input#avatar {
     #seatcount.eventseat{
         max-width: 100%;
     }
+}
+@media(max-width: 991px){
+    .content-positioner{
+        display: none;
+    }
+}
+@media(max-width: 767px){
+    
+    .content-page{
+        width: 320px;
+    }
+    body{
+        width: fit-content;
+    }
+    .qrcode * {
+        top: 95%;
+        left: 115%;
+    }
+    .qrcode-text{
+        top: 35%;
+        width: max-content;
+        font-size: 50px;
+    }
+    .qrcode-arrow{
+        top: 60%;
+    }
+    #qrcode-error,#qrcode-success{
+        width: max-content;
+        top: 35%;
+        left: 50%;
+    }
+    .qr-success{
+        top: 10%;
+        width: 130%;
+    }
+    .qr-warning{
+        top: 25%;
+        width: 130%;
+    }
+
 }

@@ -266,47 +266,52 @@ function get_ticket_data($eventid,$reservid,$email){
     return $data;
 
 }
-function convert_data_to_html($eventid,$reservid,$email){
+function attendance($eventid){
+
+    $reservations = Reservation::where('EventID',$eventid)->get();
+    $data = array();
+
+    $ticketnumber = $seatnumber = $tablenumber = $standnumber = 0;
+    $same = array();
+
+    foreach($reservations as $r){
+
+        if($r->Attendance == true){ 
+            
+            $ticketnumber += $r->Tickets;
+            $seatnumber += $r->Seats;
+
+            if($r->TableNr != 0){
+
+                if(!in_array($r->TableNr,$same)) $tablenumber++;
+        
+            }
+            $same[] = $r->TableNr;
+            if(($r->Seats + $r->TableSeats) < $r->Tickets)
+                $standnumber += $r->Tickets - ($r->Seats + $r->TableSeats);
+        }
     
-$data = get_ticket_data($eventid,$reservid,$email);
+    }
 
- $output = '
- <html>
- <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <style>
-@font-face {
-    font-family: "Source Sans Pro";
-    font-weight: normal;
-    font-style: normal;
-    font-variant: normal;
-    src: url("https://fonts.googleapis.com/css?family=Source+Sans+Pro&display=swap") format("truetype");
-  }
-  body {
-    font-family: Source Sans Pro, sans-serif;
-  }
-</style>
-</head>
-<body>
+    $data[0] = $ticketnumber;
+    $data[1] = $seatnumber;
+    $data[2] = $tablenumber;
+    $data[3] = $standnumber;
 
-        <img style="float: right;" src="'. public_path() .'/qrcode.png" alt="QRCODE">
-        <h1 style="font-family: "Source Sans Pro", sans-serif;text-align: center;"><strong>' . $data[0] . '</strong></h1>
-        <p style="font-family: "Source Sans Pro", sans-serif;text-align: center;">&nbsp;</p>
-        <h4 style="font-family: "Source Sans Pro", sans-serif;text-align: left; padding-left: 60px;">Adrese : ' . $data[1] . '</h4>
-        <h4 style="font-family: "Source Sans Pro", sans-serif;text-align: left; padding-left: 60px;">Datums: ' . $data[2] . '</h4>
-        <h4 style="font-family: "Source Sans Pro", sans-serif;text-align: left; padding-left: 60px;">Biļetes: ' . $data[3] . '</h4>
-        <p>&nbsp;</p>
-        <h1 style="font-family: "Source Sans Pro", sans-serif;text-align: center;"><strong>Rezervācijas Informacija</strong></h1>
-        <p style="font-family: "Source Sans Pro", sans-serif;text-align: left;">&nbsp;</p>
-        <h4 style="font-family: "Source Sans Pro", sans-serif;text-align: left; padding-left: 60px;">Rezervātas: ' . $data[4] . '</h4>
-        <i><h4 style="font-family: "Source Sans Pro", sans-serif;text-align: left; padding-left: 60px;">' . $data[5] . '</h4></i>
-        <p style="font-family: "Source Sans Pro", sans-serif;text-align: center;">&nbsp;</p>
-</body>
-</html>';
+    return $data;
+    
+}
+function checkAttendance($userid,$eventid){
 
-$output = mb_convert_encoding($output, 'HTML-ENTITIES', 'UTF-8');
+    $user = User::find($userid);
+    $reservations  = Reservation::where('EventID',$eventid)->get();
 
- return $output;
+    foreach($reservations as $r){
+
+        if($r->Attendance == true && $r->email == $user->email) return true;
+
+    }
+    return false;
 
 }
 ?>

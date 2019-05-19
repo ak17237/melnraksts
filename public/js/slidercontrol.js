@@ -95,6 +95,8 @@ $(document).ready(function(){
          
          $('tr.expiredevent').find('button').prop('disabled','disabled');
          $('tr.expiredevent').find('a:not(.today)').removeClass('button').addClass('inactive');
+         
+            $('.reporttooltip').tooltip({title: 'Atskaite būs pieejama nākošajā pasākuma dienā', placement: "top",trigger: 'hover',container: '.questiontooltip'});
 
     
 });

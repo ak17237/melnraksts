@@ -19,6 +19,8 @@ class Resetuser extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+    protected $guard = 'resetuser';
+    
     public function getAuthPassword () {
 
         return $this->password;

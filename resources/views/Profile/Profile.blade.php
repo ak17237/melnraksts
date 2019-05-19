@@ -14,8 +14,12 @@
     <a href="javascript:window.location=document.referrer;" class="btn btn-primary back">Atpakaļ</a>
         <div class="row">
             <div class="col-lg-offset-3 col-lg-8 center profilediv">
+              @if(Auth::check() && Auth::user()->hasRole('Admin'))
                     <div class="profiletab"><button id="profilename"><legend class="profilelegend">{{Auth::user()->First_name}} Profils</legend></button></div>
                     <div class="profiletab"><button style="float:right;" id="emailsend"><legend class="profilelegend">E-pastu sūtīšana</legend></button></div>
+              @else
+                    <legend>{{Auth::user()->First_name}} Profils</legend>
+              @endif
                     <br><br><br>
                     <div class="profileinfo">
                     @if(session()->has('message'))
@@ -124,9 +128,11 @@
                   <div class="col-lg-12">
                   <p class="left emailtext profiletext">{{$Email}}</p>
                   <input type="email" class="left form-control email {{ $errors->has('email') ? ' is-invalid' : '' }}" 
-                  name="email" placeholder="Enter email" 
+                  name="email" placeholder="Ievadiet e-pastu" 
                   @if(!empty(old('email')))
                   value="{{ old('email') }}"
+                  @elseif(session()->has('oldemail'))
+                  value="{{ session()->get('oldemail') }}"
                   @else
                   value="{{ $Email }}" 
                   @endif

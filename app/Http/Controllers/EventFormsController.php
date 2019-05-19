@@ -285,5 +285,29 @@ class EventFormsController extends Controller
             }
 
     }
+    public function showqrcode($id){
+
+        return view('Event_forms.qrcode',compact('id'));
+
+    }
+    public function qrcode($id,Request $request){
+
+        $reserv = Reservation::where('EventID',$id)->where('QRcode', $request['qrcode'])->first();
+
+        if($reserv == null)  
+            return redirect()->back()->withErrors(['qrcode' => 'Šim pasākumam šis kods ir nederīgs!']);
+        else{
+
+            if($reserv->Attendance == false){
+
+                $reserv->fill(['Attendance' => true]);
+                $reserv->save();
+                
+            }
+            return redirect()->back()->with('message','QR kods tika veiksmīgi pārbaudīts!');
+
+        }
+
+    }
 
 }

@@ -165,6 +165,8 @@ $(document).ready(function(){
 
     $('#resetpasstooltip').tooltip({title: 'Uzstādīt tagadējo paroli tādu pašu kā pirmā logošanas reizē(Latvenergo parole)', placement: "top",trigger: 'hover',container: '.questiontooltip'});
 
+    if ($('.profiletab').length == 0) localStorage.setItem('profiletab','profile'); // lai parasti lietotājs neredzētu e-pasta lapu,ja admins sessijā atstāja to ieslēgtu un izmainīja lietotājus
+
     if(localStorage.getItem('profiletab') == null || localStorage.getItem('profiletab') == 'profile'){
 
         $('button#profilename').addClass('active');
@@ -232,6 +234,6 @@ $(document).ready(function(){
     }); 
 
     $('#transportemail').tooltip({title: 'Sūtīt ziņu lietotājiem kuri ir rezervēti noteiktam pasākumam un izvēlējās tranportu. Iekavās ir cilvēku skaits. Ja saraksts tukšs,tad pasākumu kuri vēl nav pagājuši kuros ir cilvēki kuri negrib braukt patstāvīgi nav.',
-     placement: "top",trigger: 'hover',container: '.questiontooltip'});
+     placement: "bottom",trigger: 'hover',container: '.questiontooltip'});
 
 });
