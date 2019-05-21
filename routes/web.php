@@ -128,9 +128,8 @@ Route::delete('reservation/{id}/delete',[ // Rezervācijas dzēšanas lapa
     'middleware' =>  ['roles'],
     'roles' => ['Admin']
         ]);
+Route::get('search/{options}-{page}','SearchController@search')->name('search')->middleware('searchlink');
+Route::post('search-get','SearchController@searchget')->name('searchget');
 Route::fallback(function(){
     return view('errors.404');
 });
-
-
-

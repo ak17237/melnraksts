@@ -45,7 +45,8 @@ class createProfileRequest extends FormRequest
             'required' => ':attribute nevar būt tukšs',
             'max' => 'Māksimāls pieļaujamais garums ir :max',
             'min' => 'Minimālais pieļaujamais garums ir :min',
-            'confirmed' => 'Paroles apstiprināšanas kļūda: Paroles nesakrīt'
+            'confirmed' => 'Paroles apstiprināšanas kļūda: Paroles nesakrīt',
+            'email.email' => 'E-pastam jābūt dērīgam'
 
         ];
     }
@@ -55,11 +56,11 @@ class createProfileRequest extends FormRequest
 
         if(request('action') == 'fname') $rules['fname'] = 'required|max: 20';
         if(request('action') == 'lname') $rules['lname'] = 'required|max: 34';
-        if(request('action') == 'email') $rules['email'] = 'required|max: 49';
+        if(request('action') == 'email') $rules['email'] = 'required|email|max: 49';
         if(request('action') == 'pass') {
 
-            $rules['password'] = 'required|min:6|confirmed|max:255';
-            $rules['oldpassword'] = 'required|min:6|max:255';
+            $rules['password'] = 'required|min:6|confirmed|max:50';
+            $rules['oldpassword'] = 'required|min:6|max:50';
 
         }
         if(request('avatar') != NULL)

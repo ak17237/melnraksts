@@ -34,9 +34,9 @@
                 <tbody>
                   <tr>
                     <td class="top clickshow">
-                      @if(Storage::disk('avatar')->has($reservation[$i+$j]->email . '-avatar') )
-                      <a href="/profile-avatar/{{$reservation[$i+$j]->email . '-avatar'}}">
-                        <img src="/profile-avatar/{{$reservation[$i+$j]->email . '-avatar'}}">
+                      @if(Storage::disk('avatar')->has(getuserbyemail($reservation[$i+$j]->email)->Avatar))
+                      <a href="/profile-avatar/{{getuserbyemail($reservation[$i+$j]->email)->Avatar}}">
+                        <img src="/profile-avatar/{{getuserbyemail($reservation[$i+$j]->email)->Avatar}}">
                       </a>
                       @else
                       <a href="/Empty-Avatar.png">

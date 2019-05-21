@@ -10,6 +10,30 @@
       </div>
     @endif
   <div class="content">
+      @if ($data->count() > 0)
+      <div class="form-group myresrvsearch">
+          <label class="col-form-label" for="inputDefault">Meklēt rezervāciju</label>
+          <input type="text" class="form-control" placeholder="Meklēt..." id="myresrvsearchinput">
+      </div>
+          <div class="reservsearchcbdiv">
+          <div class="custom-control custom-checkbox myreservsearchcb">
+            <input type="checkbox" class="custom-control-input" id="customCheck1" checked="">
+            <label class="custom-control-label" for="customCheck1">Pēc nosaukuma</label>
+          </div>
+          <div class="custom-control custom-checkbox myreservsearchcb">
+            <input type="checkbox" class="custom-control-input" id="customCheck2" checked="">
+            <label class="custom-control-label" for="customCheck2">Pēc datuma</label>
+          </div>
+          <div class="custom-control custom-checkbox myreservsearchcb">
+            <input type="checkbox" class="custom-control-input" id="customCheck3" checked="">
+            <label class="custom-control-label" for="customCheck3">Pēc adreses</label>
+          </div>
+          <div class="custom-control custom-checkbox myreservsearchcb">
+              <input type="checkbox" class="custom-control-input" id="customCheck5" checked="">
+              <label class="custom-control-label" for="customCheck5">Pēc anotācijas</label>
+          </div>
+        </div>
+        @endif
     <div class="title m-b-md">
      
         Melnraksti
@@ -28,7 +52,7 @@
           </thead>
           
           @foreach ($data as $d){{-- līdzīgi kā slierī izvada pasākumus (home.blade.php) --}}
-            <tbody>
+            <tbody class="searchcontent">
               <tr>
                 <td class="top clickshow"><a class='divlink' href="{{ route('showevent',$d->id) }}"></a>
                   <div class="eventdate">
@@ -37,10 +61,10 @@
                     </div>
                 </td>
                 <td class="top space eventinfo clickshow"><a class='divlink' href="{{ route('showevent',$d->id) }}"></a>
-                  <h5>{{ $d->Title }}</h5>
-                  <p>Kad: {{ geteventdate($d->Datefrom) }}</p><span id='eventdate{{ $counter++ }}'style="display:none">{{ $d->Datefrom }}</span>
-                  <p>Kur: {{ $d->Address }}</p>
-                  <i>{{ $d->Anotation }}</i>
+                  <h5 class="eventtitle">{{ $d->Title }}</h5>
+                  <p>Kad: <span class="searcheventdate">{{ geteventdate($d->Datefrom) }}</span></p><span class="searcheventdate" id='eventdate{{ $counter++ }}'style="display:none">{{ $d->Datefrom }}</span>
+                  <p>Kur: <span class="eventaddress">{{ $d->Address }}</span></p>
+                  <i class="searchanotation">{{ $d->Anotation }}</i>
                 </td>
                 <td class="space"><a href="{{ route('showedit',$d->id) }}" class="button">Rediģēt</a></td>
               </tr>

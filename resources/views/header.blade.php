@@ -18,7 +18,7 @@
                 @if (Route::has('login'))
                     @if (Auth::check()){{-- pārbaude vai ielogojas un lai laravel kļūdu lapa saprastu ka ielogots --}}
                     <li>
-                        <a class="long-links" href="{{ route('profile.index') }}">{{Auth::user()->First_name}} Profils</a>
+                        <a class="long-links name" href="{{ route('profile.index') }}">{{Auth::user()->First_name}} Profils</a>
                     </li>
                     <li>
                         <a href="/">Home</a>
@@ -56,6 +56,18 @@
                         <a class="long-links" href="{{ route('reservationusers',1) }}">Manas rezervācijas</a> 
                     </li>   
                 @endif
+                <li class="searchbox" @if(!Auth::check() || Auth::check() && Auth::user()->hasRole('User')) style="float:right;" @endif>
+                    <form action="{{ route('searchget') }}" class="searchboxform @if(!Auth::check() || Auth::check() && Auth::user()->hasRole('User')) searchboxformguest @endif" method="POST">
+                            {{csrf_field()}}
+                    <input type="text" name="search" class="form-control searchinput">
+                    <button type="submit" class="searchbtn">
+                    <img src="/svg/magnifier-tool.svg" alt="Search icon" width="25" height="25">
+                    </button>
+                    </form>
+                    <a class="searchbtn-small" href="{{ route('search',['options' => 'checkevent>>off>off>off>off','page' => '1']) }}">
+                        <img src="/svg/magnifier-tool.svg" alt="Search icon" width="25" height="25">
+                    </a>
+                </li>
                 </ul>
             </div>
         </div>

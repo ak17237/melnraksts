@@ -84,7 +84,7 @@
                                     <label class="seats">Sēdvietas</label>
                                     <div class="radio">
                                         <div class="custom-radio control-radio">
-                                            <input type="radio" id="customRadio1" name="customRadio" class="custom-control-input" value="Yes"  
+                                            <input type="radio" id="customRadio1" name="customRadio" class="custom-control-input" value="Yes"   
                                             @if(old('customRadio') == "Yes" || empty(old('customRadio'))) {{-- ja vecā vērtība ir YES jeb ja vecās nebija(validācijas nebija),tad atzīmēt šo radio --}}
                                                 checked="" 
                                             @endif>

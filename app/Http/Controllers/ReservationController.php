@@ -38,7 +38,7 @@ class ReservationController extends Controller
     }
     public function showreservationusers($page){
 
-        $elements = 5;
+        $elements = 10;
         $counter = 1;
 
         $user = User::where('email', Auth::user()->email)->first();
@@ -97,7 +97,7 @@ class ReservationController extends Controller
         $reservation = Reservation::where('EventID',$id)->get();
         
         $count = $reservation->count();
-        $number = $tempnumber = 5; // cik ieraksti rādās vienā lapā // korektai skaitļu izvadei katrā lapā
+        $number = $tempnumber = 2; // cik ieraksti rādās vienā lapā // korektai skaitļu izvadei katrā lapā
         session(['way' => 'admins']);
         return view('Reservation.Reservationadmins',compact('myevent','reservation','user','count','number','tempnumber'));
 

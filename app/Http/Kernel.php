@@ -71,6 +71,7 @@ class Kernel extends HttpKernel
         'editable' => \App\Http\Middleware\CheckReservEditable::class,
         'expired' => \App\Http\Middleware\CheckExpiredEvent::class,
         'attendance' => \App\Http\Middleware\CheckAttendance::class,
+        'searchlink' => \App\Http\Middleware\CheckSearchLink::class,
     ];
 
     /**

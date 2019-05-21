@@ -94,7 +94,7 @@
 
                                 <div class="col-lg-4 eventcreate">
                                         <label>Skaits</label>
-                                    <input type="number" name='ticketcount' class="form-control tickets {{ $errors->has('ticketcount') ? ' is-invalid' : '' }}" id="eventaddress" 
+                                    <input type="number" min="1" name='ticketcount' class="form-control tickets {{ $errors->has('ticketcount') ? ' is-invalid' : '' }}" id="eventaddress" 
                                     @if(old('Radio') == "No") {{-- ja vecā bija NO tad atslēgt input un noņemt vērtību --}}
                                     disabled
                                     value=''
@@ -131,7 +131,7 @@
                                 </div>
                                 <div class="col-lg-2 eventcreate">
                                     <label>Sēdvietu skaits</label>
-                                    <input type="number" name='seatnr' class="form-control eventseat {{ $errors->has('seatnr') ? ' is-invalid' : '' }}" 
+                                    <input type="number" min="1" name='seatnr' class="form-control eventseat {{ $errors->has('seatnr') ? ' is-invalid' : '' }}" 
                                     @if(old('customRadio') == "No")
                                     disabled
                                     value=''
@@ -167,7 +167,7 @@
 
                                     <div class="col-lg-2 eventcreate">
                                         <label>Galdu skaits</label>
-                                        <input type="number" name='tablenr' id="eventtable" class="form-control eventtable {{ $errors->has('tablenr') ? ' is-invalid' : '' }}" 
+                                        <input type="number" min="1" name='tablenr' id="eventtable" class="form-control eventtable {{ $errors->has('tablenr') ? ' is-invalid' : '' }}" 
                                         @if(old('inlineDefaultRadiosExample') == "No")
                                         disabled
                                         value=''
@@ -182,7 +182,7 @@
                                     </div>
                                     <div class="col-lg-2 eventcreate">
                                         <label>Sēdvietas pie galda</label>
-                                        <input type="number" name='seatsontablenr' id="seatsontable" class="form-control eventtable {{ $errors->has('seatsontablenr') ? ' is-invalid' : '' }}" 
+                                        <input type="number" min="1" name='seatsontablenr' id="seatsontable" class="form-control eventtable {{ $errors->has('seatsontablenr') ? ' is-invalid' : '' }}" 
                                         @if(old('inlineDefaultRadiosExample') == "No")
                                         disabled
                                         value=''

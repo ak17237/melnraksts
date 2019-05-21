@@ -160,7 +160,7 @@
                           <p>Kur: {{ $d->Address }}</p>
                           <i>{{ $d->Anotation }}</i>
                         </td>
-                        @if(Auth::check() && checkAttendance(Auth::user()->id,$d->id) || Auth::user()->hasRole('Admin'))
+                        @if(Auth::check() && checkAttendance(Auth::user()->id,$d->id) || Auth::check() && Auth::user()->hasRole('Admin'))
                         <td style="text-align:center;" colspan="2" class="showreserv">
                           <a href="{{ route('showgallery',$d->id) }}" class="button reservshow" @if(Auth::check() && Auth::user()->hasRole('User')) style="position:unset;" @endif>Apskatīt galeriju</a>
                         </td>

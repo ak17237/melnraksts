@@ -19,8 +19,8 @@ class LoginController extends Controller
     public function Login(Request $request){ 
 
         $rules = [
-            'email' => 'required|email|max:255',
-            'password' => 'required|min:6|max:255',
+            'email' => 'required|email|max:34',
+            'password' => 'required|min:6|max:50',
         ];
         $messages = [
             'max' => 'Māksimāls pieļaujamais garums ir :max',

@@ -50,11 +50,11 @@ class ValidReserv implements Rule
         if($this->type == 4)
         return "Rezervētās sēdvietas(" . $this->curr . ") ir vairāk par jūsu vēlamajām(" . $this->max . ")";
         if($this->type == 5)
-        return "Nevar noņemt sēdvietas,kad  tās jau ir rezervētas (" . $this->curr . ")";
+        return "Nevar noņemt sēdvietas,kad tās jau ir rezervētas (" . $this->curr . ")";
         if($this->type == 6)
         return "Rezervētās sēdvietas pie galdiem(" . $this->curr . ") ir vairāk par jūsu vēlamajām(" . $this->max . ")";
         if($this->type == 7)
-        return "Nevar noņemt galdus,kad sēdvietas pie tiem jau ir rezervētas (" . $this->curr . ")";
+        return "Nevar noņemt galdus,kad tos jau rezervēja (" . $this->curr . ")";
         if($this->type == 8)
         return "Nevar mainīt sēdvietu skaitu pie galdiem,kad vismaz pie viena galda jau sēž(" . $this->curr . ") vairāk par jūsu vēlamo skaitu (" . $this->max . ")";
     }

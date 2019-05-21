@@ -209,6 +209,11 @@ function geteventbyreservation($id,&$event){
 
     $event = Events::where('id',$reservation->EventID)->first(); 
 }
+function geteventbyid($id){
+
+    return Events::find($id);
+
+}
 function getuserbyemail($email){
 
     return User::where('email',$email)->first();
