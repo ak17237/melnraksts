@@ -106,27 +106,6 @@ class ProfileController extends Controller
 
          }
 
-        if(Auth::user()->hasRole('Admin')){
-
-            $events = Events::where('email',$email->email)->get();
-
-            foreach($events as $e){
-
-                $e->email = $request->get('email');
-                $e->save();
-            }
-
-        }
-
-        $reservations = Reservation::where('email',$email->email)->get();
-
-        foreach($reservations as $r){
-
-            $r->email = $request->get('email');
-            $r->save();
-
-        }
-
          $email->email = $request->get('email');
          $email->save();
          return redirect()->back()->with('message','Jūsu e-pasts tika veiksmīgi izmainīts');
@@ -149,28 +128,6 @@ class ProfileController extends Controller
 
         $user = User::where('email',Auth::user()->email)->first();
         $resetuser = Resetuser::where('id',$user->id)->first();
-
-        if(Auth::user()->hasRole('Admin')){
-
-            $events = Events::where('email',$user->email)->get();
-
-            foreach($events as $e){
-
-                $e->email = $resetuser->email;
-                $e->save();
-            }
-
-        }
-
-        $reservations = Reservation::where('email',$user->email)->get();
-
-        foreach($reservations as $r){
-
-            $r->email =$resetuser->email;
-            $r->save();
-
-        }
-
 
         $user->fill([
             'email' => $resetuser->email,
@@ -210,7 +167,7 @@ class ProfileController extends Controller
 
                 foreach($reservations as $r){
 
-                    if($r->Transport != "Patstāvīgi") $transportemails[] = $r->email;
+                    if($r->Transport != "Patstāvīgi") $transportemails[] = User::where('id',$r->user_id)->first()->email;
 
                 }
                 Mail::send(new CustomEmail($transportemails,$request['emailtitle'],$text,$button));

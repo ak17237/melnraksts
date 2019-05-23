@@ -80,11 +80,28 @@ class FileController extends Controller
         return redirect()->route('showgallery',$id)->with('message','Pasākuma galerijas attēli ir veiksmīgi pievienoti!');
 
     }
+    public function editgallery($id,Request $request){
+
+       $description = $request->except('_token');
+       $keys = array_keys($description);
+
+       for($i = 0;$i < sizeof($request->except('_token'));$i++){
+
+        $photoid = explode('-',$keys[$i]);
+
+        $gallery = Gallery::find($photoid[1]);
+        $gallery->fill(['Description' => $description[$keys[$i]]]);
+        $gallery->save();
+       }
+
+        return redirect()->route('showgallery',$id)->with('message','Attēlu apraksti ir veiksmīgi rediģēti!');
+
+    }
     public function deletegallery(Request $request,$id){
 
-        $counter = 0; // lai uzzināt pdf failu skaitu lapā
+        $counter = 0; // lai uzzināt attēlu failu skaitu lapā
 
-        while($request->has('imgname' . $counter) == true) $counter++; // uzzinam pdf skaitu
+        while($request->has('imgname' . $counter) == true) $counter++; // uzzinam attēlu skaitu
 
         for($i = 0;$i < $counter;$i++){ // ja checkbox ir atzīmēts,tad tieši šo nosaukumu izdzēšam no datubāzes un no servera
 

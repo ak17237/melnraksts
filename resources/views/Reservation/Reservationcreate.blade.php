@@ -175,14 +175,14 @@
                                                 @if(old('TransportRadio') == "Yes" || empty(old('TransportRadio'))) {{-- ja vecā vērtība ir YES jeb ja vecās nebija(validācijas nebija),tad atzīmēt šo radio --}}
                                                     checked="" 
                                                 @endif>
-                                                <label class="custom-control-label" for="Radio1">Yes</label>
+                                                <label class="custom-control-label" for="Radio1">Jā</label>
                                             </div>
                                             <div class="custom-radio control-radio">
                                                 <input type="radio" id="Radio2" name="TransportRadio" class="custom-control-input" value="No"
                                                 @if(old('TransportRadio') == "No") {{-- ja vecā bija NO tikai tad atzīmēt --}}
                                                     checked="" 
                                                 @endif>
-                                                <label class="custom-control-label" for="Radio2">No</label>
+                                                <label class="custom-control-label" for="Radio2">Nē</label>
                                             </div>
                                         </div>
                                     </div>

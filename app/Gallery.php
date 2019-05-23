@@ -8,6 +8,7 @@ class Gallery extends Model
 {
     protected $fillable = [
         'Event_ID',
-        'Name'
+        'Name',
+        'Description'
     ];
 }

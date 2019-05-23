@@ -120,7 +120,7 @@ function checkAuthor($email,$eventid){
 
     if(empty($event)) return response("There is no such event",404);
 
-    if($event->email != $user->email) return false;
+    if($event->user_id != $user->id) return false;
     else return true;
 }
 function checkCreator($email,$reservid){
@@ -130,7 +130,7 @@ function checkCreator($email,$reservid){
 
     if(empty($reserv)) return response("There is no such event",404);
 
-    if($reserv->email != $user->email) return false;
+    if($reserv->user_id != $user->id) return false;
     else return true;
 
 }
@@ -145,7 +145,8 @@ function tableSeats($eventid,$nrid){
 }
 function checkResrvationCount($eventid,$email){
 
-    $reservations = Reservation::where('EventID',$eventid)->where('email',$email)->get();
+    $user = User::where('email',$email)->first();
+    $reservations = Reservation::where('EventID',$eventid)->where('user_id',$user->id)->get();
     $count = 0;
     foreach($reservations as $reserv){
         $count += $reserv->Tickets;
@@ -214,9 +215,9 @@ function geteventbyid($id){
     return Events::find($id);
 
 }
-function getuserbyemail($email){
+function getuserbyid($id){
 
-    return User::where('email',$email)->first();
+    return User::where('id',$id)->first();
 
 }
 function checkEditable($reservid){
@@ -244,6 +245,7 @@ function get_ticket_data($eventid,$reservid,$email){
     $myevent = Events::find($eventid);
     $reserv = Reservation::find($reservid);
     $user = User::where('email',$email)->first();
+
     $data = array();
 
     $data['title'] = $myevent->Title;
@@ -313,7 +315,7 @@ function checkAttendance($userid,$eventid){
 
     foreach($reservations as $r){
 
-        if($r->Attendance == true && $r->email == $user->email) return true;
+        if($r->Attendance == true && $r->user_id == $user->id) return true;
 
     }
     return false;

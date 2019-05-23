@@ -7,6 +7,7 @@ use App\Http\Requests\createEventRequest;
 
 use App\Events;
 use App\Pdf;
+use App\Gallery;
 use App\Reservation;
 use App\User;
 use Auth;
@@ -44,8 +45,8 @@ class EventFormsController extends Controller
 
         $user = User::where('email', Auth::user()->email)->first();
 
-        $data = Events::where('Melnraksts',1)->where('email',$user->email)->orderBy('updated_at','DESC')->SimplePaginate(5,['*'], 'page', $page);
-        $count = Events::where('Melnraksts',1)->where('email',$user->email)->count();
+        $data = Events::where('Melnraksts',1)->where('user_id',$user->id)->orderBy('updated_at','DESC')->SimplePaginate(5,['*'], 'page', $page);
+        $count = Events::where('Melnraksts',1)->where('user_id',$user->id)->count();
         $number = 1;
         while($count > 5){ // precīza paginēšanas url izvade un pogas tai
             $number++;
@@ -110,7 +111,7 @@ class EventFormsController extends Controller
         'VIP' => $vip,
         'Editable' => $editable,
         'imgextension' => $img,
-        'email' => $user->email,
+        'user_id' => $user->id,
         'linkcode' => $linkcode,
         ]);
 
@@ -245,7 +246,9 @@ class EventFormsController extends Controller
             
             foreach($reservedusers as $reserveduser){
 
-            Mail::send(new EventChange($reserveduser,$myevent,$eventchange));
+            $user = User::find($reserveduser->user_id);
+
+            Mail::send(new EventChange($reserveduser,$user->email,$myevent,$eventchange));
 
             }
 
@@ -259,12 +262,28 @@ class EventFormsController extends Controller
 
         $myevent = Events::find($id);
         $reservations = Reservation::where('EventID',$id)->get();
+        $galleries = Gallery::where('Event_ID',$id)->get();
+        $pdfs =  Pdf::where('Event_ID',$id)->get();
 
         foreach($reservations as $r){
 
+            
             $r->delete();
 
         }
+        foreach($galleries as $g){
+
+            Storage::disk('gallery')->delete($g->Name);
+            $g->delete();
+
+        }
+        foreach($pdfs as $p){
+
+            Storage::disk('pdf')->delete($p->Name);
+            $p->delete();
+
+        }
+
 
         $filename = $myevent->imgextension;
 

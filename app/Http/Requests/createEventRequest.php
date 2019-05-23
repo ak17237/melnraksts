@@ -44,6 +44,7 @@ class createEventRequest extends FormRequest
     {
         return[
             'max' => 'Māksimāls pieļaujamais garums ir :max',
+            'min' => 'Minimālais pieļaujamais garums ir :min',
             'required' => ':attribute ir obligāts',
             'image' => ':attribute jābūt bildes formātā(png,jpg,gif utt.)',
             'gte' => ':attribute jābūt lielāks vai vienāds par :value',
@@ -53,11 +54,11 @@ class createEventRequest extends FormRequest
     public function rules() // pasākumu saglabāšanas noteikumi ja tika nospiesta poga create
     {
         $rules = array();
-        if(request('action') == 'create') $rules['title'] = 'required|max:250';
+        if(request('action') == 'create') $rules['title'] = 'required|max:250|min:4';
         if(request('action') == 'create') $rules['datefrom'] = 'required';
         if(request('action') == 'create') $rules['dateto'] = 'required';
-        if(request('action') == "create") $rules['address'] = 'required|max:500';
-        if(request('action') == "create") $rules['anotation'] = 'required|max:500';
+        if(request('action') == "create") $rules['address'] = 'required|max:500|min:4';
+        if(request('action') == "create") $rules['anotation'] = 'required|max:500|min:4';
         if(request('action') == "create" && request('Radio') == 'Yes') $rules['ticketcount'] = ['required'];
         if(request('action') == "create" && request('customRadio') == 'Yes') $rules['seatnr'] = ['required'];
         if(request('action') == "create" && request('inlineDefaultRadiosExample') == 'Yes') {

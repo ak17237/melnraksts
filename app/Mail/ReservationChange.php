@@ -16,8 +16,9 @@ class ReservationChange extends Mailable
      *
      * @return void
      */
-    public function __construct($reservation,$changes,$event)
+    public function __construct($reservation,$email,$changes,$event)
     {
+        $this->email = $email;
         $this->reservation = $reservation;
         $this->changes = $changes;
         $this->event = $event;
@@ -34,6 +35,6 @@ class ReservationChange extends Mailable
             'reservation' => $this->reservation,
             'changes' => $this->changes,
             'event' => $this->event
-            ])->to($this->reservation->email);
+            ])->to($this->email);
     }
 }

@@ -131,14 +131,14 @@
                 </tr>
               </thead>
               @foreach ($data as $d){{-- līdzīgi kā slierī izvada datus (home.blade.php) --}}
-              @if(Auth::check() && Auth::user()->hasRole('User') && $d->email != Auth::user()->email)
+              @if(Auth::check() && Auth::user()->hasRole('User') && $d->user_id != Auth::user()->id)
               @else
                 <tbody>
                   <tr>
                     <td class="top">
-                      @if(Storage::disk('avatar')->has(getuserbyemail($d->email)->Avatar))
-                      <a href="/profile-avatar/{{getuserbyemail($d->email)->Avatar}}">
-                        <img src="/profile-avatar/{{getuserbyemail($d->email)->Avatar}}"  width="75" height="75">
+                      @if(Storage::disk('avatar')->has(getuserbyid($d->user_id)->Avatar))
+                      <a href="/profile-avatar/{{getuserbyid($d->user_id)->Avatar}}">
+                        <img src="/profile-avatar/{{getuserbyid($d->user_id)->Avatar}}"  width="75" height="75">
                       </a>
                       @else
                       <a href="/Empty-Avatar.png">
@@ -148,7 +148,7 @@
                     </td>
                     <td class="top space eventinfo">
                       <a class='divlink' href="{{ route('showreservation',$d->id) }}"></a>
-                      <h5>{{ getuserbyemail($d->email)->First_name }} {{ getuserbyemail($d->email)->Last_name }}</h5>
+                      <h5>{{ getuserbyid($d->user_id)->First_name }} {{ getuserbyid($d->user_id)->Last_name }}</h5>
                       <i>Biļešu skaits: {{ $d->Tickets }}</i>
                     </td>
                     <td class="top space eventinfo">

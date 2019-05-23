@@ -34,9 +34,9 @@
                 <tbody>
                   <tr>
                     <td class="top clickshow">
-                      @if(Storage::disk('avatar')->has(getuserbyemail($reservation[$i+$j]->email)->Avatar))
-                      <a href="/profile-avatar/{{getuserbyemail($reservation[$i+$j]->email)->Avatar}}">
-                        <img src="/profile-avatar/{{getuserbyemail($reservation[$i+$j]->email)->Avatar}}">
+                      @if(Storage::disk('avatar')->has(getuserbyid($reservation[$i+$j]->user_id)->Avatar))
+                      <a href="/profile-avatar/{{getuserbyid($reservation[$i+$j]->user_id)->Avatar}}">
+                        <img src="/profile-avatar/{{getuserbyid($reservation[$i+$j]->user_id)->Avatar}}">
                       </a>
                       @else
                       <a href="/Empty-Avatar.png">
@@ -46,7 +46,7 @@
                     </td>
                     <td class="top space eventinfo clickshow">
                       <a class='divlink' href="{{ route('showreservation',$reservation[$i+$j]->id) }}"></a>
-                      <h5>{{ getuserbyemail($reservation[$i+$j]->email)->First_name }} {{ getuserbyemail($reservation[$i+$j]->email)->Last_name }}</h5>
+                      <h5>{{ getuserbyid($reservation[$i+$j]->user_id)->First_name }} {{ getuserbyid($reservation[$i+$j]->user_id)->Last_name }}</h5>
                       <i>Biļešu skaits: {{ $reservation[$i+$j]->Tickets }}</i>
                     </td>
                     <td class="space" @if(checkExpired($myevent->id)) colspan="2" style="text-align: center" @endif><a href="{{ route('showreservation',$reservation[$i+$j]->id) }}" class="button reservsmall">Apskatīt</a>

@@ -16,9 +16,10 @@ class Ticket extends Mailable
      *
      * @return void
      */
-    public function __construct($reserv,$event,$path)
+    public function __construct($reserv,$email,$event,$path)
     {
         $this->reserv = $reserv;
+        $this->user = $email;
         $this->event = $event;
         $this->path = $path;
     }
@@ -33,6 +34,6 @@ class Ticket extends Mailable
         return $this->view('Emails.Ticket')->subject($this->event->Title)->with([
             'event' => $this->event,
             'reserv' => $this->reserv
-            ])->attach($this->path)->to($this->reserv->email);
+            ])->attach($this->path)->to($this->user);
     }
 }

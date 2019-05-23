@@ -42,10 +42,10 @@ class ReservationController extends Controller
         $counter = 1;
 
         $user = User::where('email', Auth::user()->email)->first();
-        $reservations = Reservation::where('email',$user->email)->orderBy('updated_at','DESC')->SimplePaginate($elements,['*'], 'page', $page);
+        $reservations = Reservation::where('user_id',$user->id)->orderBy('updated_at','DESC')->SimplePaginate($elements,['*'], 'page', $page);
         $event = null;
 
-        $count = Reservation::where('email',$user->email)->count();
+        $count = Reservation::where('user_id',$user->id)->count();
         
         $number = 1;
         while($count > $elements){ // precīza paginēšanas url izvade un pogas tai
@@ -61,7 +61,7 @@ class ReservationController extends Controller
 
         $reservation = Reservation::find($id);
         $myevent = Events::find($reservation->EventID);
-        $user = User::where('email',$reservation->email)->first();
+        $user = User::where('id',$reservation->user_id)->first();
 
         $data = reservinfo($reservation->EventID); // funkcija kura ir helpers.php failā un kura atgriež datus par atlikušajām vietām
  
@@ -78,7 +78,7 @@ class ReservationController extends Controller
         
         $reservation = Reservation::find($id);
         $myevent = Events::find($reservation->EventID);
-        $user = User::where('email',$reservation->email)->first();
+        $user = User::where('id',$reservation->user_id)->first();
 
         $data = reservinfo($reservation->EventID); // funkcija kura ir helpers.php failā un kura atgriež datus par atlikušajām vietām
  
@@ -102,32 +102,33 @@ class ReservationController extends Controller
         return view('Reservation.Reservationadmins',compact('myevent','reservation','user','count','number','tempnumber'));
 
     }
-    public function reservationcreate(createReservationRequest $request,$id){
+    public function reservationcreate(createReservationRequest $request,$id){ // Saņem ierakstītos datus uz pasākuma ID
         
-        define("DOMPDF_UNICODE_ENABLED", true);
+        define("DOMPDF_UNICODE_ENABLED", true); // PDF rakstīšanai vajadzīgā formātā
 
-        $myevent = Events::find($id);
+        $myevent = Events::find($id); // atrod vajadzīgo pasākumu
 
-        eventvalidate($request);
+        eventvalidate($request); // Manis izveidotā funkcija kura iedot vajadzīgās datubāzei vērtības laukiem kuri tika atslēgti,neaizpildīti
 
-        if($request['manualreserv'] == "on") {
+        if($request['manualreserv'] == "on") { // ja rezervācijas bija manuāla
 
-            $email = $request['email'];
-            session(['way' => 'admins']);
+            $email = $request['email']; // saņem ierakstīto e-pastu
+            session(['way' => 'admins']); // "Atpakaļ" pogu pareizai funkcionēšanai,lai saprastu uz kurieni redirectot
+            $user = User::where('email', $email)->first(); // atrod lietotāju ar šādu e-pastu
 
         }
-        else {
+        else { // ja rezervē autentificēto lietotāju
 
-            $user = User::where('email', Auth::user()->email)->first();
+            $user = User::where('email', Auth::user()->email)->first(); // saņem to pēc e-pasta
 
-            $email = $user->email;
+            $email = $user->email; // saņem to e-pastu no datu bāzes
 
-            session(['way' => 'users']);
+            session(['way' => 'users']); // "Atpakaļ" pogu pareizai funkcionēšanai,lai saprastu uz kurieni redirectot
 
         }
         
         Reservation::create([  // ieraksta datus datubāzē 
-            'email' => $email,
+            'user_id' => $user->id,
             'EventID' => $myevent->id,
             'Tickets' => $request['tickets'],
             'Seats' => $request['seatnr'],
@@ -138,33 +139,35 @@ class ReservationController extends Controller
 
             $reserv = Reservation::all()->sortByDesc(['updated_at'])->first(); // saņemam tikko ievietoto rezervāciju
 
-            $QRcode = generateRandomString(); // ģenerējas skaitļū un vārdu virkne
+            $QRcode = generateRandomString(); // ģenerējas skaitļu un vārdu nejaušā kārtībā virkne
             $idarray = str_split($reserv->id); // sadalam id masīvā,lai izslēgt gadijumu,kad nejauši ģenerēta virkne var ar mazu varbūtību atkārtoties
 
-            for($i = 0;$i < strlen($reserv->id);$i++){ // ievietojam virknē id vietās pēc katra burta(id  pirmais numurs,virknes simbols,id otrais numurs,vēl viens virknes simbols utt.)
+            for($i = 0;$i < strlen($reserv->id);$i++){ // ievietojam virknē id vietās pēc katra burta
+                //id  pirmais numurs,virknes simbols,id otrais numurs,vēl viens virknes simbols utt.
 
             $QRcode = substr_replace($QRcode,$idarray[$i],$i*2,0);
 
             }
 
-            $reserv->fill(['QRcode' => $QRcode]);
-            $reserv->save();
-
-        $qrCode = new QrCode($QRcode);
-        header('Content-Type: '.$qrCode->getContentType());
-        $qrCode->writeFile(public_path() .'/qrcode.png');
+            $reserv->fill(['QRcode' => $QRcode]); // ievietojam ģenerēto kodu,kas ir kods biļetei
+            $reserv->save(); // saglabājam rezervācijai
         
-        $data = get_ticket_data($myevent->id,$reserv->id,$reserv->email);
+        $qrCode = new QrCode($QRcode); // rakstam kodu
+       /*  header('Content-Type: image/png'); */
+        $qrCode->writeFile(public_path() .'/qrcode.png'); // ierakstam QRkodu
 
-        $pdf = PDF::loadView('ticket', $data);
-        $path = 'event-ticket/' . str_replace(' ', '_', $myevent->Title) . '_' . $reserv->id .'_ticket.pdf';
-        $pdf->save($path);
-        Mail::send(new Ticket($reserv,$myevent,$path));
+        $user = User::find($reserv->user_id); // atrodam lietotāju šai rezervācijai
+        $data = get_ticket_data($myevent->id,$reserv->id,$user->email); // saņemem biļetes datus no funkcijas,kura apstrādā (Pasākuma id,reservācijas,id,lietotāja e-pasts)
 
-        Storage::disk('ticket')->delete(str_replace(' ', '_', $myevent->Title) . '_' . $reserv->id .'_ticket.pdf');
+        $pdf = PDF::loadView('ticket', $data); // Izveidojam PDF no html skata
+        $path = 'event-ticket/' . str_replace(' ', '_', $myevent->Title) . '_' . $reserv->id .'_ticket.pdf'; // pdf faila glabāšanas vieta un nosaukums
+        $pdf->save($path); // saglabājam pdf
+        Mail::send(new Ticket($reserv,$user->email,$myevent,$path)); // sūtam e-pastu rezervētam lietotājam ar pielikumu PDF failu
+
+        Storage::disk('ticket')->delete(str_replace(' ', '_', $myevent->Title) . '_' . $reserv->id .'_ticket.pdf'); // pēc tam izdzēšam QRkodu un pdf failu
         Storage::disk('main')->delete('qrcode.png');
         
-
+            
         return redirect()->route('showreservation',$reserv->id)->with('message','Pasākums rezervēts');
         
     }
@@ -185,7 +188,12 @@ class ReservationController extends Controller
 
         $event = Events::find($reservation->EventID);
 
-        if(sizeof($reservation->getChanges()) > 0) Mail::send(new ReservationChange($reservation,$reservation->getChanges(),$event));
+        if(sizeof($reservation->getChanges()) > 0) {
+         
+            $user = User::find($reservation->user_id);
+            Mail::send(new ReservationChange($reservation,$user->email,$reservation->getChanges(),$event));
+
+        }
 
         if(\Session::get('way') == 'users')
         return redirect()->route('showreservation',$id)->with('message','Rezervācija Izmainīta');

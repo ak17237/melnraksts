@@ -15,7 +15,7 @@
     <div class="form-group">
       <label for="exampleInputEmail1" class="col-lg-4 control-label">E-pasts</label>
       <div class="col-lg-12">
-      <input type="email" class="form-control {{ $errors->has('email') ? ' is-invalid' : '' }}" id="exampleInputEmail1" name="email" aria-describedby="emailHelp" placeholder="Enter email" 
+      <input type="email" class="form-control {{ $errors->has('email') ? ' is-invalid' : '' }}" id="exampleInputEmail1" name="email" aria-describedby="emailHelp" placeholder="Ievadiet e-pastu" 
       @if(!empty(old('email')))
       value="{{ old('email') }}"
       @elseif(!empty(request()->cookie('email')))
@@ -26,8 +26,6 @@
             <strong>{{ $errors->first('email') }}</strong>
             
         </span>
-        @else <small id="emailHelp" class="form-text text-muted">
-            Mēs nekad nepublicēsim jūsu e-pasta ziņojumus nevienam citam.</small>
        @endif
       </div>
     </div>
@@ -35,7 +33,7 @@
     <div class="form-group">
       <label for="exampleInputPassword1" class="col-lg-4 control-label">Parole</label>
       <div class="col-lg-12">
-      <input type="password" class="form-control {{ $errors->has('password') ? ' is-invalid' : '' }}" id="exampleInputPassword1" name="password" placeholder="Password" 
+      <input type="password" class="form-control {{ $errors->has('password') ? ' is-invalid' : '' }}" id="exampleInputPassword1" name="password" placeholder="Parole" 
       @if(!empty(old('password')))
       value=""
       @elseif(!empty(request()->cookie('password')))

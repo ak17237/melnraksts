@@ -7,6 +7,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Auth;
+use App\User;
 
 class EventChange extends Mailable
 {
@@ -17,9 +18,10 @@ class EventChange extends Mailable
      *
      * @return void
      */
-    public function __construct($reservuser,$event,$change)
+    public function __construct($reservuser,$email,$event,$change)
     {
-        $this->user = $reservuser;
+        $this->email = $email;
+        $this->reserv = $reservuser;
         $this->event = $event;
         $this->changedate = $change[0];
         $this->changeaddress = $change[1];
@@ -37,7 +39,7 @@ class EventChange extends Mailable
             'event' => $this->event,
             'changedate' => $this->changedate,
             'changeaddress' => $this->changeaddress,
-            'reserv' => $this->user
-            ])->to($this->user->email);
+            'reserv' => $this->reserv
+            ])->to($this->email);
     }
 }

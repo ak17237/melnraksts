@@ -15,7 +15,7 @@ $(document).ready(function(){
                 $("<div class='alert alert-dismissible alert-danger qr-warning js-qr-warning' style='padding-top: 20px;'>" +
                 "<button type='button' class='close qr-close' data-dismiss='alert'>&times;</button>" + 
                 "<p class='mb-0' id='qrcode-error'></p><br></div>").insertBefore(".qrcode-text").slideDown();
-
+                
                 $('#qrcode-error').text('QR kods netika atrasts! Pameiģiniet vēl reiz.');
                 
                 }

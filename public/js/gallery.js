@@ -13,9 +13,17 @@ $(window).load(function(){
 
             if($(this)[0].files.length > 15){
 
-                $('.text-warn').html('Attēlu skaits vienā ielādes reizē navar būt lielāks par 15');
-                $('.alert-warning').fadeIn();
+                $('.alert-warning').remove();
 
+                $("<div class='alert alert-dismissible alert-warning' style='display: none;padding-top: 20px;'>" +
+                "<button type='button' class='close' data-dismiss='alert'>&times;</button>" +
+                "<p class='mb-0 text-warn'>Attēlu skaits vienā ielādes reizē navar būt lielāks par 15</p><br></div>")
+                .insertBefore(".gallery-content").slideDown();
+
+                $('#addphotosgallery')[0].reset();
+
+                window.scrollTo({top: 0});
+                
             }
             else $('#addphotosgallery').submit();
             
@@ -29,6 +37,8 @@ $(window).load(function(){
 
         $('.gallery-photo').css({'height' : $('.gallery-photo').width()/1.7777777});
         $('.add-gallery').css({'height' : $('.add-gallery').width()/1.7777777});
+
+        
 
 });
 
@@ -116,8 +126,11 @@ $(window).load(function(){
         $('.outerImage').hide();
         $('.submitGallery').prop('disabled', true);
         $('.text').hide();
+        $('.imgdescription').fadeIn(500);
+        $('.gallery-photo').css({'margin-bottom' : '15px'});
 
     });
+    
     $('.closeEdit').click(function(){
 
         $('.content-page').removeClass('overlay-back');
@@ -129,13 +142,54 @@ $(window).load(function(){
         $('.innerImage').hide();
         $('.outerImage').show();
         $('.text').show();
+        $('.imgdescription').fadeOut(0);
+        $('.gallery-photo').css({'margin-bottom' : '0'});
 
 
     });
     $('.imgcb').click(function(){
 
         if($(".imgcb").is(':checked')) $('.submitGallery').prop('disabled', false);
-        else $('.submitGallery').prop('disabled', true); 
+        else $('.submitGallery').prop('disabled', true);
+
+    });
+    $('.imgcb').click(function(){
+
+        var input = $(this).next().next();
+    
+        if($(this).is(':checked')) input.attr('form','editgallery');
+        else input.attr('form','');
+        
+
+    });
+    $('.checkGallery').click(function(){
+
+        if($('.check-icon').attr('src') == '/svg/checkbox.svg'){
+
+            $('.imgcb').prop('checked',true);
+            $('.submitGallery').prop('disabled', false);
+            $('.imgdescription').attr('form','editgallery');
+            $('.check-icon').attr('src','/svg/checkbox-success.svg');
+
+        }
+        else if($('.check-icon').attr('src') == '/svg/checkbox-success.svg'){
+
+            $('.imgcb').prop('checked',false);
+            $('.submitGallery').prop('disabled', true);
+            $('.imgdescription').attr('form','');
+            $('.check-icon').attr('src','/svg/checkbox.svg');
+
+        } 
+
+    });
+    $('.add-gallery').mouseover(function(){
+
+        $('.plus-icon').attr('src','/svg/plus.svg');
+
+    });
+    $('.add-gallery').mouseout(function(){
+
+        $('.plus-icon').attr('src','/svg/plusgray.svg');
 
     });
 
@@ -165,4 +219,4 @@ $(window).load(function(){
 
     });
 
-    });
+});

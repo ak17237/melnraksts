@@ -81,6 +81,7 @@ Route::get('event/{id}/gallery',[ // Galerijas lapa pasākumam
     'roles' => ['User','Admin']
         ]);
 Route::post('event/{id}/gallery/upload','FileController@uploadgallery')->name('uploadgallery'); // Galerijas foto ielāde
+Route::post('/event/{id}/gallery/edit','FileController@editgallery')->name('editgallery'); // Galerijas foto apraksta rediģēšana
 Route::post('/event/{id}/gallery/delete','FileController@deletegallery')->name('deletegallery'); // Galerijas foto dzēšana
 Route::get('/download/{id}/eventreport',[ // Atskaites lejuplāde docx formātā
     'uses' => 'FileController@downloadreport',

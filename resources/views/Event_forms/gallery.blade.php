@@ -15,6 +15,8 @@
             <strong style="font-weight: 600;">Rediģēšanas režīms ieslēgts!</strong>Lai izslēgtu nospiediet krustiņu.
             <img class="close-icon closeEdit" src="/svg/close.svg" alt="Circle-Plus" width="24" height="24">
             <button type="submit" class="submitGallery" form="deletegallery"><img class="trash-icon" src="/svg/trash.svg" alt="Circle-Plus" width="24" height="24"></button>
+            <button type="submit" class="submitGallery" form="editgallery"><img class="trash-icon edit-icon" src="/svg/edit.svg" alt="Circle-Plus" width="24" height="24"></button>
+            <button type="button" class="checkGallery" id="checkall"><img class="trash-icon check-icon" src="/svg/checkbox.svg" alt="Circle-Plus" width="24" height="24"></button>
         </div>
     <div class="content" id="gallery-content">
             <a href="javascript:window.location=document.referrer;" class="btn btn-primary back left ml-7-p">Atpakaļ</a>
@@ -26,10 +28,7 @@
             Galerija
         </div>
         @include('errors')
-        <div class="alert alert-dismissible alert-warning" style="display: none;padding-top: 20px;">
-                <button type="button" class="close" data-dismiss="alert">&times;</button>
-                    <p class="mb-0 text-warn"></p><br>
-        </div>
+        
         @if(session()->has('message'))
                 <div class="alert alert-dismissible alert-success" style="margin-top: 79px;margin-bottom: 20px;">
                     <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -46,12 +45,18 @@
             <div class="gallery-photo imgcheckbox">
                     <input type="hidden" name="imgname{{$i}}" value="{{ $gallery[$i]->Name  }}" form="deletegallery">
                     <input type="checkbox" class="imgcb" name="imgcheckbox{{$i}}" id="imgcb{{$i}}" form="deletegallery"/>
-
                     <label for="imgcb{{$i}}" class="innerImage">
                     <img src="/event-gallery/{{$gallery[$i]->Name}}" alt="{{$gallery[$i]->Name}}" width="300" height="168.75">
                     </label>
+                    <input type="text" name="imgdescription-{{$gallery[$i]->id}}" id="imgdescription{{$i}}" class="form-control imgdescription"
+                    @if($gallery[$i]->Description != NULL) 
+                    value="{{ $gallery[$i]->Description }}"
+                    @endif>
                     <div class="imageContainer">
-                    <img class="outerImage" id="galerryImg{{$i}}" src="/event-gallery/{{$gallery[$i]->Name}}" alt="{{$gallery[$i]->Name}}" width="300" height="168.75">
+                    <img class="outerImage" id="galerryImg{{$i}}" src="/event-gallery/{{$gallery[$i]->Name}}" 
+                    @if($gallery[$i]->Description == NULL) 
+                        alt="{{$gallery[$i]->Name}}" 
+                    @else alt="{{$gallery[$i]->Description}}" @endif width="300" height="168.75">
                         <div class="middle">
                             <div class="text">
                                 <img src="/svg/eye.svg" alt="EyeIcon" width="24" height="24">
@@ -79,8 +84,8 @@
             <div class="add-gallery">
                 <form id="addphotosgallery"  method="POST" action="{{ route('uploadgallery',$id) }}" enctype="multipart/form-data">
                     {{csrf_field()}}
-                    <label for="gallery">
-                    <img class="plus-icon" src="/svg/plus.svg" alt="Circle-Plus" width="48" height="48">
+                    <label for="gallery" class="plus-icon-label">
+                    <img class="plus-icon" src="/svg/plusgray.svg" alt="Circle-Plus" width="48" height="48">
                     </label>
                     <input multiple type="file" id="gallery" name="gallery[]" accept="image/png, image/jpeg,jpg,gif">
                 </form>
@@ -91,6 +96,9 @@
                         {{csrf_field()}}
                         
                     </form>
+                <form action="{{ route('editgallery',$id) }}" id="editgallery" enctype="multipart/form-data" method="POST">
+                {{csrf_field()}}
+            </form>                    
             @endif
         </div>
         @endif

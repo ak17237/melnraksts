@@ -109,6 +109,7 @@ html, body {
     text-align: -webkit-center;
     width: 100%;
     max-width: 750px;
+    height: 40px;
     padding-right: 15px;
     padding-left: 15px;
     margin-right: auto;
@@ -184,6 +185,13 @@ td.top{
   }
   .bold{
     font-weight: bold;
+  }
+  .month.uppercase.bold{
+      font-size: 24px;
+  }
+  .prev img,.next img{
+      width: 30px;
+      height: 30px;
   }
 .history-slider-months,.slider-months, .slider-reservation {
     list-style-type: none;
@@ -752,6 +760,11 @@ input#gallery,input#avatar {
 .gallery-photo{
     margin-left: 10.56%;
 }
+.imgdescription{
+    display:none;
+    width: 100%;
+    height: 30px;
+}
 .innerImage,.innerImage img{
     width: 100%;
     height: 100%;
@@ -799,6 +812,9 @@ input#gallery,input#avatar {
 .trash-icon:hover,.close-icon:hover{
     transform: scale(1.5) translate(-30%, -30%);
     transition: 0.3s;
+}
+.edit-icon{
+    margin-right: 41px;
 }
 #editAlert{
     padding-right: 5px;
@@ -868,7 +884,7 @@ input#gallery,input#avatar {
     box-shadow: 0 0 5px #333;
     z-index: -1;
   }
-  button.submitGallery{
+  button.submitGallery,button.checkGallery{
     border: none;
     background: #e2e3e5;
     width: 0;
@@ -1244,6 +1260,9 @@ input#qrcode{
 }
 .searchboxformguest{
     margin-top: 4%;
+}
+.check-icon{
+    margin-right: 82px;
 }
   /* 100% Image Width on Smaller Screens */
 @media only screen and (max-width: 700px){

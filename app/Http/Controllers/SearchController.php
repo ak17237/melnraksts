@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Events;
 use App\Reservation;
+use App\User;
 
 class SearchController extends Controller
 {
@@ -67,13 +68,26 @@ class SearchController extends Controller
                 }
                 if($search[5] == 'on') $filter[3] = '%' . $search[1]  . '%';
             
-            $data =  Reservation::where('email','like',$filter[0])
+                if(User::where('email','like',$filter[0])->exists()){
+
+                    $user = User::where('email','like',$filter[0])->get();
+                    
+                    foreach($user as $u){
+
+                        $userid[] = $u->id;
+
+                    }
+                }
+                else $userid = 0;
+
+            $data =  Reservation::whereIn('user_id',$userid)
             ->orWhere('Tickets',$filter[1])
             ->orWhere('EventID','like',$filter[2])
             ->orWhere('Transport','like',$filter[3])->SimplePaginate(5,['*'], 'page', $page);
+
             $counter = 1;
-    
-            $count = Reservation::where('email','like',$filter[0])
+
+            $count = Reservation::whereIn('user_id',$userid)
             ->orWhere('Tickets',$filter[1])
             ->orWhere('EventID','like',$filter[2])
             ->orWhere('Transport','like',$filter[3])->count();
@@ -100,7 +114,8 @@ class SearchController extends Controller
             $data = implode(">",$request->except('_token','eventsearch','eventtitle','eventdate','eventaddress','eventanotation'));
         else $data = 'checkevent>' . $request['search'] . '>on>on>on>on';
 
-        if($request['eventdate'] == 'off' &&  $request['reservtickets'] == 'off'){
+
+        if(empty($request['eventdate']) || $request['eventdate'] == 'off' &&  $request['reservtickets'] == 'off'){
 
         if(strlen($request['search']) < 3 || strlen($request['search']) > 50) // Ja ieraksta ar roku meklēšanas vārdu garāku jeb īsāku nekā vajag
             $data = 'checkevent>>off>off>off>off';

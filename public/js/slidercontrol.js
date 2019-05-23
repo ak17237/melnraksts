@@ -25,8 +25,8 @@ $(document).ready(function(){
         controls: true,
         nextSelector: 'a.next',
         prevSelector: 'a.prev',
-        nextText: "<img class='main' src='css/images/RightArrow.png'>", // slaidu pārslēgšanas pogas
-        prevText: "<img class='main' src='css/images/LeftArrow.png'>",
+        nextText: "<img class='main' src='svg/right-arrow.svg'>", // slaidu pārslēgšanas pogas
+        prevText: "<img class='main' src='svg/left-arrow.svg'>",
         infiniteLoop: false,
         hideControlOnEnd: true,
         startSlide: 0,

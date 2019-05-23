@@ -21,7 +21,7 @@ class Events extends Model
         'VIP',
         'Editable',
         'imgextension',
-        'email',
+        'user_id',
         'linkcode'
     ];
     

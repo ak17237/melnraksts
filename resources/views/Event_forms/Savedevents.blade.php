@@ -12,7 +12,7 @@
   <div class="content">
       @if ($data->count() > 0)
       <div class="form-group myresrvsearch">
-          <label class="col-form-label" for="inputDefault">Meklēt rezervāciju</label>
+          <label class="col-form-label" for="inputDefault">Meklēt pasākumu</label>
           <input type="text" class="form-control" placeholder="Meklēt..." id="myresrvsearchinput">
       </div>
           <div class="reservsearchcbdiv">
