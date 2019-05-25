@@ -21,7 +21,7 @@ class CreateResetuserTable extends Migration
             $table->increments('id');
             $table->string('First_name');
             $table->string('Last_name');
-            $table->string('email')->unique();
+            $table->string('email');
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();

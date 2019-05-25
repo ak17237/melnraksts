@@ -15,7 +15,7 @@ class CreatePdfTable extends Migration
     {
         Schema::create('pdf', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('Event_ID',11)->unsigned();
+            $table->integer('Event_ID',false,true)->length(11);
             $table->string('Name');
             $table->timestamps();
 
