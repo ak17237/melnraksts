@@ -7,7 +7,7 @@
             
         <meta charset="utf-8"/>
 
-        <title>Pasākumu sistēma</title>
+        <title>@yield('PageTitle') | Latvenergo pasākumu sistēma</title>
 
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -32,7 +32,7 @@
         <link href="{{ asset('metronic/layout2/css/custom.css') }}" rel="stylesheet" type="text/css"/>
         <!-- Tēmu stili beigas -->
         
-        <link rel="shortcut icon" href="favicon.ico"/>
+    <link rel="shortcut icon" href="/html-logo.ico"/>
 
         
         <link href="{{ asset('css/bootstrapoverstyle.css') }}" rel="stylesheet" type="text/css">

@@ -16,14 +16,18 @@ class CheckAttendance
      */
     public function handle($request, Closure $next)
     {
-        if(Auth::user()->hasRole('Admin') || checkAttendance(Auth::user()->id,$request->route('id'))) return $next($request);
-        else{
+        if(Auth::check()){
 
-            $message[0] = 'Nevar piekļūt galerijai!';
-            $message[1] = 'Nevar skatīt galerijas pasākumiem,kuros jūs nepiedalījāties!';
-            $state = '3';
+            if(Auth::user()->hasRole('Admin') || checkAttendance(Auth::user()->id,$request->route('id'))) return $next($request);
+            else{
 
-            return response()->view('errors.specificerrors',compact('message','state'));
+                $message[0] = 'Nevar piekļūt galerijai!';
+                $message[1] = 'Nevar skatīt galerijas pasākumiem,kuros jūs nepiedalījāties!';
+                $state = '3';
+
+                return response()->view('errors.specificerrors',compact('message','state'));
+            }
+
         }
     }
 }

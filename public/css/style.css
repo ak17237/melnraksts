@@ -98,6 +98,8 @@ html, body {
 }
 .contain{
     text-align: -webkit-center;
+    text-align: -moz-center;
+    text-align: -o-center;
     width: 100%;
     max-width: 750px;
     padding-right: 15px;
@@ -107,6 +109,8 @@ html, body {
 }
 .slidercontainer{
     text-align: -webkit-center;
+    text-align: -moz-center;
+    text-align: -o-center;
     width: 100%;
     max-width: 750px;
     height: 40px;
@@ -344,6 +348,7 @@ td.top{
     background-color: #3377b5;
 }
 #copybtn{
+    height: 33.59px;
     margin-top: 18px;
     border-radius: 0 .25rem .25rem 0;
     padding-bottom: 5.4px;
@@ -351,6 +356,12 @@ td.top{
     border-color: #5b5b5b;
     float: right;
 
+}
+.reservation-message{
+    margin-top: 15px;
+}
+#imgcopy{
+    margin-bottom: 1px;
 }
 .eventcreate .delete,.deletebtn .delete{
     background-color: #ec8a5b;
@@ -685,7 +696,7 @@ hr{
     font-size: 17px;
 } 
 .tab button:hover {
-    background-color: #357b2b;
+    background-color: #357b2b8c;
     color: aliceblue;
 }
 .tab button.active {
@@ -726,6 +737,8 @@ tr.expiredevent div.eventmonth{
 .add-gallery:hover{
     border:4px solid black;
     -webkit-transition: 0.4s; /* Safari */
+    -moz-transition: 0.4s;
+    -o-transition: 0.4s;
   transition: 0.4s; 
 }
 .add-gallery:hover .plus-icon{
@@ -745,6 +758,8 @@ tr.expiredevent div.eventmonth{
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
   -webkit-transition: 0.4s; /* Safari */
+  -moz-transition: 0.4s;
+  -o-transition: 0.4s;
     transition: 0.4s;
 }
 input#gallery,input#avatar {
@@ -804,6 +819,8 @@ input#gallery,input#avatar {
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
   -webkit-transition: 0.4s; /* Safari */
+  -moz-transition: 0.4s;
+  -o-transition: 0.4s;
     transition: 0.4s;
     float: right;
     margin-top: 9px;
@@ -1076,6 +1093,9 @@ input#gallery,input#avatar {
     font-family: Titlefont;
     src: url("/leaguespartan-bold.woff");
   }
+.profiletab{
+    padding-top: 20px;
+}
 .profiletab button {
     background-color: inherit;
     float: left;
@@ -1196,6 +1216,12 @@ input#qrcode{
     width: fit-content;
     margin: auto;
 }
+@-moz-document url-prefix() {
+    .reservsearchcbdiv,.mysearchpagediv{
+        width: -moz-fit-content;
+        margin: auto;
+    }
+  }
 .searchbtn{
     border: 0;
     background: none;
@@ -1264,6 +1290,10 @@ input#qrcode{
 .check-icon{
     margin-right: 82px;
 }
+.reservcreatetitle{
+    text-align: -webkit-center;
+    text-align: -moz-center;
+}
   /* 100% Image Width on Smaller Screens */
 @media only screen and (max-width: 700px){
 
@@ -1316,6 +1346,7 @@ input#qrcode{
 @media (max-width: 1275px){
     .page-header-outter li.searchbox{
         text-align: -webkit-center;
+        text-align: -moz-center;
         width: calc(20% - 33px);
     }
     .searchboxform{
@@ -1362,6 +1393,40 @@ input#qrcode{
         max-width: 100%;
     }
 }
+@media(max-width: 1032px){
+
+    body{
+         min-width: 1032px;
+    }
+    .manualreservdata{
+        max-width: 40%;
+    }
+    .col-lg-8.eventcreate{
+        max-width: 45%;
+    }
+    .col-lg-2.eventcreate.ticketinfo{
+        max-width: 7%;
+        padding-top: 22px;
+    }
+    .manualreserv{
+        margin-left: 5%;
+    }
+    .eventcreate.ml-7-p{
+        margin-left: 0;
+    }
+    .reservseatcount{
+        padding-left: 0;
+    }
+    .evntcrttcktcnt{
+        padding-left: 0;
+    }
+    .editablereservations{
+        padding-left: 38px;
+    }
+    .editreserv .create{
+        width: 200px;
+    }
+}
 @media(max-width: 991px){
     .content-positioner{
         display: none;
@@ -1374,6 +1439,11 @@ input#qrcode{
     body{
         width: fit-content;
     }
+    @-moz-document url-prefix() {
+        body{
+            display: table;
+        }
+      }
     .qrcode * {
         top: 95%;
         left: 115%;

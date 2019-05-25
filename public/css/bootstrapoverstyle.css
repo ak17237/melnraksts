@@ -25,6 +25,7 @@
     transform-origin: 100% 0%;
 
     -webkit-animation: fadeIn 0.3s ease-in-out;
+    -moz-animation: fadeIn 0.3s ease-in-out;
     animation: fadeIn 0.3s ease-in-out;
 
 }
@@ -76,10 +77,12 @@
     background:#a5a1a1;
 }
 #reservlink{
+    max-width: 42%;
     margin-left: 12px;
     margin-top: 18px;
     border-radius: .25rem 0 0 .25rem;
     padding-bottom: 7px;
+    height: 33.59px;
 }
 .block{
     display: block;
@@ -99,6 +102,7 @@
     background-color: aliceblue;
     border:0px;
     -webkit-appearance: none;
+    -moz-appearance: none;
 }
 .question{
     padding-top: 30px;
@@ -117,7 +121,7 @@ hr{
 }
 .reservshow{
     width: 193px;
-    position: absolute;
+    position: initial;
     bottom: 0;
     left: 10%
 }
@@ -140,6 +144,7 @@ hr{
 }
 .deleteform{
     display: -webkit-box;
+    display: -moz-box;
     position: absolute;
     top: 89.9%;
 }

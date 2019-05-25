@@ -16,12 +16,18 @@ class CreateReservationTable extends Migration
         Schema::create('reservation', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
-            $table->string('email');
-            $table->string('EventTitle');
-            $table->integer('Tickets');
-            $table->integer('Seats');
-            $table->integer('Tables');
-            $table->string('Transport');
+            $table->integer('user_id',11)->unsigned();
+            $table->string('EventID',11)->unsigned();
+            $table->integer('Tickets',11);
+            $table->integer('Seats',11)->default(0);
+            $table->integer('TableNr',11)->default(0);
+            $table->integer('TableSeats',11)->default(0);
+            $table->string('Transport')->default(0);
+            $table->string('QRcode',50)->nullable();
+            $table->tinyInteger('Editable')->default(0);
+
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('EventID')->references('id')->on('events');
         });
     }
 

@@ -12,9 +12,13 @@ class CheckUser implements Rule
      *
      * @return void
      */
-    public function __construct($email)
+
+    public function __construct($email,$eventid)
     {
-        $this->email = $email;
+        $this->email = $email; // lietotāja e-pasts
+        $this->eventid = $eventid; // pasākuma id
+        $this->validateuser = false; // lietotāja validācijas
+        $this->validatecount = false; // lietotāja rezervāciju sakita validācija
     }
 
     /**
@@ -26,7 +30,15 @@ class CheckUser implements Rule
      */
     public function passes($attribute, $value)
     {
-        if(User::where('email', $this->email)->exists()) return true;
+        if(User::where('email', $this->email)->exists()) { // Pārbauda vai eksistē lietotājs ar šādu e-pastu
+            
+            $this->validateuser = true;   
+            if(checkResrvationCount($this->eventid,$this->email) < 2) $this->validatecount = true;
+            /* Pārbaudīt vai lietotājs,kuru vajag rezervēt jau rezervēja maksimālo biļešu skaitu */
+
+        }
+        if($this->validateuser == true && $this->validatecount == true) return true;
+
     }
 
     /**
@@ -36,6 +48,9 @@ class CheckUser implements Rule
      */
     public function message()
     {
-        return 'Lietotājs ar šādu e-pastu nav reģistrēts';
+        if($this->validateuser == false)
+            return 'Lietotājs ar šādu e-pastu nav reģistrēts';
+        elseif($this->validatecount == false)
+            return 'Šim lietotājam jau ir maskimālais rezervāciju skaits(2)';
     }
 }

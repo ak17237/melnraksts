@@ -1,9 +1,9 @@
 @extends('welcome')
+@section('PageTitle','Autorizācija')
 @section('content')
 
 <div class="container">
     <div class="row">
-        <a href="javascript:window.location=document.referrer;" class="btn btn-primary back">Atpakaļ</a>
         <div class="col-lg-offset-3 col-lg-6 center">
 
         <form class="form-horizontal" action="{{ route('login') }}" method="POST">

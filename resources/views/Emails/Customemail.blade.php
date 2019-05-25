@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
-		<title>Pasākuma dati izmainīti</title>
+		<title>Pasākuma dati izmainīti | Latvenergo pasākumu sistēma</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<style type="text/css">
@@ -106,7 +106,7 @@
 														<table class="center" cellpadding="0" cellspacing="0">
 															<tr>
 																<td style="line-height:0;">
-																	<a target="_blank" style="text-decoration:none;" href="{{url('/')}}"><img @if($preview) src="\latvenergo-logo.png" @else src="<?php echo $message->embed(public_path() . '\latvenergo-logo.png'); ?>" @endif border="0" style="font:bold 12px/12px Arial, Helvetica, sans-serif; color:#606060;" align="left" vspace="0" hspace="0" width="160px" alt="Latvenergo" /></a>
+																	<a target="_blank" style="text-decoration:none;" href="{{url('/')}}"><img @if($preview) src="\png\latvenergo-logo.png" @else src="<?php echo $message->embed(public_path() . '\png\latvenergo-logo.png'); ?>" @endif border="0" style="font:bold 12px/12px Arial, Helvetica, sans-serif; color:#606060;" align="left" vspace="0" hspace="0" width="160px" alt="Latvenergo" /></a>
 																</td>
 															</tr>
 														</table>
@@ -134,7 +134,7 @@
 							<td data-bgcolor="bg-module" bgcolor="#eaeced">
 								<table class="flexible" width="600" align="center" style="margin:0 auto;" cellpadding="0" cellspacing="0">
 									<tr>
-										<td class="img-flex"><img @if($preview) src="\img-01.jpg" @else src="<?php echo $message->embed(public_path() . '\img-01.jpg'); ?>" @endif style="vertical-align:top;" width="600" height="306" alt="" /></td>
+										<td class="img-flex"><img @if($preview) src="\png\img-01.jpg" @else src="<?php echo $message->embed(public_path() . '\png\img-01.jpg'); ?>" @endif style="vertical-align:top;" width="600" height="306" alt="" /></td>
 									</tr>
 									<tr>
 										<td data-bgcolor="bg-block" class="holder" style="padding:58px 60px 52px;" bgcolor="#f9f9f9">

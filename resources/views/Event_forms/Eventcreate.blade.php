@@ -1,8 +1,8 @@
 @extends('welcome')
+@section('PageTitle','Izveidot pasākumu')
 @section('content')
 
 <div class="container">
-        <a href="javascript:window.location=document.referrer;" class="btn btn-primary back">Atpakaļ</a>
     <br>
         <div class="row">
             <div class="col-lg-offset-3 col-lg-11 center">
@@ -92,7 +92,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-lg-4 eventcreate">
+                                <div class="col-lg-4 eventcreate evntcrttcktcnt">
                                         <label>Skaits</label>
                                     <input type="number" min="1" name='ticketcount' class="form-control tickets {{ $errors->has('ticketcount') ? ' is-invalid' : '' }}" id="eventaddress" 
                                     @if(old('Radio') == "No") {{-- ja vecā bija NO tad atslēgt input un noņemt vērtību --}}
@@ -211,7 +211,7 @@
                         
                             <div class=" col-lg-12 eventcreate">
                                 <label>Pasākuma apraksts</label>
-                                <textarea class="form-control" name='description' id="eventdescription" rows="3">{{ old('description') }}</textarea>
+                                <textarea class="form-control" name='description' id="eventdescription" rows="8">{{ old('description') }}</textarea>
                             </div>
                             
                                 <div class="custom-control custom-switch col-lg-12 eventcreate">
@@ -219,7 +219,7 @@
                                   <input type="checkbox" class="custom-control-input" id="customSwitch1" name="vipswitch" {{ old('vipswitch') ? 'checked' : '' }}>
                                   <label class="custom-control-label" for="customSwitch1">VIP pasākums</label>
                                 </div>
-                                <div class="col-lg-3 eventcreate">
+                                <div class="col-lg-3 eventcreate editablereservations">
                                     <input type="checkbox" class="custom-control-input" id="customSwitch2" name="editableswitch" {{ old('editableswitch') ? 'checked' : '' }}>
                                     <label class="custom-control-label" for="customSwitch2">Rediģējamas rezervācijas</label> 
                                     <i class="far fa-question-circle" id="reserveditabletooltip"></i>

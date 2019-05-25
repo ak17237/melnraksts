@@ -1,8 +1,8 @@
 @extends('welcome')
+@section('PageTitle','Rezervēt ' . $myevent->Title)
 @section('content')
 
 <div class="container">
-    <a href="javascript:window.location=document.referrer;" class="btn btn-primary back">Atpakaļ</a>
     <br>
     <div class="row">
         <div class="col-lg-offset-3 col-lg-11 center">
@@ -24,13 +24,13 @@
             </div>
             @if($ticketinfo == 0 && $myevent->Tickets != -999)
                 <h3 style="text-align: -webkit-center;">Biļetes ir beigušās</h3>
-            @elseif(checkResrvationCount($myevent->id,Auth::user()->email) >= 2) 
+            @elseif(checkResrvationCount($myevent->id,Auth::user()->email) >= 2 && Auth::user()->hasRole('User')) 
                 <h3 style="text-align: center;"><strong>Jūs pasūtījāt maksimāli pieļaujamo biļešu skaitu uz lietotāju šajā pasākumā</strong></h3>
             @else
                 <form action="{{ route('reservationcreate',['id' => $myevent->id, 'extension' => $myevent->linkcode]) }}" method="POST">
                     {{csrf_field()}}    
                     <fieldset>
-                        <legend class="eventcreate">Rezervēt pasākumu "{{ $myevent->Title }}"</legend>
+                        <legend class="eventcreate reservcreatetitle">Rezervēt pasākumu "{{ $myevent->Title }}"</legend>
                         @if(session()->has('message'))
                             <div class="alert alert-dismissible alert-success">
                                 <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -39,9 +39,14 @@
                         @endif
                         @if(Auth::check() && Auth::user()->hasRole('Admin'))
                             <div class="custom-control custom-switch col-lg-2 eventcreate manualreserv">
-                                <input type="hidden" name="manualreserv" value="off" />
-                                <input type="checkbox" class="custom-control-input" id="customSwitch1" name="manualreserv" 
-                                @if(old('manualreserv') == "on")
+                                <input type="hidden" name="manualreserv" 
+                                @if(checkResrvationCount($myevent->id,Auth::user()->email) >= 2 && Auth::user()->hasRole('Admin'))
+                                value="on" {{-- Lai kad galvenais checkbox is disabled checked lai būtu vērtība on,un var rezervēt tikai lietājus --}}
+                                @else value="off" @endif/>
+                                <input type="checkbox" class="custom-control-input" id="customSwitch1" name="manualreserv"
+                                @if(checkResrvationCount($myevent->id,Auth::user()->email) >= 2 && Auth::user()->hasRole('Admin'))
+                                checked disabled {{-- Ja nav pašam palikušas rezervācijas,lai var rezervēt tikai lieotāju --}}
+                                @elseif(old('manualreserv') == "on")
                                 checked 
                                 @endif>
                                 <label class="custom-control-label" for="customSwitch1">Rezervēt lietotāju</label>
@@ -99,7 +104,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-3 eventcreate">
+                                <div class="col-lg-3 eventcreate reservseatcount">
                                     <label>Sēdvietu skaits</label>
                                     <input type="number" min="1" name='seatnr' id="seatcount" class="count form-control eventseat {{ $errors->has('seatnr') ? ' is-invalid' : '' }}"
                                     @if(old('customRadio') == "No") {{-- ja vecā bija NO tad atslēgt input un noņemt vērtību --}}
@@ -205,7 +210,14 @@
                                     @if(($checkedseats != 0 && $checkedtables == 0) || ($checkedseats == 0 && $checkedtables != 0))</div>@endif {{-- Ja ir tikai sēdveitas vai tikai galdi,lai pareizi bīdītos --}}
                                 {{-- Pasakaidrojums formai --}}
                                     <div class="col-lg-11 eventcreate ticketinfo ml-7-p">
-                                        <span>Sēdvietas nekādā veidā nav saistītas ar sēdvietām pie galda,tās ir neatkarīgās sēdvietas</span>    
+                                        <span>Sēdvietas nekādā veidā nav saistītas ar sēdvietām pie galda,tās ir neatkarīgās sēdvietas</span><br><br>
+                                        <span>Maksimāli pieļaujamais skaits uz vienu lietotāju ir 2</span><br><br>
+                                        <span>Ja jūs saņemat kļūdu,pārbaudiet:</span><br>
+                                        <span><strong>1. Vai jūsu biļešu skaits nav lielāks par 2</span><br>
+                                        <span>2. Vai jūsu sēdvietu skaits nav lielāks par biļešu skaitu</span><br>
+                                        <span>3. Vai pasākumam palika pietiekams biļetes,kuras jūs gribat rezervēt</strong></span><br>
+                                        <span>Lai pārbaudīt pasākumam pieejamas vietas,pārvietojiet kurosru uz jautajumu zīmi pie biļeša skaita.</span>
+                                            
                                     </div>
 
 

@@ -131,7 +131,7 @@ class FileController extends Controller
 
         $report->setValue('nosaukums',$event->Title); // aizpildam dokumenta lauku
 
-        $user = User::where('email', $event->email)->first(); // atrodam kurš izveidoja pasākumu
+        $user = User::find($event->user_id); // atrodam kurš izveidoja pasākumu
 
         $report->setValue('autors',$user->First_name . ' ' . $user->Last_name); // ievietojam dokumentā
         $report->setValue('adrese',$event->Address);

@@ -1,14 +1,14 @@
 @extends('welcome')
+@section('PageTitle','Rezervācijas pārskats')
 @section('content')
 
 <div class="container">
-    <a href="javascript:window.location=document.referrer;" class="btn btn-primary back">Atpakaļ</a>
     <br>
         <div class="row">
             <div class="col-lg-offset-3 col-lg-11 center">
 
                     @if(session()->has('message'))
-                    <div class="alert alert-dismissible alert-success">
+                    <div class="alert alert-dismissible alert-success reservation-message">
                       <button type="button" class="close" data-dismiss="alert">&times;</button>
                       <p class="mb-0">{{ session()->get('message') }}</p>
                     </div>

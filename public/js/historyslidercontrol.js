@@ -1,3 +1,4 @@
+var historyslider;
 $(document).ready(function(){
 
     var months = [] // Masīvs mēneša korektai izvadei vārdos
@@ -19,14 +20,14 @@ $(document).ready(function(){
     jQuery('.month').html(months[todaymonth]); // ievieto šodienas mēnesi slaidera galvenē
     jQuery('#historyslidermonth,#mainslidermonth').html(todaymonth); // kad pārslēdz no gaidāmā uz pagājušiem pasākumiem lai pārslēdzas slaidera headera mēnesis
 
-    var historyslider = $('.historyslider').bxSlider({ // bxSlider plugina iestatījumi
+    historyslider = $('.historyslider').bxSlider({ // bxSlider plugina iestatījumi
         mode: 'fade',
         keyboardEnabled: true,
         controls: true,
         nextSelector: 'a.next',
         prevSelector: 'a.prev',
-        nextText: "<img class='history' src='css/images/RightArrow.png'>", // slaidu pārslēgšanas pogas
-        prevText: "<img class='history' src='css/images/LeftArrow.png'>",
+        nextText: "<img class='history' src='svg/right-arrow.svg'>", // slaidu pārslēgšanas pogas
+        prevText: "<img class='history' src='svg/left-arrow.svg'>",
         infiniteLoop: false,
         hideControlOnEnd: true,
         startSlide: 5,
@@ -45,39 +46,52 @@ $(document).ready(function(){
         touchEnabled: false,
         wrapperClass: 'history-bx bx-wrapper'
     });
-    
-    $('button#slider').addClass('active');
 
-    $('button#slider').click(function(){
+    function mainslideractive($element){
 
-        $(this).siblings('button').removeClass('active');
-        $(this).addClass('active');
+        $($element).siblings('button').removeClass('active');
+        $($element).addClass('active');
         $('.main').show();
         $('.history').hide();
         $('.history-bx,.history-slider-months').fadeOut(200,function(){
             $('.slider-months,.main-bx').fadeIn(200);
-            mainslider.redrawSlider();
+            if($('div').hasClass('bx-wrapper')) mainslider.redrawSlider();
         });
         
-
+        localStorage.setItem("slidertab","present");
         jQuery('.month').hide().fadeOut('fast').html(months[$('#mainslidermonth').text()]).fadeIn('slow'); // kad pārslēdz no gaidāmā uz pagājušiem pasākumiem lai pārslēdzas slaidera headera mēnesis
 
-    });
-    $('button#historyslider').click(function(){
+    }
+    function historyslideractive($element){
 
-        $(this).siblings('button').removeClass('active');
-        $(this).addClass('active');
+        $($element).siblings('button').removeClass('active');
+        $($element).addClass('active');
         $('.main').hide();
         $('.history').show();
         $('.main-bx,.slider-months').fadeOut(200,function(){
             $('.history-slider-months,.history-bx').fadeIn(200);
-            historyslider.redrawSlider();
+            if($('div').hasClass('bx-wrapper')) historyslider.redrawSlider();
         });
         
-
+        localStorage.setItem("slidertab","past");
         
 
         jQuery('.month').hide().fadeOut('fast').html(months[$('#historyslidermonth').text()]).fadeIn('slow'); // kad pārslēdz no gaidāmā uz pagājušiem pasākumiem lai pārslēdzas slaidera headera mēnesis
+
+
+    }
+
+    if(localStorage.getItem('slidertab') == null || localStorage.getItem('slidertab') == 'present') mainslideractive($('button#slider'));
+    else historyslideractive($('button#historyslider'));
+
+    $('button#slider').click(function(){
+
+        mainslideractive($('button#slider'));
+        
+    });
+    $('button#historyslider').click(function(){
+
+        historyslideractive($('button#historyslider'));
 
     });
     

@@ -1,7 +1,8 @@
 @extends('welcome')
+@section('PageTitle','Rediģēt pasākumu')
 @section('content')
 <div class="container">
-        <a href="javascript:window.location=document.referrer;" class="btn btn-primary back">Atpakaļ</a>
+<a href="{{ route('showevent',$myevent->id) }}" class="btn btn-primary back">Apskatīt pasākumu</a>
             <br>
         <div class="row">
             <div class="col-lg-offset-3 col-lg-11 center">
@@ -13,7 +14,7 @@
                             <p style="float:left;">Rezervācijas links: </p>
                                 <input id="reservlink" class="form-control col-lg-5 eventcreate" value="{{ route('showreservationcreate', ['id' => $myevent->id,'extension' => $myevent->linkcode]) }}">
                                 <button id="copybtn" type="button" class="btn btn-secondary clippy eventcreate editcpy">
-                                    <img id='imgcopy' src="{{ asset('clippy.svg') }}" width="25" height="25">
+                                    <img id='imgcopy' src="{{ asset('svg/clippy.svg') }}" width="25" height="25">
                                 </button>
                             <p class="eventinfo eventcreate smalltitle m-b-md" style="padding: unset;margin: unset;">Rediģēt pasākumu 
                                 @if(strlen($myevent->Title) > 23)
@@ -118,7 +119,7 @@
                                         </div>
                                     </div>
     
-                                    <div class="col-lg-4 eventcreate">
+                                    <div class="col-lg-4 eventcreate evntcrttcktcnt">
                                             <label>Skaits</label>
                                         <input type="number" name='ticketcount' class="form-control tickets {{ $errors->has('ticketcount') ? ' is-invalid' : '' }}" id="eventaddress" 
                                         @if(old('Radio') == "No") {{-- Ja vecā ir NO tad atslēgt un noņemt vērtību --}}
@@ -298,7 +299,7 @@
                         
                             <div class=" col-lg-12 eventcreate">
                                 <label>Pasākuma apraksts</label>
-                                <textarea class="form-control" name='description' id="eventdescription" rows="3">
+                                <textarea class="form-control" name='description' id="eventdescription" rows="8">
                                     @if(empty(old('description')))
                                     {{ $myevent->Description }}
                                     @else
@@ -321,7 +322,7 @@
                               <label class="custom-control-label" for="customSwitch1">VIP pasākums</label>
                             </div>
 
-                            <div class="col-lg-3 eventcreate">
+                            <div class="col-lg-3 eventcreate editablereservations">
                                 <input type="hidden" name="editableswitch" value="off" />
                                 <input type="checkbox" class="custom-control-input" id="customSwitch2" name="editableswitch" 
                                 @if(old('editableswitch') == "on") checked=""
@@ -331,7 +332,7 @@
                                           checked=""
                                       @endif
                                   @endif>
-                                <label class="custom-control-label" for="customSwitch2">Rediģējams pasākums</label>
+                                <label class="custom-control-label" for="customSwitch2">Rediģējamas rezervācijas</label>
                                 <i class="far fa-question-circle" id="reserveditabletooltip"></i>
                                 <div class="questiontooltip"></div>
                               </div>
@@ -360,7 +361,7 @@
                                         <input type="hidden" name="pdfname{{$i}}" value="{{ $pdf[$i]->Name  }}" form="deletepdf">
                                         <input type="checkbox" class="pdfcb" name="pdfcheckbox{{$i}}" id="pdfcb{{$i}}" form="deletepdf"/>
                                         <label for="pdfcb{{$i}}">
-                                            <img src="{{ asset('pdf.svg') }}" alt="png" width="40" height="40">
+                                            <img src="{{ asset('svg/pdf.svg') }}" alt="png" width="40" height="40">
                                             <p class="small">{{ $pdf[$i]->Name }}</p>
                                         </label>
                                     </li>     
@@ -385,7 +386,7 @@
                                 </div>
                                 @if(sizeof($pdf) <= 2)</div>@endif
                             <div class="col-lg-12 eventcreate buttons">
-                                        <div class="eventcreatebutton edit right"><button type="submit" class="btn btn-primary create right" name="action" value="create">
+                                        <div class="eventcreatebutton edit right"><button type="submit" class="btn btn-primary create right" name="action" id="createeventbtn" value="create">
                                             @if ($myevent->Melnraksts == 0)
                                                 Rediģēt
                                             @else

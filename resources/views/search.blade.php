@@ -1,7 +1,7 @@
 @extends('welcome')
+@section('PageTitle','Meklēt')
 @section('content')
 <div class="container">
-    <a href="javascript:window.location=document.referrer;" class="btn btn-primary back">Atpakaļ</a>
     @if(session()->has('message'))
       <br>
       <div class="alert alert-dismissible alert-success" style="margin-top: 20px;">
@@ -141,8 +141,8 @@
                         <img src="/profile-avatar/{{getuserbyid($d->user_id)->Avatar}}"  width="75" height="75">
                       </a>
                       @else
-                      <a href="/Empty-Avatar.png">
-                        <img src="/Empty-Avatar.png" width="75" height="75">
+                      <a href="/png/Empty-Avatar.png">
+                        <img src="/png/Empty-Avatar.png" width="75" height="75">
                       </a>
                       @endif
                     </td>

@@ -78,7 +78,7 @@ class SearchController extends Controller
 
                     }
                 }
-                else $userid = 0;
+                else $userid[] = 0;
 
             $data =  Reservation::whereIn('user_id',$userid)
             ->orWhere('Tickets',$filter[1])

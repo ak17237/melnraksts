@@ -1,4 +1,5 @@
 @extends('welcome')
+@section('PageTitle','Kļūda')
 @section('content')
 
 <div id="notfound">

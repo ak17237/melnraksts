@@ -90,7 +90,7 @@ class createReservationRequest extends FormRequest
         $rules = array();
         if(request('manualreserv') == 'on'){ // ja maunāli rezervē
 
-            $rules['email'] = ['required',new CheckUser(request('email'))]; //  pārbaudam lietotāju ar e-pastu uz esamību
+            $rules['email'] = ['required',new CheckUser(request('email'),$this->route('id'))]; //  pārbaudam lietotāju ar e-pastu uz esamību un rezervāciju skaitu
 
         }
         // validācijas noteikumi,nevar būt vairāk par 2 biļetēm,nevar būt mazāk par sēdvietu un sēdvietu pie galda kopsummu

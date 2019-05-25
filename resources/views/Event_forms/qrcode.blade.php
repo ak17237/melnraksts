@@ -1,7 +1,7 @@
 @extends('welcome')
+@section('PageTitle',geteventbyid($id)->Title . ' biļešu skanēšana')
 @section('content')
 <div>
-<a href="javascript:window.location=document.referrer;" class="btn btn-primary back">Atpakaļ</a>
 </div>
     <div class="qrcode">
         @if(session()->has('message'))

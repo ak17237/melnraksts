@@ -41,11 +41,19 @@ class ReservationController extends Controller
         $elements = 10;
         $counter = 1;
 
-        $user = User::where('email', Auth::user()->email)->first();
-        $reservations = Reservation::where('user_id',$user->id)->orderBy('updated_at','DESC')->SimplePaginate($elements,['*'], 'page', $page);
-        $event = null;
+        $events = Events::where('Datefrom','>',date('Y-m-d',strtotime('-1 weeks')))->get();
 
-        $count = Reservation::where('user_id',$user->id)->count();
+        foreach($events as $event){
+
+            $presentevents[] = $event->id;
+
+        }
+        $user = User::where('email', Auth::user()->email)->first();
+
+        $reservations = Reservation::where('user_id',$user->id)->whereIn('EventID',$presentevents)->orderBy('updated_at','DESC')->SimplePaginate($elements,['*'], 'page', $page);
+        $count = Reservation::where('user_id',$user->id)->whereIn('EventID',$presentevents)->count();
+
+        $event = null;
         
         $number = 1;
         while($count > $elements){ // precīza paginēšanas url izvade un pogas tai
@@ -103,7 +111,7 @@ class ReservationController extends Controller
 
     }
     public function reservationcreate(createReservationRequest $request,$id){ // Saņem ierakstītos datus uz pasākuma ID
-        
+
         define("DOMPDF_UNICODE_ENABLED", true); // PDF rakstīšanai vajadzīgā formātā
 
         $myevent = Events::find($id); // atrod vajadzīgo pasākumu
@@ -195,11 +203,20 @@ class ReservationController extends Controller
 
         }
 
-        if(\Session::get('way') == 'users')
-        return redirect()->route('showreservation',$id)->with('message','Rezervācija Izmainīta');
-        else 
-        return redirect()->route('showreservation',$id)->with('message','Rezervācija Izmainīta');
-        // kad back pogas strādās pareizi redirects būs uz apskates lapu tā pat kā augstaāk
+        if(\Session::get('way') == 'users'){
+
+            if($reservation->wasChanged())
+                return redirect()->route('showreservation',$id)->with('message','Rezervācija izmainīta');
+            else return redirect()->route('showreservation',$id)->with('message','Rezervācijā nebija veiktas izmaiņas');
+
+        }
+        else {
+
+            if($reservation->wasChanged())
+                return redirect()->route('showreservation',$id)->with('message','Rezervācija izmainīta');
+            else return redirect()->route('showreservation',$id)->with('message','Rezervācijā nebija veiktas izmaiņas');
+
+        }
 
     }
     public function reservationdelete($id){

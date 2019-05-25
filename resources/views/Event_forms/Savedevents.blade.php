@@ -1,7 +1,7 @@
 @extends('welcome')
+@section('PageTitle','Melnraksti')
 @section('content')
 <div class="container">
-    <a href="javascript:window.location=document.referrer;" class="btn btn-primary back">Atpakaļ</a>
     @if(session()->has('message'))
       <br>
       <div class="alert alert-dismissible alert-success" style="margin-top: 20px;">
@@ -11,7 +11,7 @@
     @endif
   <div class="content">
       @if ($data->count() > 0)
-      <div class="form-group myresrvsearch">
+      <div class="form-group myresrvsearch" style="padding-top: 20px;">
           <label class="col-form-label" for="inputDefault">Meklēt pasākumu</label>
           <input type="text" class="form-control" placeholder="Meklēt..." id="myresrvsearchinput">
       </div>

@@ -1,4 +1,5 @@
 @extends('welcome')
+@section('PageTitle',geteventbyid($id)->Title . ' galerija')
 @section('content')
 <div id="loadinger" class="fakeLoader"> {{-- Lapas loaders,pirms lapas attēli ielādējas --}}
         <script type="text/javascript"> 
@@ -19,7 +20,6 @@
             <button type="button" class="checkGallery" id="checkall"><img class="trash-icon check-icon" src="/svg/checkbox.svg" alt="Circle-Plus" width="24" height="24"></button>
         </div>
     <div class="content" id="gallery-content">
-            <a href="javascript:window.location=document.referrer;" class="btn btn-primary back left ml-7-p">Atpakaļ</a>
             @if(sizeof($gallery) > 0 && Auth::check() && Auth::user()->hasRole('Admin'))
             <button type="button" id="editGallery" class="btn btn-primary back right mr-7-p">Rediģēt</button>
             @endif

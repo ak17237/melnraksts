@@ -13,14 +13,19 @@ class EventChange extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $user;
+    public $reserv;
+    public $event;
+    public $changedate;
+    public $changeaddress;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($reservuser,$email,$event,$change)
+    public function __construct($reservuser,$user,$event,$change)
     {
-        $this->email = $email;
+        $this->user = $user;
         $this->reserv = $reservuser;
         $this->event = $event;
         $this->changedate = $change[0];
@@ -34,12 +39,11 @@ class EventChange extends Mailable
      */
     public function build()
     {
-        
         return $this->view('Emails.Eventchange')->subject("Rezervētā pasākuma izmaiņas")->with([
             'event' => $this->event,
             'changedate' => $this->changedate,
             'changeaddress' => $this->changeaddress,
             'reserv' => $this->reserv
-            ])->to($this->email);
+            ])->bcc($this->user);
     }
 }

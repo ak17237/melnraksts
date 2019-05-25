@@ -234,6 +234,17 @@ jQuery('document').ready(function(){
          if(datefrom > dateto) $('#dateto').val($('#datefrom').val());
 
     });
+
+    var today = new Date();
+    var todaydate = today.getFullYear() + '-' + String(today.getMonth()+ 1).padStart(2, '0') + '-' + today.getDate();
+
+    $('#createeventbtn').click(function(){
+
+        if($('#datefrom').val() <= todaydate) 
+            return confirm('Pasākums būs pārvietots uz pagjušiem pasākumiem un vairs nebūs pieejams rediģēšanai! Vai turpināt?');
+
+    });
+
     function focus() {
         [].forEach.call(this.options, function(o) {
           o.textContent = o.getAttribute('value') + ' (' + o.getAttribute('data-descr') + ')';

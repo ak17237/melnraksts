@@ -106,7 +106,7 @@
 														<table class="center" cellpadding="0" cellspacing="0">
 															<tr>
 																<td style="line-height:0;">
-																	<a target="_blank" style="text-decoration:none;" href="{{url('/')}}"><img src="<?php echo $message->embed(public_path() . '\latvenergo-logo.png'); ?>" border="0" style="font:bold 12px/12px Arial, Helvetica, sans-serif; color:#606060;" align="left" vspace="0" hspace="0" width="160px" alt="Latvenergo" /></a>
+																	<a target="_blank" style="text-decoration:none;" href="{{url('/')}}"><img src="<?php echo $message->embed(public_path() . '\png\latvenergo-logo.png'); ?>" border="0" style="font:bold 12px/12px Arial, Helvetica, sans-serif; color:#606060;" align="left" vspace="0" hspace="0" width="160px" alt="Latvenergo" /></a>
 																</td>
 															</tr>
 														</table>
@@ -134,7 +134,7 @@
 							<td data-bgcolor="bg-module" bgcolor="#eaeced">
 								<table class="flexible" width="600" align="center" style="margin:0 auto;" cellpadding="0" cellspacing="0">
 									<tr>
-										<td class="img-flex"><img src="<?php echo $message->embed(public_path() . '\img-01.jpg'); ?>" style="vertical-align:top;" width="600" height="306" alt="" /></td>
+										<td class="img-flex"><img src="<?php echo $message->embed(public_path() . '\png\img-01.jpg'); ?>" style="vertical-align:top;" width="600" height="306" alt="" /></td>
 									</tr>
 									<tr>
 										<td data-bgcolor="bg-block" class="holder" style="padding:58px 60px 52px;" bgcolor="#f9f9f9">

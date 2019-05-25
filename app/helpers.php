@@ -235,8 +235,8 @@ function checkExpired($id,$route = NULL){ // pārbauda vai pasākums jau beidzā
         $event = Events::find($reservation->EventID);
     }
     else $event = Events::find($id);
-
-    if(date('Y-m-d') > $event->Datefrom) return true;
+    
+    if(date('Y-m-d') >= $event->Datefrom) return true;
     else return false;
 
 }

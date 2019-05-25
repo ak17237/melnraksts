@@ -82,16 +82,6 @@ class EventFormsController extends Controller
         if(empty($request['editableswitch'])) $editable = 0;
         else $editable = 1;
 
-        if($vip == 1 && $request['action'] == 'create'){
-
-        $info = 'VIP';
-        $linkcode = generateRandomString();
-
-        }else {
-            $info = 0;
-            $linkcode = "show";
-        }
-
         if($request['file'] == NULL) $img = NULL; // pārbauda vai ir faila,nav tad img mainīgs ir NULL  
         else $img = $request['file']->getClientOriginalName(); // ja fails ir saņem to pilnu nosaukumu un ieivieto mainīgajā img
 
@@ -112,10 +102,29 @@ class EventFormsController extends Controller
         'Editable' => $editable,
         'imgextension' => $img,
         'user_id' => $user->id,
-        'linkcode' => $linkcode,
         ]);
 
-        $id = Events::all()->sortByDesc(['updated_at'])->first()->id;
+        $event = Events::all()->sortByDesc(['updated_at'])->first();
+
+        if($vip == 1 && $request['action'] == 'create'){
+
+            $info = 'VIP';
+            $linkcode = generateRandomString(); // ģenerējas skaitļu un vārdu nejaušā kārtībā virkne
+                $idarray = str_split($event->id); // sadalam id masīvā,lai izslēgt gadijumu,kad nejauši ģenerēta virkne var ar mazu varbūtību atkārtoties
+    
+            for($i = 0;$i < strlen($event->id);$i++){ // ievietojam virknē id vietās pēc katra burta
+                    //id  pirmais numurs,virknes simbols,id otrais numurs,vēl viens virknes simbols utt.
+    
+                $linkcode = substr_replace($linkcode,$idarray[$i],$i*2,0);
+    
+                }
+    
+            }else {
+                $info = 0;
+                $linkcode = "show";
+            }
+            $event->fill(['linkcode' => $linkcode]); // ievietojam ģenerēto kodu,kas ir kods linkā pasākumam
+            $event->save(); // saglabājam pasākumam
 
         if($request->hasFile('pdffile')){
 
@@ -125,7 +134,7 @@ class EventFormsController extends Controller
                     Storage::disk('pdf')->put($name,File::get($request['pdffile.' . $i]));
 
                     Pdf::create([
-                        'Event_ID' => $id,
+                        'Event_ID' => $event->id,
                         'Name' => $name,
                     ]);
             }
@@ -137,7 +146,7 @@ class EventFormsController extends Controller
             Storage::disk('public')->put($request['file']->getClientOriginalName(),File::get($file));
         }
 
-        return redirect()->back()->with('message','Pasākums ir veiksmīgi ' . $message[$melnraksts])->with('info',$info);
+        return redirect()->route('showevent',$event->id)->with('message','Pasākums ir veiksmīgi ' . $message[$melnraksts])->with('info',$info);
         
     }
     public function edit(createEventRequest $request,$id){
@@ -155,7 +164,7 @@ class EventFormsController extends Controller
             $index = 1; // jebkurā gadijumā rādīt melnrakstu sarakstu ($index ir url numurs $route)
         }
         else {
-            $status = $myevent->Melnraksts; // ja tika rdiģēts bez kļūdām,tad saglabāt ziņu atkarībā kāds status ir pirms izmainīšanas
+            $status = $myevent->Melnraksts; // ja tika rediģēts bez kļūdām,tad saglabāt ziņu atkarībā kāds status ir pirms izmainīšanas
             $index = 0; // ja publicēts tad melnraksts ir 0
         }
 
@@ -173,16 +182,22 @@ class EventFormsController extends Controller
             $info = 0;
         }
         elseif($vip == 1 && $request['action'] == 'create'){
-        
-        $linkcode = generateRandomString();
-        $info = "VIP";
-        
-        }
-        else{
 
-            $linkcode = "show";
-            $info = 0;
-        }
+            $info = 'VIP';
+            $linkcode = generateRandomString(); // ģenerējas skaitļu un vārdu nejaušā kārtībā virkne
+                $idarray = str_split($id); // sadalam id masīvā,lai izslēgt gadijumu,kad nejauši ģenerēta virkne var ar mazu varbūtību atkārtoties
+    
+            for($i = 0;$i < strlen($id);$i++){ // ievietojam virknē id vietās pēc katra burta
+                    //id  pirmais numurs,virknes simbols,id otrais numurs,vēl viens virknes simbols utt.
+    
+                $linkcode = substr_replace($linkcode,$idarray[$i],$i*2,0);
+    
+                }
+    
+            }else {
+                $info = 0;
+                $linkcode = "show";
+            }
 
         if($request['file'] == NULL) { // ja jauna faila nav
 
@@ -243,19 +258,19 @@ class EventFormsController extends Controller
         $reservedusers = Reservation::where('EventID',$id)->get();
 
         if($eventchange[0] || $eventchange[1]) {
-            
+
             foreach($reservedusers as $reserveduser){
 
-            $user = User::find($reserveduser->user_id);
-
-            Mail::send(new EventChange($reserveduser,$user->email,$myevent,$eventchange));
-
+                $user[] = User::find($reserveduser->user_id);
+    
             }
-
+            Mail::send(new EventChange($reserveduser,$user,$myevent,$eventchange));
+            
         }
 
-
-        return redirect()->route('showevent',$id)->with('message','Pasākums ir veiksmīgi ' . $message[$status])->with('info',$info);
+        if($myevent->wasChanged())
+            return redirect()->route('showevent',$id)->with('message','Pasākums ir veiksmīgi ' . $message[$status])->with('info',$info);
+        else return redirect()->route('showevent',$id)->with('message','Pasākumā nebija veiktas izmaiņas')->with('info',$info);
 
 }
     public function delete($id){ // pasākuma dzēšana

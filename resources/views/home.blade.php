@@ -1,4 +1,5 @@
 @extends('welcome')
+@section('PageTitle','Galvenā lapa')
 @section('content')
 
             <div class="content">
@@ -71,7 +72,7 @@
                               @if(Auth::check() && Auth::user()->hasRole('Admin'))
                               <button type="button" class="vip btn btn-secondary clippy homecopybtn{{ $count }}">
                                   <input type="text" id="linkcopy{{ $count }}"class="linkcopy" value="{{ route('showreservationcreate', ['id' => $d->id,'extension' => $d->linkcode]) }}">
-                                  <img id='imgcopy' src="{{ asset('clippy.svg') }}" width="15" height="15">
+                                  <img id='imgcopy' src="{{ asset('svg/clippy.svg') }}" width="15" height="15">
                               </button>
                               <div class="vip" id='popover{{ $count }}'></div>
                               @endif

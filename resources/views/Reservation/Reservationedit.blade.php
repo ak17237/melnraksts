@@ -1,8 +1,8 @@
 @extends('welcome')
+@section('PageTitle','Rediģēt rezervāciju')
 @section('content')
 
 <div class="container">
-    <a href="javascript:window.location=document.referrer;" class="btn btn-primary back">Atpakaļ</a>
     <br>
         <div class="row">
             <div class="col-lg-offset-1 col-lg-11 center">

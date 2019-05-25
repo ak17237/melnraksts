@@ -46,7 +46,6 @@ class ProfileController extends Controller
             $count = 0;
 
         }
-
         return view('Profile.Profile',compact('First_name','Last_name','Email','user','transport','eventid'));
 
     }
@@ -108,7 +107,11 @@ class ProfileController extends Controller
 
          $email->email = $request->get('email');
          $email->save();
-         return redirect()->back()->with('message','Jūsu e-pasts tika veiksmīgi izmainīts');
+
+         if($request->cookie('email') != null) $cookie_email = cookie('email', $request['email'], 60 * 24 * 30);
+         else $cookie_email = cookie('email','',-1);
+
+         return redirect()->back()->cookie($cookie_email)->with('message','Jūsu e-pasts tika veiksmīgi izmainīts');
 
     }
     public function changepassword(createProfileRequest $request){
@@ -119,12 +122,16 @@ class ProfileController extends Controller
             $user = User::where('email', Auth::user()->email)->first();
             $user->password = Hash::make($request['password']); // ieraksta jaunu paroli
             $user->save();
-            return redirect()->route('profile.index')->with('message','Jūsu parole tika veiksmīgi izmainīta');
+
+            if($request->cookie('password') != null) $cookie_password = cookie('password', $request['password'], 60 * 24 * 30);
+            else $cookie_password = cookie('password','',-1);
+
+            return redirect()->route('profile.index')->cookie($cookie_password)->with('message','Jūsu parole tika veiksmīgi izmainīta');
         }
         else return redirect()->back()->withInput($request->input())->withErrors(['oldpassword' => 'Nepareiza parole']);
 
     }
-    public function Reset(){
+    public function Reset(Request $request){
 
         $user = User::where('email',Auth::user()->email)->first();
         $resetuser = Resetuser::where('id',$user->id)->first();
@@ -135,7 +142,12 @@ class ProfileController extends Controller
         ]);
         $user->save();
 
-        return redirect()->back()->with('message','Jūsu e-pasts un parole tika veiksmīgi atjaunoti!');
+        if($request->cookie('email') != null) $cookie_email = cookie('email', $request['email'], 60 * 24 * 30);
+        else $cookie_email = cookie('email','',-1);
+        if($request->cookie('password') != null) $cookie_password = cookie('password', $request['password'], 60 * 24 * 30);
+        else $cookie_password = cookie('password','',-1);
+
+        return redirect()->back()->cookie($cookie_password)->cookie($cookie_email)->with('message','Jūsu e-pasts un parole tika veiksmīgi atjaunoti!');
 
     }
     public function sendemail(createProfileRequest $request){

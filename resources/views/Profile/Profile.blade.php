@@ -1,4 +1,5 @@
 @extends('welcome')
+@section('PageTitle',Auth::user()->First_name . ' profils')
 @section('content')
 <div id="loadinger" class="fakeLoader"> {{-- Lapas loaders,pirms lapas attēli ielādējas --}}
     <script type="text/javascript"> 
@@ -11,14 +12,13 @@
         });
    </script> 
 <div class="container">
-    <a href="javascript:window.location=document.referrer;" class="btn btn-primary back">Atpakaļ</a>
         <div class="row">
             <div class="col-lg-offset-3 col-lg-8 center profilediv">
               @if(Auth::check() && Auth::user()->hasRole('Admin'))
                     <div class="profiletab"><button id="profilename"><legend class="profilelegend">{{Auth::user()->First_name}} Profils</legend></button></div>
                     <div class="profiletab"><button style="float:right;" id="emailsend"><legend class="profilelegend">E-pastu sūtīšana</legend></button></div>
               @else
-                    <legend>{{Auth::user()->First_name}} Profils</legend>
+                    <legend style="padding-top: 20px;">{{Auth::user()->First_name}} Profils</legend>
               @endif
                     <br><br><br>
                     <div class="profileinfo">
@@ -38,7 +38,7 @@
                           <div class="middle">
                             <div class="avatarchange">
                                 <label for="avatar">
-                              <img src="/exchange.png" alt="EyeIcon" width="24" height="24">
+                              <img src="/png/exchange.png" alt="ExchangeIcon" width="24" height="24">
                                 </label>
                             </div>
                           </div>
@@ -46,7 +46,7 @@
                         
                       @else
                       <div class="imageContainer profileavatar">
-                          <img class="outerImage" src="/Empty-Avatar.png" alt="Empty-Avatar">
+                          <img class="outerImage" src="/png/Empty-Avatar.png" alt="Empty-Avatar">
                           <div class="middle">
                             <div class="avatarchange">
                               <label for="avatar">

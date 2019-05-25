@@ -1,7 +1,7 @@
 @extends('welcome')
+@section('PageTitle',$myevent->Title . ' rezervācijas')
 @section('content')
 <div class="container">
-  <a href="javascript:window.location=document.referrer;" class="btn btn-primary back">Atpakaļ</a>
   <div class="contain">     
     @if(session()->has('message'))
       <div class="alert alert-dismissible alert-success">
@@ -39,8 +39,8 @@
                         <img src="/profile-avatar/{{getuserbyid($reservation[$i+$j]->user_id)->Avatar}}">
                       </a>
                       @else
-                      <a href="/Empty-Avatar.png">
-                        <img src="/Empty-Avatar.png">
+                      <a href="/png/Empty-Avatar.png">
+                        <img src="/png/Empty-Avatar.png">
                       </a>
                       @endif
                     </td>
