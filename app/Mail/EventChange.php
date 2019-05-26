@@ -25,11 +25,11 @@ class EventChange extends Mailable
      */
     public function __construct($reservuser,$user,$event,$change)
     {
-        $this->user = $user;
-        $this->reserv = $reservuser;
-        $this->event = $event;
-        $this->changedate = $change[0];
-        $this->changeaddress = $change[1];
+        $this->user = $user; // leitotāji
+        $this->reserv = $reservuser; // rezervācija lietotājiem
+        $this->event = $event; // pasākums
+        $this->changedate = $change[0]; // izmaiņas datumā
+        $this->changeaddress = $change[1]; // izmaiņas adresē
     }
 
     /**

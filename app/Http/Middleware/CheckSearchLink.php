@@ -14,10 +14,10 @@ class CheckSearchLink
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle($request, Closure $next) // meklēšanas linka pārbaude
     {
-        $path = explode('/',$request->path());
-        $options = explode('%3E',$path[1]);
+        $path = explode('/',$request->path()); // saņemam meklēšanas parametrus
+        $options = explode('%3E',$path[1]); // sadalam tos masīvā
 
         if(sizeof($options) != 6) return response()->view('errors.404'); // ja linkā nav pietiekams parametru tad nedod to apstrādāt
         

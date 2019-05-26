@@ -94,7 +94,7 @@ class createReservationRequest extends FormRequest
 
         }
         // validācijas noteikumi,nevar būt vairāk par 2 biļetēm,nevar būt mazāk par sēdvietu un sēdvietu pie galda kopsummu
-        // ValidReserv klase pārbauda vai stāvvietas nav vairāk par atlikušajām un pārbauda vai pir izvēlēta galda palika vietas
+        // ValidReserv klase pārbauda vai stāvvietas nav vairāk par atlikušajām un pārbauda vai ir izvēlēta galda palika vietas
         if($myevent->Tickets == -999) $rules['tickets'] = ['required','lte: ' . $ticketinfo ,'gte: ' . (getdata($this->get('tablecount'),0) +  getdata($this->get('seatnr'),0)),new ValidReserv($standinginfo,$standing,1)];
         else $rules['tickets'] = ['required','lte: ' . $ticketinfo ,'gte: ' . (getdata($this->get('tablecount'),0) +  getdata($this->get('seatnr'),0)),new ValidReserv($standinginfo,$standing,1)];
         if(request('customRadio') == 'Yes') $rules['seatnr'] = 'required|max:2|lte: ' . $seatsinfo;

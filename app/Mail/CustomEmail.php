@@ -18,11 +18,11 @@ class CustomEmail extends Mailable
      */
     public function __construct($recievers,$title,$text,$button)
     {
-        $this->recievers = $recievers;
-        $this->title = $title;
-        $this->text = $text;
-        $this->button = $button;
-        $this->preview = false;
+        $this->recievers = $recievers; // saņēmēju e-pasti
+        $this->title = $title; // e-pasta virsraksts
+        $this->text = $text; // e-pasta teksts
+        $this->button = $button; // e-pasta pogas iestatījumi
+        $this->preview = false; // skats nav preikš apskatīšanas bet pirekš sūtīšanas
     }
 
     /**
@@ -32,7 +32,7 @@ class CustomEmail extends Mailable
      */
     public function build()
     {
-        return $this->view('Emails.Customemail')->subject($this->title)->with([
+        return $this->view('Emails.Customemail')->subject($this->title)->with([ // sūta skatu lietotājiem padodot tam parametrus
             'title' => $this->title,
             'text' => $this->text,
             'button' => $this->button,

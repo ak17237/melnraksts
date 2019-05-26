@@ -82,8 +82,10 @@
           </div>
     </form>
     <div class="contain" style="width: 70%"> 
-      <table class="eventtable">
-        @if ($data->count() == 0)
+      <table class="eventtable"> {{-- Ja lietotājs lietotājs ir viesis jeb parasts lietotājs un pasākumu kuri nav melnraksti nav izvadī ziņu --}}
+        @if(Auth::check() && Auth::user()->hasRole('User') && $data->where('Melnraksts',0)->count() == 0 || !Auth::check() && $data->where('Melnraksts',0)->count() == 0)
+          <h3><i style="margin-left: 10%;">Nav atrastu rezultātu</i></h3> {{-- ja lietotājs ir admins un pasākumu vispār nav,tad izvadīt ziņu --}}
+        @elseif(Auth::check() && Auth::user()->hasRole('Admin') && $data->count() == 0)
           <h3><i style="margin-left: 10%;">Nav atrastu rezultātu</i></h3>
         @else
             @if($type == 'event')
@@ -96,6 +98,7 @@
           </thead>
           
           @foreach ($data as $d){{-- līdzīgi kā slierī izvada pasākumus (home.blade.php) --}}
+          @if($d->Melnraksts == 0 || Auth::check() && Auth::user()->hasRole('Admin')) {{-- ja pasākums nav melnrakst jeb ja sarakstu pārskata admins,tad tikai rādīt šo ierakstu --}}
             <tbody class="searchcontent">
               <tr>
                 <td class="top"><a class='divlink' href="{{ route('showevent',$d->id) }}"></a>
@@ -105,7 +108,7 @@
                     </div>
                 </td>
                 <td class="top space eventinfo"><a class='divlink' href="{{ route('showevent',$d->id) }}"></a>
-                  <h5 class="eventtitle">{{ $d->Title }}</h5>
+                  <h5 class="eventtitle">{{ $d->Title }}@if($d->Melnraksts == 1) (Melnraksts) @endif</h5> {{-- tā kā šim būs piekļuve tiaki adminam var pārbaudī tikai uz melnrakstu --}}
                   <p>Kad: <span class="searcheventdate">{{ geteventdate($d->Datefrom) }}</span></p><span class="searcheventdate" id='eventdate{{ $counter++ }}'style="display:none">{{ $d->Datefrom }}</span>
                   <p>Kur: <span class="eventaddress">{{ $d->Address }}</span></p>
                   <i class="searchanotation">{{ $d->Anotation }}</i>
@@ -119,6 +122,7 @@
             </td>
               </tr>
             </tbody>
+            @endif
           @endforeach
           @elseif($type == 'reservation')
           <thead>

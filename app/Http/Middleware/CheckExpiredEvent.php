@@ -14,9 +14,9 @@ class CheckExpiredEvent
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle($request, Closure $next) // pārbauda vai pasākums jau pagāja
     {
-        if($request->route()->getName() == 'downloadreport'){
+        if($request->route()->getName() == 'downloadreport'){ // ja meiģina lejuplādēt atskaiti pasākumam pēc kura nepagāja vēl viena diena
 
             $event = Events::find($request->route('id'));
             
@@ -32,7 +32,7 @@ class CheckExpiredEvent
             }
 
         }
-        elseif($request->route()->getName() == 'showqrcode'){
+        elseif($request->route()->getName() == 'showqrcode'){ // ja meiģina piekļūt pie biļešu skanēšanas ārpus pasākuma dienās
 
             $event = Events::find($request->route('id'));
 

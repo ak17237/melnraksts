@@ -18,10 +18,10 @@ class Ticket extends Mailable
      */
     public function __construct($reserv,$email,$event,$path)
     {
-        $this->reserv = $reserv;
-        $this->user = $email;
-        $this->event = $event;
-        $this->path = $path;
+        $this->reserv = $reserv; // rezervācijasdati
+        $this->user = $email; // lietotāja dati
+        $this->event = $event; // pasākuma dati
+        $this->path = $path; // ceļš uz biļeti
     }
 
     /**

@@ -13,7 +13,7 @@ class CheckRole
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle($request, Closure $next) // lietotāju tiesību pārbaude
     {
         if($request->user() == null){
              // ja lietotājs nav ielogojies nav piekļuves
@@ -23,10 +23,10 @@ class CheckRole
 
             return response()->view('errors.specificerrors',compact('message','state'));
         }
-        $actions = $request->route()->getAction(); 
-        $roles = isset($actions['roles']) ? $actions['roles'] : null; // saņem tiesības ja tās ir iestatītas
+        $actions = $request->route()->getAction(); // saņem visas actions no web.php
+        $roles = isset($actions['roles']) ? $actions['roles'] : null; // ja tieši 'roles' middleware actions ir iestatītas tad ievietojam tās,ja nē tad null,pārbaude uz tiesībām nav
         
-        if($request->user()->hasAnyRole($roles) || !$roles) { // pārbauda vai lietotājam ir ši tiesība un lai tā nebūtu tukša
+        if($request->user()->hasAnyRole($roles) || !$roles) { // pārbauda vai lietotājam ir ši tiesība, jeb vai tiesības ir iestatītas
             return $next($request);
         }
             $message[0] = 'Nepietiekamas tiesības!';

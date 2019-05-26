@@ -3,7 +3,7 @@ use App\Reservation;
 use App\Events;
 use App\User;
 
-function geteventdate($eventdata){ // datumu izvade vajadzīgajā formātā
+function geteventdate($eventdata){ // datumu izvade vajadzīgajā formātā no datubāzes
     $exp = explode('-',$eventdata);
     $date = explode(' ',$exp[2]);
     
@@ -12,14 +12,14 @@ function geteventdate($eventdata){ // datumu izvade vajadzīgajā formātā
     
 }
 
-function geteventday($eventdata){
+function geteventday($eventdata){ // dienas izvade no datuma
     $exp = explode('-',$eventdata);
     $day = explode(' ',$exp[2]);
 
     return $day[0];
 }
 
-function eventvalidate($request){  // sēdvietu inicializēšana ja nav
+function eventvalidate($request){  // Ja lauki ir deaktivēti tad iedod tiem vajadzīgās vērtības
 
         if($request['Radio'] == "No") $request['ticketcount'] = -999;
         if($request['customRadio'] == "No" || empty($request['seatnr'])) $request['seatnr'] = 0;
@@ -37,7 +37,7 @@ function getdata($data,$default = null){ // saņem datus ja ir tukšs izvada nul
     else return $data;
 
 }
-function reservinfo($id){
+function reservinfo($id){ // izvada masīvu ar palikušām rezervāciajas vieām,arguments pasākuma ID
 
     $myevent = Events::find($id); // atrod vajadzīgo pasākumu
     $reservation = Reservation::where('EventID',$myevent->id)->get(); // atrod visas rezervācijas šim pasākumam
@@ -65,7 +65,7 @@ function reservinfo($id){
 
         return $array;
 }
-function resrvcount($id){
+function resrvcount($id){ // izvada masīvā rezervācijas kopējo skaitu,biļešu,sēdvietu,galdu sēdvietu,maksimālo rezervēto skaitu pie viena galda un rezervēto galdu skaitu
 
     $myevent = Events::find($id); // atrod vajadzīgo pasākumu
     $reservation = Reservation::where('EventID',$myevent->id)->get(); // atrod visas rezervācijas šim pasākumam
@@ -73,23 +73,26 @@ function resrvcount($id){
     $array = array();
 
     $ticketnumber = $seatnumber = $tableseatnumber = $maxtableseats = $tables =  0; // biļešu skaits
-    $same = array();
-    if($reservation->isNotEmpty()){
+    $tableseats = array();
+    if($reservation->isNotEmpty()){ // ja pasākumam ir rezerācijas pieskaita katram mainīgajam savu vērtību
         foreach($reservation as $reservations){
-            $ticketnumber += $reservations->Tickets; // pievieno biļešu skaitu cik bija rezervēts no datubāzes
+            $ticketnumber += $reservations->Tickets; // pievieno biļešu skaitu cik bija rezervēts no datubāzes,sēdvietas,galud sēdvietas
             $seatnumber += $reservations->Seats;
             $tableseatnumber += $reservations->TableSeats;
-            $tableseats[] = $reservations->TableSeats;
             
-            if($reservations->TableNr != 0){
+            if($reservations->TableNr != 0){ // ja galds ir rezervēts tā vērtība nebūs 0
+            
+                if (!isset($tableseats[$reservations->TableNr])) { // ja masīvs atslēgas vēl nav tad tā ir pirmā vērtība tajā
 
-            if(!in_array($reservations->TableNr,$same)) $tables++;
+                    $tableseats[$reservations->TableNr] = $reservations->TableSeats; // izveidojam to ar vērtību sēdvietas pie tā galda
+                    $tables++; // pievienojam mainīgajam +1,kas nozīmē ka galds ir rezervēts jo vismaz viens cilvēks tajā sēž
 
-            }
-
-            $same[] = $reservations->TableNr;
+                 }
+                 else
+                    $tableseats[$reservations->TableNr] += $reservations->TableSeats; // ja bija pieskaitam vēl
+            }          
         }
-        $maxtableseats = max($tableseats);
+        $maxtableseats = max($tableseats); // saņemam maskimālo rezervētu sēdvietu skaitu pie galda
     }
     
     $array[0] = $ticketnumber;
@@ -101,99 +104,101 @@ function resrvcount($id){
     return $array;
 
 }
-function linecount($string){
+function linecount($string){ // saskaita cik ir rindas dotajai simbolu virknei,rezervācijas izveides lapai
     
-    $new = explode('<br>',$string);
+    $new = explode('<br>',$string); // sadalam simbolu virkni masīvā,pēc rindas atstarpes br
     $lines = 0;
 
-    for($i = 0;$i < count($new);$i++){
+    for($i = 0;$i < count($new);$i++){ // masīvs skaita cik ir rindas katrā rindā,ja viena rinda ir 161 simbols
+
         $lines += ceil(strlen($new[$i])/161);
         if(strlen($new[$i]) == 0) $lines++;
+
     }
     return (int)$lines;
 
 }
-function checkAuthor($email,$eventid){
+function checkAuthor($email,$eventid){ // pārbauda pasākuma autoru
 
-    $user = User::where('email', $email)->first();
+    $user = User::where('email', $email)->first(); // saņem lietotāju saņem pasākumu
     $event = Events::where('id',$eventid)->first();
 
-    if(empty($event)) return response("There is no such event",404);
+    if(empty($event)) return response("There is no such event",404); // ja pasākums neeskistē
 
-    if($event->user_id != $user->id) return false;
-    else return true;
+    if($event->user_id != $user->id) return false; // ja pasākuma autors nav lietotājs ar kuru salīdzinam false
+    else return true; // ja ir true
 }
-function checkCreator($email,$reservid){
+function checkCreator($email,$reservid){ // pārbauda rezervācijas īpašnieku
 
-    $user = User::where('email', $email)->first();
+    $user = User::where('email', $email)->first(); // sanem lietotāju un rezervāciju
     $reserv = Reservation::where('id',$reservid)->first();
 
-    if(empty($reserv)) return response("There is no such event",404);
+    if(empty($reserv)) return response("There is no such event",404); // ja rezervācijas neeksitē
 
-    if($reserv->user_id != $user->id) return false;
-    else return true;
+    if($reserv->user_id != $user->id) return false; // ja rezervācijas īpašnieks nav lietotājs ar kuru salīdzinam false
+    else return true; // ja ir true
 
 }
-function tableSeats($eventid,$nrid){
+function tableSeats($eventid,$nrid){ // atdod sēdvietu skaitu pie noteikta galda noteiktajam pasākumam
 
-    $reservations = Reservation::where('EventID',$eventid)->where('TableNr',$nrid)->get();
+    $reservations = Reservation::where('EventID',$eventid)->where('TableNr',$nrid)->get(); // saņem rezervācijas pasākumam pie noteikta galda
     $count = 0;
-    foreach($reservations as $reserv){
+    foreach($reservations as $reserv){ // saskaita cik ir sēdvietas pie tā galda
         $count += $reserv->TableSeats;
     }
     return $count;
 }
-function checkResrvationCount($eventid,$email){
+function checkResrvationCount($eventid,$email){ // pārbauda rezervāciju skaitu noteiktam pasākumam noteiktam lietotājam
 
-    $user = User::where('email',$email)->first();
-    $reservations = Reservation::where('EventID',$eventid)->where('user_id',$user->id)->get();
+    $user = User::where('email',$email)->first(); // saņem lietotāju pēc e-pasta
+    $reservations = Reservation::where('EventID',$eventid)->where('user_id',$user->id)->get(); // saņem rezervācijas lietotājam šajā pasākumā
     $count = 0;
-    foreach($reservations as $reserv){
+    foreach($reservations as $reserv){ // saskaita cik ir biļetes šim lietotājam uz šo pasākumu
         $count += $reserv->Tickets;
     }
     return $count;
 }
-function generateRandomString($length = 10) {
-    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    $charactersLength = strlen($characters);
+function generateRandomString($length = 10) { // nejaušas simbolu virknes ģenerācija
+    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'; // simbolu virkne no kurienes ņemt nejaušus skaitļus
+    $charactersLength = strlen($characters); // simbolu virknes garums no kurienes ņemam simbolus
     $randomString = '';
-    for ($i = 0; $i < $length; $i++) {
+    for ($i = 0; $i < $length; $i++) { // length nejaušas simbolu virknes garumā ieraksta simbolus nejaušā secībā.
         $randomString .= $characters[rand(0, $charactersLength - 1)];
     }
     return $randomString;
 }
-function checkEvent($eventid,$save = 0,$extension = null,&$status = null){
+function checkEvent($eventid,$save = 0,$extension = null,&$status = null){ // middleware funkcija,pārbauda pasākuma datus
     
-    $event = Events::where('id',$eventid)->first();
+    $event = Events::where('id',$eventid)->first(); // saņem pasākumu pēc ID
     
-    if(empty($event)) return false;
-    elseif($save != 0){
+    if(empty($event)) return false; // ja pasākuma nav,tad false
+    elseif($save != 0){ // ja save arguments nav 0 tad pārbaudam uz melnrakstiem
         
         if($event->Melnraksts == 1) return false;
         
 
-        elseif($save == 2){
-            if($event->VIP == 1 && $extension != $event->linkcode) {
-    
+        elseif($save == 2){ // ja save 2 tad pārbaudam uz VIP
+            if($event->VIP == 1 && $extension != $event->linkcode) { // ja pasākuma ir VIP un padotais arguments extension nav vienāds ar datubāzes
+    // statuss ir 2 un izvadam false
                 $status = 2;
                 return false;
             }
-            elseif($extension != $event->linkcode) {
+            elseif($extension != $event->linkcode) { // ja pasākums nav VIP,bet tā links - argumnets extentison,nav pareizs,tad statuss 1 un false
     
                 $status = 1;
                 return false;
     
-            }
+            } // citos gadījumos links ir pareizs
             else return true;       
     
-        }
+        } // ja save nav 0 un nav 2,tad ir vajadzīga tikai pasākuma eksistences un melnraksta pārbaude
         else return true;
 
-    }
+    } // ja save ir 0,tad ir vajadzīga tikai pasākuma eksistences  pārbaude
     else return true;
 
 }
-function checkReserv($reservid){
+function checkReserv($reservid){ // rezervācijas eksistences pārbaude
 
     $reserv = Reservation::where('id',$reservid)->first();
 
@@ -201,100 +206,100 @@ function checkReserv($reservid){
     else return true;
 
 }
-function countbyoneVIP(&$count){
+function countbyoneVIP(&$count){ // palielināt skaitu par 1,izmantots tikai home.blade.php lai sakaitīt vip pasākumus lapā
     $count++;
 }
-function geteventbyreservation($id,&$event){
+function geteventbyreservation($id,&$event){ // saņemam pasākumu,pēc rezervācijas ID
 
     $reservation = Reservation::find($id);
 
     $event = Events::where('id',$reservation->EventID)->first(); 
 }
-function geteventbyid($id){
+function geteventbyid($id){ // saņemam pasākumu pēc tā ID
 
     return Events::find($id);
 
 }
-function getuserbyid($id){
+function getuserbyid($id){ // saņemam lietotāju pēc tā ID
 
     return User::where('id',$id)->first();
 
 }
-function checkEditable($reservid){
+function checkEditable($reservid){ // pārbaudam vai dotā rezervācija var būt rediģējama šim pasākumam
 
     $reservation = Reservation::find($reservid);
-    $event = Events::where('id',$reservation->EventID)->first(); 
+    $event = Events::where('id',$reservation->EventID)->first(); // ssaņemam pasākumu
 
-    if($event->Editable == 1) return true;
+    if($event->Editable == 1) return true; //pārbaude
     else false;
 }
 function checkExpired($id,$route = NULL){ // pārbauda vai pasākums jau beidzās,ja beidzās tad true,ja nē tad false
-    if($route === 'showreservationedit') {
+    if($route === 'showreservationedit') { // ja route ir showreservationedit,tad ID būs rezervācijas ID
 
-        $reservation = Reservation::find($id);
+        $reservation = Reservation::find($id); 
         $event = Events::find($reservation->EventID);
     }
     else $event = Events::find($id);
     
-    if(date('Y-m-d') >= $event->Datefrom) return true;
+    if(date('Y-m-d') >= $event->Datefrom) return true; // ja šodienas datums ir lielāks par pasākuma sākuma datumu,tad true un pasākums beidzās
     else return false;
 
 }
-function get_ticket_data($eventid,$reservid,$email){
+function get_ticket_data($eventid,$reservid,$email){ // saņemam biļetes datus html faila izveidei biļetes ģenerācijai
 
     $myevent = Events::find($eventid);
     $reserv = Reservation::find($reservid);
-    $user = User::where('email',$email)->first();
+    $user = User::where('email',$email)->first(); // saņemam vajadzīgo pasākumu,rezervāiju un lietotāju
 
     $data = array();
 
-    $data['title'] = $myevent->Title;
+    $data['title'] = $myevent->Title; // ievietojam masīvā datus
     $data['address'] = $myevent->Address;
 
-    if(geteventdate($myevent->Datefrom) == geteventdate($myevent->Dateto))
+    if(geteventdate($myevent->Datefrom) == geteventdate($myevent->Dateto)) // datuma validēšana formātā kur "-" vietā ir "."
         $data['date'] =  geteventdate($myevent->Datefrom);
     else
      $data['date'] = geteventdate($myevent->Datefrom) . '-' . geteventdate($myevent->Dateto);
 
-    $data['ticket'] = $reserv->Tickets;
+    $data['ticket'] = $reserv->Tickets; // biļešu skaits
 
-    if($reserv->Seats > 0)
+    if($reserv->Seats > 0) // sēdvietu skaits
         $data['info'] = $reserv->Seats . ' sēdvietas.';
     if($reserv->TableNr != 0){
 
-        if(isset($data['info'])){
+        if(isset($data['info'])){ // info par rezervācijām tekstā
             $data['info'] = $data['info'] . $reserv->TableSeats . ' sēdvietas pie ' . $reserv->TableNr . '. galda.';
         }
         else $data['info'] = $reserv->TableSeats . ' sēdvietas pie ' . $reserv->TableNr . '. galda.';
     }
-    $data['name'] = $user->First_name . ' ' . $user->Last_name;
+    $data['name'] = $user->First_name . ' ' . $user->Last_name; // rezervētā cilvēka vārds uzvārds
     if($reserv->Seats == 0 && $reserv->TableNr == 0) $data['info'] = $reserv->Tickets . ' stāvvietas.';
 
     return $data;
 
 }
-function attendance($eventid){
+function attendance($eventid){ // pārbaudam pasākuma apmeklējumu
 
-    $reservations = Reservation::where('EventID',$eventid)->get();
+    $reservations = Reservation::where('EventID',$eventid)->get(); // rezervācijas pasākumam
     $data = array();
 
     $ticketnumber = $seatnumber = $tablenumber = $standnumber = 0;
     $same = array();
 
-    foreach($reservations as $r){
+    foreach($reservations as $r){ // katrai rezervācijai
 
-        if($r->Attendance == true){ 
+        if($r->Attendance == true){ // ja dotā rezervāija ir ar statusu apmeklēta
             
-            $ticketnumber += $r->Tickets;
+            $ticketnumber += $r->Tickets; // pievienojam datus
             $seatnumber += $r->Seats;
 
-            if($r->TableNr != 0){
+            if($r->TableNr != 0){ // galdu rezervācija ja ir vismaz viens cilvēks pie tā
 
                 if(!in_array($r->TableNr,$same)) $tablenumber++;
         
             }
             $same[] = $r->TableNr;
-            if(($r->Seats + $r->TableSeats) < $r->Tickets)
+            if(($r->Seats + $r->TableSeats) < $r->Tickets) // ja šai rezervācijai biļešu skaits ir lielāks nekā sēdvietu un galda sēdvietu skaitu tad pievienojam pie stāvvietām
                 $standnumber += $r->Tickets - ($r->Seats + $r->TableSeats);
         }
     
@@ -308,12 +313,12 @@ function attendance($eventid){
     return $data;
     
 }
-function checkAttendance($userid,$eventid){
+function checkAttendance($userid,$eventid){ // pārbauda lietotāja apmeklējumu pasākumam
 
     $user = User::find($userid);
-    $reservations  = Reservation::where('EventID',$eventid)->get();
+    $reservations  = Reservation::where('EventID',$eventid)->get(); // saņemam datus
 
-    foreach($reservations as $r){
+    foreach($reservations as $r){ // ja rezervācijas lietotājam ir vismaz viens true,tad apmeklēja un var saņemt piekļuvi pie pasākuma galerijas un vietām tikai apmeklētājiem
 
         if($r->Attendance == true && $r->user_id == $user->id) return true;
 

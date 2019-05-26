@@ -89,14 +89,14 @@
                                     <label class="seats">Sēdvietas</label>
                                     <div class="radio">
                                         <div class="custom-radio control-radio">
-                                            <input type="radio" id="customRadio1" name="customRadio" class="custom-control-input" value="Yes"   
+                                            <input type="radio" id="customRadio1" name="customRadio" class="custom-control-input count" value="Yes"   
                                             @if(old('customRadio') == "Yes" || empty(old('customRadio'))) {{-- ja vecā vērtība ir YES jeb ja vecās nebija(validācijas nebija),tad atzīmēt šo radio --}}
                                                 checked="" 
                                             @endif>
                                             <label class="custom-control-label" for="customRadio1">Jā</label>
                                         </div>
                                         <div class="custom-radio control-radio">
-                                            <input type="radio" id="customRadio2" name="customRadio" class="custom-control-input" value="No"
+                                            <input type="radio" id="customRadio2" name="customRadio" class="custom-control-input count" value="No"
                                             @if(old('customRadio') == "No") {{-- ja vecā bija NO tikai tad atzīmēt --}}
                                                 checked="" 
                                             @endif>
@@ -127,14 +127,14 @@
                                         <label class="seats">Galdi</label>
                                         <div class="radio">
                                             <div class="custom-control custom-radio custom-control-inline">
-                                                <input type="radio" class="custom-control-input" id="defaultInline1" name="inlineDefaultRadiosExample" value="Yes" 
+                                                <input type="radio" class="custom-control-input count" id="defaultInline1" name="inlineDefaultRadiosExample" value="Yes" 
                                                 @if(old('inlineDefaultRadiosExample') == "Yes" || empty(old('inlineDefaultRadiosExample'))) {{-- ja vecā vērtība ir YES jeb ja vecās nebija(validācijas nebija),tad atzīmēt šo radio --}}
                                                     checked="" 
                                                 @endif>
                                                 <label class="custom-control-label" for="defaultInline1">Jā</label>
                                             </div>
                                             <div class="custom-control custom-radio custom-control-inline">
-                                                <input type="radio" class="custom-control-input" id="defaultInline2" name="inlineDefaultRadiosExample" value="No"
+                                                <input type="radio" class="custom-control-input count" id="defaultInline2" name="inlineDefaultRadiosExample" value="No"
                                                 @if(old('inlineDefaultRadiosExample') == "No") {{-- ja vecā bija NO tikai tad atzīmēt --}}
                                                     checked="" 
                                                 @endif>

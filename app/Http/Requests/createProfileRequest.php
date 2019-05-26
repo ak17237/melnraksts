@@ -22,9 +22,9 @@ class createProfileRequest extends FormRequest
      *
      * @return array
      */
-    public function attributes()
+    public function attributes() // atribūtu savi nosaukumi
     {
-       return[
+       return[ 
         'fname' => 'Vārds',
         'lname' => 'Uzvārds',
         'email' => 'E-pasts',
@@ -38,7 +38,7 @@ class createProfileRequest extends FormRequest
         'transport' => 'Pasākumu lauks'
        ];
     }
-    public function messages()
+    public function messages() // ziņu savi nosaukumi
     {
         return[
             'image' => ':attribute jābūt bildes formātā(png,jpg,gif utt.)',
@@ -53,31 +53,31 @@ class createProfileRequest extends FormRequest
     public function rules()
     {
         $rules = array();
-
+ // ja profilā ir izvēlēts izmainīt noteikto lauku,tad tas ir obligāts ar savu MAX vērtību
         if(request('action') == 'fname') $rules['fname'] = 'required|max: 20';
         if(request('action') == 'lname') $rules['lname'] = 'required|max: 34';
         if(request('action') == 'email') $rules['email'] = 'required|email|max: 49';
-        if(request('action') == 'pass') {
+        if(request('action') == 'pass') { // ja pase,tad vecai un jaunajai šādi noteikumi
 
             $rules['password'] = 'required|min:6|confirmed|max:50';
             $rules['oldpassword'] = 'required|min:6|max:50';
 
         }
-        if(request('avatar') != NULL)
-            $rules['avatar'] = 'image';
+        if(request('avatar') != NULL) // ja tika izvēlēta bilde
+            $rules['avatar'] = 'image'; // bildes formāts
 
-        if(request('action') == 'send' || request('action') == 'preview'){
+        if(request('action') == 'send' || request('action') == 'preview'){ // ja ir e-pastu sūtīšana
 
-            if(request('inlineDefaultRadiosExample') == 'Yes') {
+            if(request('inlineDefaultRadiosExample') == 'Yes') { // pārbaudīt vai visi pogas lauki aizpildīti gadījumā kad izvēlne jā
 
                 $rules['buttontitle'] = ['required'];
                 $rules['buttonlink'] = ['required'];
 
             }
-           
+           // e-pasta virsraksts un teksts obligāti
             $rules['emailtitle'] = ['required'];
             $rules['emailtext'] = ['required'];
-            
+            // ja transporta sūtīšana pasākuma izvēlne obligāta,ja lietotājiem,tad vismaz viens lietotājs no izvēlnes
             if(request('transportcb') == "on") $rules['transport'] = ['required'];
             else  $rules['reciever'] = ['required'];
 

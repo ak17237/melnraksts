@@ -18,8 +18,8 @@ class ValidReserv implements Rule
 
         $this->max = $max; // max pieļauto stāvvietu/sēdvietu skaits
         $this->curr = $current; // izvēlēto stāvvietu/sēdvietu skaits
-        $this->type = $type;
-
+        $this->type = $type; // tips
+// kuru validācijas kļūdu saņemt
     }
 
     /**
@@ -30,7 +30,7 @@ class ValidReserv implements Rule
      * @return bool
      */
     public function passes($attribute, $value)
-    {
+    { // a max skaitlis ir lielāks jeb vienāds par izvēlēto,jeb tas ir neierobežots izpildīt validāciju pozitīvi
         if($this->curr <= $this->max || $this->max === "Neierobežots") return true;
     }
 
@@ -40,7 +40,7 @@ class ValidReserv implements Rule
      * @return string
      */
     public function message()
-    {
+    { // ja ievadītais skaitlis ir lielāks par maksimālo izvada noteiktu paziņojumu
         if($this->type == 1)
         return 'Stavvietu skaitam jabut mazakam par ' . $this->max;
         if($this->type == 2)

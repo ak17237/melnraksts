@@ -14,12 +14,12 @@ class CheckAttendance
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle($request, Closure $next) // pārbauda pasākuma apmeklējumu autnetificētam lietotājam
     {
         if(Auth::check()){
-
+        // ja ir administrators tad apmeklējums nav obligāts
             if(Auth::user()->hasRole('Admin') || checkAttendance(Auth::user()->id,$request->route('id'))) return $next($request);
-            else{
+            else{ // ja nav apmeklējuma izvada kļūdas lapu.
 
                 $message[0] = 'Nevar piekļūt galerijai!';
                 $message[1] = 'Nevar skatīt galerijas pasākumiem,kuros jūs nepiedalījāties!';

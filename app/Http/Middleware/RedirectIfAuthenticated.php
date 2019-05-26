@@ -17,7 +17,7 @@ class RedirectIfAuthenticated
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        if (Auth::guard($guard)->check()) {
+        if (Auth::guard($guard)->check()) { // ja lietotājs jau ir ielogojies,kļūdu lapa
             
             $message[0] = 'Jūs jau ielogojāties!';
             $message[1] = 'Nevar piekļūt pie reģistrācijas vai ielogošanas formas ja jūs jau ielogojāties sistēmā!';

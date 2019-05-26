@@ -18,10 +18,10 @@ class ReservationChange extends Mailable
      */
     public function __construct($reservation,$email,$changes,$event)
     {
-        $this->email = $email;
-        $this->reservation = $reservation;
-        $this->changes = $changes;
-        $this->event = $event;
+        $this->email = $email; // e-pasts
+        $this->reservation = $reservation; // rezervācija
+        $this->changes = $changes; // izzmaiņas tajā
+        $this->event = $event; // pasākums rezervācijai
     }
 
     /**

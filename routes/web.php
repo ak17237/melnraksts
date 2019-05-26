@@ -24,7 +24,7 @@ Route::get('/profile',[ // Profila lapa
     'as' => 'profile.index',
     'middleware' =>  'roles',
     'roles' => ['User','Admin']
-        ]);
+        ]); // Profila pārvalde
 Route::post('/profile/changeavatar','ProfileController@changeavatar')->name('changeavatar');
 Route::post('/profile/changename','ProfileController@changename')->name('profile.changename');
 Route::post('/profile/changesurname','ProfileController@changesurname')->name('profile.changesurname');

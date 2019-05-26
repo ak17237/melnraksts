@@ -14,10 +14,10 @@ class CheckCreator
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle($request, Closure $next) // pārbauda rezervācijas īpašnieku
     {
-        if(Auth::user()->hasRole('Admin')) return $next($request);
-        elseif(!checkCreator(Auth::user()->email,$request->route('id'))) {
+        if(Auth::user()->hasRole('Admin')) return $next($request); // ja ir admnistrators var pārskatīt 
+        elseif(!checkCreator(Auth::user()->email,$request->route('id'))) { // ja nav autors kļūdas lapa
 
             $message[0] = 'Jūs neesat rezervācijas autors!';
             $message[1] = 'Jūs nevarat piekļūt pie svešām rezervācijām!';
@@ -25,7 +25,7 @@ class CheckCreator
 
             return response()->view('errors.specificerrors',compact('message','state'));
 
-        }
+        } // ja ir autors dod pieeju
         else return $next($request);
     }
 }

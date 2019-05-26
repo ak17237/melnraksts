@@ -25,7 +25,7 @@ class createGalleryRequest extends FormRequest
      */
     public function messages()
     {
-        return[
+        return[ // ziņas aizvietošana uz savu
             'image' => 'Failam jābūt bildes formātā(png,jpg,gif utt.)',
         ];
     }
@@ -34,7 +34,7 @@ class createGalleryRequest extends FormRequest
         
         $rules = array();
 
-        if(request()->hasFile('gallery')){
+        if(request()->hasFile('gallery')){ // ja tiek ielādei faili pārbaudīt katram savu validāciju klasē
 
             for($i = 0;$i < sizeof(request('gallery'));$i++){ // MultipleFileName ir klase,kurā tiek pārbaudītas validācijas,kuras laravels nevar pārbaudīt
 

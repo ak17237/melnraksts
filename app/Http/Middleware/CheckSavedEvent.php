@@ -14,10 +14,10 @@ class CheckSavedEvent
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle($request, Closure $next) // ja pasākums ir melnrakstots
     {
-        if(checkEvent($request->route('id'),1)) return $next($request);
-        elseif(Auth::check() && Auth::user()->hasRole('Admin')) return $next($request);
+        if(checkEvent($request->route('id'),1)) return $next($request); // pārbaudam vai viņs ir melnrakstos
+        elseif(Auth::check() && Auth::user()->hasRole('Admin')) return $next($request); // ja ir melnrakstos,tad tikai admina piekļuve
         else{
             
             $message[0] = 'Pasākums nav atrasts!';

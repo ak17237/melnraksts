@@ -13,8 +13,8 @@ class CheckReserv
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
-    {
+    public function handle($request, Closure $next) // rezervācijas eksistence pārbaude
+    {   // funckija no heleprs.php
         if(checkReserv($request->route('id'))) return $next($request);
         else {
             

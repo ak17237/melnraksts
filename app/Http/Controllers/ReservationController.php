@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Storage;
 class ReservationController extends Controller
 {
 
-    public function showreservationcreate($id,$extension){
+    public function showreservationcreate($id,$extension){ //rezervācija izveides skats
         $myevent = Events::find($id);
         
         $data = reservinfo($id); // funkcija kura ir helpers.php failā un kura atgriež datus par atlikušajām vietām
@@ -32,60 +32,60 @@ class ReservationController extends Controller
         $standing = $data[3];
         
 
-        $description = str_replace("\r\n",'<br>',$myevent->Description);
+        $description = str_replace("\r\n",'<br>',$myevent->Description); // lai atstarpes rādītos html formātā
         
         return view('Reservation.Reservationcreate',compact('myevent','checkedtables','checkedseats','ticketinfo','standing','description'));
     }
-    public function showreservationusers($page){
+    public function showreservationusers($page){ // manas rezervācijas sadaļa
 
-        $elements = 10;
-        $counter = 1;
+        $elements = 10; // elementu skaits vienā lapā
+        $counter = 1; // mēneša ivadīšanai tabulas galvenē
 
-        $events = Events::where('Datefrom','>',date('Y-m-d',strtotime('-1 weeks')))->get();
+        $events = Events::where('Datefrom','>',date('Y-m-d',strtotime('-1 weeks')))->get(); // kad pasākums ir pagājis vairāk par 1 nedēlu atpakaļ nerāda rezervācijas pasākumam
 
         foreach($events as $event){
 
-            $presentevents[] = $event->id;
+            $presentevents[] = $event->id; // saņemam to pasākumu ID
 
         }
         $user = User::where('email', Auth::user()->email)->first();
 
         $reservations = Reservation::where('user_id',$user->id)->whereIn('EventID',$presentevents)->orderBy('updated_at','DESC')->SimplePaginate($elements,['*'], 'page', $page);
-        $count = Reservation::where('user_id',$user->id)->whereIn('EventID',$presentevents)->count();
+        $count = Reservation::where('user_id',$user->id)->whereIn('EventID',$presentevents)->count(); // atlasam rezervācijas pasākumam kurus rezervēja lietotāji un kuri nav vēlaki par 1 nedēļu
 
-        $event = null;
+        $event = null; // lai saņemtu pasākumu pēc rezervācijas skatā kad taisa foreach katrai rezervācijai
         
-        $number = 1;
+        $number = 1;// saskaita lapu skaitu
         while($count > $elements){ // precīza paginēšanas url izvade un pogas tai
             $number++;
             $count = $count - $elements;
         }
         for($i = 1;$i <= $number; $i++) $pagenumber[] = $i;
-        session(['way' => 'users']);
+        session(['way' => 'users']); // ja no šīs lapas tiek apskatīta jeb rediģēta rezervācijas lai atgriezties uz šo lapu nevis sadaļu manas rezervācijas
         return view('Reservation.Reservationusers',compact('pagenumber','reservations','event','counter'));
 
     }
-    public function showreservation($id){
+    public function showreservation($id){ // rezervācijas apskate
 
         $reservation = Reservation::find($id);
-        $myevent = Events::find($reservation->EventID);
-        $user = User::where('id',$reservation->user_id)->first();
+        $myevent = Events::find($reservation->EventID); // atrod pasākumu rezervācijai
+        $user = User::where('id',$reservation->user_id)->first(); // lietotāju rezervācijai
 
         $data = reservinfo($reservation->EventID); // funkcija kura ir helpers.php failā un kura atgriež datus par atlikušajām vietām
  
         $checkedseats = $data[1]; // (0 = biļešu skaits,1 = sēdvietu skaits,2 = galdu skaits,3 = stāvvietu skaits)
         $checkedtables = $data[2];
 
-        $checkedseats += $reservation->Seats;
+        $checkedseats += $reservation->Seats; // ja lietotājs nerezervēja vēl sēdvietas un to jau nepalika,tad rakstīt ka pasākuma neparedz galdus skatā
         $checkedtables += $reservation->TableSeats;
 
         return view('Reservation.Reservationinfo',compact('reservation','myevent','user','checkedseats','checkedtables'));
 
     }
-    public function showreservationedit($id){
+    public function showreservationedit($id){ // rezervācijas rediģēšana
         
         $reservation = Reservation::find($id);
-        $myevent = Events::find($reservation->EventID);
+        $myevent = Events::find($reservation->EventID); // atrodam pasākumu un lietotāju rezervācijas
         $user = User::where('id',$reservation->user_id)->first();
 
         $data = reservinfo($reservation->EventID); // funkcija kura ir helpers.php failā un kura atgriež datus par atlikušajām vietām
@@ -93,20 +93,20 @@ class ReservationController extends Controller
         $checkedseats = $data[1]; // (0 = biļešu skaits,1 = sēdvietu skaits,2 = galdu skaits,3 = stāvvietu skaits)
         $checkedtables = $data[2];
 
-        $checkedseats += $reservation->Seats;
+        $checkedseats += $reservation->Seats; // ja lietotājs nerezervēja vēl sēdvietas un to jau nepalika,tad rakstīt ka pasākuma neparedz galdus skatā
         $checkedtables += $reservation->TableSeats;
 
         return view('Reservation.Reservationedit',compact('reservation','myevent','user','checkedseats','checkedtables'));
 
     }
-    public function showreservationadmins($id){
+    public function showreservationadmins($id){ // rezervācijas noteiktam pasākumam skats
 
         $myevent = Events::find($id);
-        $reservation = Reservation::where('EventID',$id)->get();
+        $reservation = Reservation::where('EventID',$id)->get(); // atrod rezervācijas pasākumam
         
-        $count = $reservation->count();
+        $count = $reservation->count(); // saskaita tos
         $number = $tempnumber = 2; // cik ieraksti rādās vienā lapā // korektai skaitļu izvadei katrā lapā
-        session(['way' => 'admins']);
+        session(['way' => 'admins']); // ja no šīs lapas tiek apskatīta jeb rediģēta rezervācijas lai atgriezties uz šo lapu nevis sadaļu manas rezervācijas
         return view('Reservation.Reservationadmins',compact('myevent','reservation','user','count','number','tempnumber'));
 
     }
@@ -121,7 +121,7 @@ class ReservationController extends Controller
         if($request['manualreserv'] == "on") { // ja rezervācijas bija manuāla
 
             $email = $request['email']; // saņem ierakstīto e-pastu
-            session(['way' => 'admins']); // "Atpakaļ" pogu pareizai funkcionēšanai,lai saprastu uz kurieni redirectot
+            session(['way' => 'admins']); // lai saprastu uz kurieni redirectot
             $user = User::where('email', $email)->first(); // atrod lietotāju ar šādu e-pastu
 
         }
@@ -131,7 +131,7 @@ class ReservationController extends Controller
 
             $email = $user->email; // saņem to e-pastu no datu bāzes
 
-            session(['way' => 'users']); // "Atpakaļ" pogu pareizai funkcionēšanai,lai saprastu uz kurieni redirectot
+            session(['way' => 'users']); // lai saprastu uz kurieni redirectot
 
         }
         
@@ -179,11 +179,11 @@ class ReservationController extends Controller
         return redirect()->route('showreservation',$reserv->id)->with('message','Pasākums rezervēts');
         
     }
-    public function reservationedit(createReservationRequest $request,$id){
+    public function reservationedit(createReservationRequest $request,$id){ //  rezervācijas rediģēšana
 
-        $reservation = Reservation::find($id);
+        $reservation = Reservation::find($id); 
 
-        eventvalidate($request);
+        eventvalidate($request); // aizpilda deaktivētos laukus ar pareizām vērtībām
 
         $reservation->fill([    // ieraksta izmainīšana 
             'Tickets' => $request['tickets'],
@@ -196,14 +196,14 @@ class ReservationController extends Controller
 
         $event = Events::find($reservation->EventID);
 
-        if(sizeof($reservation->getChanges()) > 0) {
+        if(sizeof($reservation->getChanges()) > 0) { // ja rezervācijābija veiktas izmaiņas
          
-            $user = User::find($reservation->user_id);
+            $user = User::find($reservation->user_id); // sūta e-pastu no klases ReservationChange ar rezervācijas datiem,e-pastu,rezervācijas izmaiņām un pasākuma datiem
             Mail::send(new ReservationChange($reservation,$user->email,$reservation->getChanges(),$event));
 
         }
 
-        if(\Session::get('way') == 'users'){
+        if(\Session::get('way') == 'users'){ // pareizs redirects uz pareizu vietu
 
             if($reservation->wasChanged())
                 return redirect()->route('showreservation',$id)->with('message','Rezervācija izmainīta');
@@ -219,15 +219,15 @@ class ReservationController extends Controller
         }
 
     }
-    public function reservationdelete($id){
+    public function reservationdelete($id){ // rezervācijas dzēšana
 
-        $reservation = Reservation::find($id);
+        $reservation = Reservation::find($id); // atrod rezervāciju,atrod pasākumu rezervācijai
         $myevent = Events::where('id',$reservation->EventID)->first();
-        $reservation->delete();
-
-        if(\Session::get('way') == 'users')
+        $reservation->delete(); // dzēš to rezervāciju
+ 
+        if(\Session::get('way') == 'users')//ja tas bija izdarīts un lietotājs agrāk bija no sadaļas manas rezervācijas tad 'way' būs user
         return redirect()->route('reservationusers',1)->with('message','Rezervācija Dzēsta');
-        else 
+        else // citādi tas būs 'admin' un redirect vajag uz admina sadaļu rezervācijas apskatīšana pasākumam
         return redirect()->route('showreservationadmins',$myevent->id)->with('message','Rezervācija Dzēsta');
 
     }
